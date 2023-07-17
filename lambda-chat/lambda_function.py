@@ -138,10 +138,10 @@ def lambda_handler(event, context):
     print('msg: ', msg)
 
     item = {
-        'request-id': requestid,
-        'type': type,
-        'body': body,
-        'msg': msg
+        'request-id': {'S':requestid},
+        'type': {'S':type},
+        'body': {'S':body},
+        'msg': {'S':msg}
     }
 
     client = boto3.client('dynamodb')
