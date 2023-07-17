@@ -297,7 +297,7 @@ function sendRequestForSummay(object) {
     var requestObj = {
         "request-id": uuidv4(),
         "type": "document",
-        "body":object
+        "body": object
     }
     console.log("request: " + JSON.stringify(requestObj));
 

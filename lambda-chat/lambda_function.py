@@ -112,16 +112,18 @@ def lambda_handler(event, context):
     requestid  = event['request-id']
     print('requestid: ', requestid)
     type  = event['type']
-
+    print('type: ', type)
+    print('body: ', event['body'])
+    
     start = int(time.time())    
 
     msg = ""
     if type == 'text':
         text = event['body']
-        print('text: ', text)
 
         msg = llm(text)
-    else:
+        
+    elif type == 'document':
         object = event['body']
     
         file_type = object[object.rfind('.')+1:len(object)]
@@ -131,6 +133,8 @@ def lambda_handler(event, context):
             
     elapsed_time = int(time.time()) - start
     print("total run time(sec): ", elapsed_time)
+
+    print('msg: ', msg)
         
     return {
         'statusCode': 200,
