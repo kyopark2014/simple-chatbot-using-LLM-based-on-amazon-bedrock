@@ -9,6 +9,7 @@ import * as cloudFront from 'aws-cdk-lib/aws-cloudfront';
 import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
 import * as apiGateway from 'aws-cdk-lib/aws-apigateway';
 import * as s3Deploy from "aws-cdk-lib/aws-s3-deployment";
+import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 
 const debug = false;
 const stage = 'dev';
@@ -44,6 +45,20 @@ export class CdkBedrockAnthropicStack extends cdk.Stack {
       });
     }
 
+    // DynamoDB for call log
+    const tableName = 'db-calllog';
+    const dataTable = new dynamodb.Table(this, 'dynamodb-calllog', {
+      tableName: tableName,
+      partitionKey: { name: 'request-id', type: dynamodb.AttributeType.STRING },
+      billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
+    });
+    const indexName = 'index-type';
+    dataTable.addGlobalSecondaryIndex({ // GSI
+      indexName: indexName,
+      partitionKey: { name: 'type', type: dynamodb.AttributeType.STRING },
+    });
+
     // copy web application files into s3 bucket
     new s3Deploy.BucketDeployment(this, "upload-HTML", {
       sources: [s3Deploy.Source.asset("../html")],
@@ -73,6 +88,7 @@ export class CdkBedrockAnthropicStack extends cdk.Stack {
       timeout: cdk.Duration.seconds(60),
       environment: {
         endpoint: endpoint,
+        tableName: tableName
       }
     }); 
 
@@ -87,6 +103,7 @@ export class CdkBedrockAnthropicStack extends cdk.Stack {
     );
     lambdaChatApi.grantInvoke(new iam.ServicePrincipal('apigateway.amazonaws.com'));  
     s3Bucket.grantRead(lambdaChatApi); // permission for s3
+    dataTable.grantReadWriteData(lambdaChatApi); // permission for dynamo
 
     // role
     const role = new iam.Role(this, "api-role-chatbot", {
@@ -105,7 +122,7 @@ export class CdkBedrockAnthropicStack extends cdk.Stack {
     const api = new apiGateway.RestApi(this, 'api-chatbot', {
       description: 'API Gateway for chatbot',
       endpointTypes: [apiGateway.EndpointType.REGIONAL],
-      binaryMediaTypes: ['application/pdf'], 
+      binaryMediaTypes: ['application/pdf', 'text/plain', 'text/csv'], 
       deployOptions: {
         stageName: stage,
 
@@ -175,7 +192,7 @@ export class CdkBedrockAnthropicStack extends cdk.Stack {
       }      
     });
     s3Bucket.grantReadWrite(lambdaUpload);
-
+    
     // POST method - upload
     const resourceName = "upload";
     const upload = api.root.addResource(resourceName);
