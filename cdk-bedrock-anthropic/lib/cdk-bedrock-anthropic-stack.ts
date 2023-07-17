@@ -88,6 +88,8 @@ export class CdkBedrockAnthropicStack extends cdk.Stack {
       timeout: cdk.Duration.seconds(60),
       environment: {
         endpoint: endpoint,
+        s3_bucket: s3Bucket.bucketName,
+        s3_prefix: s3_prefix,
         tableName: tableName
       }
     }); 
