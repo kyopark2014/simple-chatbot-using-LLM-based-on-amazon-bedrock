@@ -2,6 +2,7 @@ import json
 import boto3
 import os
 import time
+import datetime
 from io import BytesIO
 import PyPDF2
 import csv
@@ -139,6 +140,7 @@ def lambda_handler(event, context):
 
     item = {
         'request-id': {'S':requestid},
+        'time': {'S':datetime.datetime.now()},
         'type': {'S':type},
         'body': {'S':body},
         'msg': {'S':msg}
