@@ -38,12 +38,6 @@ exports.handler = async (event, context) => {
     }
     else if(contentType == 'text/plain') {
         filename = uuid+'.txt';
-
-        let formData = new FormData();
-        formData.append("attachFile" , body);
-
-        console.log(formData.Body);
-
     }
     else if(contentType == 'text/csv') {
         filename = uuid+'.csv';
