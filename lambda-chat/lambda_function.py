@@ -16,6 +16,7 @@ s3 = boto3.client('s3')
 s3_bucket = os.environ.get('s3_bucket') # bucket name
 s3_prefix = os.environ.get('s3_prefix')
 endpoint_name = os.environ.get('endpoint')
+tableName = os.environ.get('tableName')
 
 # initiate llm model based on langchain
 class ContentHandler(LLMContentHandler):
@@ -113,18 +114,18 @@ def lambda_handler(event, context):
     print('requestid: ', requestid)
     type  = event['type']
     print('type: ', type)
-    print('body: ', event['body'])
+    body = event['body']
+    print('body: ', body)
     
     start = int(time.time())    
 
     msg = ""
     if type == 'text':
-        text = event['body']
-
+        text = body
         msg = llm(text)
         
     elif type == 'document':
-        object = event['body']
+        object = body
     
         file_type = object[object.rfind('.')+1:len(object)]
         print('file_type: ', file_type)
@@ -135,6 +136,21 @@ def lambda_handler(event, context):
     print("total run time(sec): ", elapsed_time)
 
     print('msg: ', msg)
+
+    item = {
+        'request-id': requestid,
+        'type': type,
+        'body': body,
+        'msg': msg
+    }
+
+    client = boto3.client('dynamodb')
+    try:
+        resp =  client.put_item(TableName=tableName, Item=item)
+    except: 
+        raise Exception ("Not able to write into dynamodb")
+    
+    print('resp, ', resp)
         
     return {
         'statusCode': 200,
