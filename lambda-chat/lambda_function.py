@@ -140,7 +140,6 @@ def lambda_handler(event, context):
 
     item = {
         'request-id': {'S':requestid},
-        'time': {'S':datetime.datetime.now()},
         'type': {'S':type},
         'body': {'S':body},
         'msg': {'S':msg}
