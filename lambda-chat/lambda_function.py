@@ -115,6 +115,7 @@ def lambda_handler(event, context):
 
     start = int(time.time())    
 
+    msg = ""
     if type == 'text':
         text = event['body']
         print('text: ', text)
