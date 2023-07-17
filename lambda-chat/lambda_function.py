@@ -109,20 +109,29 @@ def get_summary(file_type, s3_file_name):
 def lambda_handler(event, context):
     print(event)
 
-    object = event['object']
-    print('object: ', object)
+    requestid  = event['request-id']
+    print('requestid: ', requestid)
+    type  = event['type']
 
-    file_type = object[object.rfind('.')+1:len(object)]
-    print('file_type: ', file_type)
+    start = int(time.time())    
+
+    if type == 'text':
+        text = event['body']
+        print('text: ', text)
+
+        msg = llm(text)
+    else:
+        object = event['body']
     
-    start = int(time.time())
-    
-    summary = get_summary(file_type, object)
+        file_type = object[object.rfind('.')+1:len(object)]
+        print('file_type: ', file_type)
         
+        msg = get_summary(file_type, object)
+            
     elapsed_time = int(time.time()) - start
     print("total run time(sec): ", elapsed_time)
-    
+        
     return {
         'statusCode': 200,
-        'msg': summary,
+        'msg': msg,
     }

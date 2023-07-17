@@ -268,7 +268,11 @@ function sendRequest(text) {
         }
     };
 
-    var requestObj = {"text":text}
+    var requestObj = {
+        "request-id": uuidv4(),
+        "type": "text",
+        "body":text
+    }
     console.log("request: " + JSON.stringify(requestObj));
 
     var blob = new Blob([JSON.stringify(requestObj)], {type: 'application/json'});
@@ -290,7 +294,11 @@ function sendRequestForSummay(object) {
         }
     };
 
-    var requestObj = {"object":object}
+    var requestObj = {
+        "request-id": uuidv4(),
+        "type": "document",
+        "body":object
+    }
     console.log("request: " + JSON.stringify(requestObj));
 
     var blob = new Blob([JSON.stringify(requestObj)], {type: 'application/json'});
