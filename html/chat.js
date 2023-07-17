@@ -281,7 +281,7 @@ function sendRequest(text) {
 }
 
 function sendRequestForSummay(object) {
-    const uri = "summary";
+    const uri = "chat";
     const xhr = new XMLHttpRequest();
 
     xhr.open("POST", uri, true);
