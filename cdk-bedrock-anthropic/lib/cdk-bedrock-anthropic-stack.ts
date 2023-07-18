@@ -99,14 +99,15 @@ export class CdkBedrockAnthropicStack extends cdk.Stack {
       resources: ['*'],
     });
 
+    const policy1 = new iam.PolicyStatement({
+      actions: ['bedrock:*'],
+      resources: ['*'],
+    });
+    policy1.addServicePrincipal('bedrock.amazonaws.com');
     const bedrockPrincipal = new iam.ServicePrincipal("apigateway.amazonaws.com");
     new iam.Policy(this, 'bedrock-policy', {
       policyName: 'CdkBedrockPolicy',        
-      statements: [new iam.PolicyStatement({
-        actions: ['bedrock:*'],
-        resources: ['*'],
-        principals: [bedrockPrincipal]
-      })],
+      statements: [policy1]
     })
 
     lambdaChatApi.role?.attachInlinePolicy( // add sagemaker policy
