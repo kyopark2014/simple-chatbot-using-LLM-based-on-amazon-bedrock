@@ -94,11 +94,13 @@ export class CdkBedrockAnthropicStack extends cdk.Stack {
     const roleLambda = new iam.Role(this, "api-role-lambda-chat", {
       roleName: "api-role-lambda-chat",
       assumedBy: new iam.CompositePrincipal(
-        new iam.ServicePrincipal("edgelambda.amazonaws.com"),
         new iam.ServicePrincipal("lambda.amazonaws.com"),
-        new iam.ServicePrincipal("apigateway.amazonaws.com")
+        new iam.ServicePrincipal("sagemaker.amazonaws.com"),
+        new iam.ServicePrincipal("bedrock.amazonaws.com")
     )
     });
+    roleLambda.grantAssumeRole(new iam.ServicePrincipal("s3.amazonaws.com"));
+
     roleLambda.addManagedPolicy({
       managedPolicyArn: 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole',
     });
