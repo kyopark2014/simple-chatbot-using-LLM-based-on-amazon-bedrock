@@ -102,7 +102,7 @@ export class CdkBedrockAnthropicStack extends cdk.Stack {
       actions: ['bedrock:*'],
       resources: ['*'],
     });
-    BedrockPolicy.addServicePrincipal('bedrock.amazonaws.com');
+   // BedrockPolicy.addServicePrincipal('bedrock.amazonaws.com');
 
     lambdaChatApi.role?.attachInlinePolicy( // add sagemaker policy
       new iam.Policy(this, 'sagemaker-policy-lambda-chat-bedrock', {
