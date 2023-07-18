@@ -102,7 +102,16 @@ export class CdkBedrockAnthropicStack extends cdk.Stack {
     roleLambda.addManagedPolicy({
       managedPolicyArn: 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole',
     });
-    
+    roleLambda.attachInlinePolicy( // add sagemaker policy
+      new iam.Policy(this, 'sagemaker-policy-lambda-chat-bedrock', {
+        statements: [SageMakerPolicy],
+      }),
+    );    
+    roleLambda.attachInlinePolicy( // add bedrock policy
+      new iam.Policy(this, 'bedrock-policy-lambda-chat-bedrock', {
+        statements: [BedrockPolicy],
+      }),
+    );    
 
     // Lambda for chat using langchain (container)
     const lambdaChatApi = new lambda.DockerImageFunction(this, "lambda-chat", {
@@ -117,9 +126,7 @@ export class CdkBedrockAnthropicStack extends cdk.Stack {
         s3_prefix: s3_prefix,
         tableName: tableName
       }
-    }); 
-
-    
+    });     
     lambdaChatApi.grantInvoke(new iam.ServicePrincipal('apigateway.amazonaws.com'));  
     s3Bucket.grantRead(lambdaChatApi); // permission for s3
     dataTable.grantReadWriteData(lambdaChatApi); // permission for dynamo
