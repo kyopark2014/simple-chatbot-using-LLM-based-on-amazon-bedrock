@@ -93,12 +93,12 @@ export class CdkBedrockAnthropicStack extends cdk.Stack {
         tableName: tableName
       }
     }); 
-
-    const bedrockPrincipal = new iam.ServicePrincipal("apigateway.amazonaws.com");
+    
     const SageMakerPolicy = new iam.PolicyStatement({  // policy statement for sagemaker
       actions: ['sagemaker:*'],
       resources: ['*'],
     });
+    const bedrockPrincipal = new iam.ServicePrincipal("apigateway.amazonaws.com");
     const BedrockPolicy = new iam.PolicyStatement({  // policy statement for bedrock
       actions: ['bedrock:*'],
       resources: ['*'],
@@ -107,6 +107,11 @@ export class CdkBedrockAnthropicStack extends cdk.Stack {
     lambdaChatApi.role?.attachInlinePolicy( // add sagemaker policy
       new iam.Policy(this, 'sagemaker-policy-lambda-chat-bedrock', {
         statements: [SageMakerPolicy],
+      }),
+    );
+    lambdaChatApi.role?.attachInlinePolicy( // add bedrock policy
+      new iam.Policy(this, 'bedrock-policy-lambda-chat-bedrock', {
+        statements: [BedrockPolicy],
       }),
     );
     lambdaChatApi.grantInvoke(new iam.ServicePrincipal('apigateway.amazonaws.com'));  
