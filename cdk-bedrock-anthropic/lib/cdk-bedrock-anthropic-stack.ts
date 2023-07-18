@@ -80,20 +80,8 @@ export class CdkBedrockAnthropicStack extends cdk.Stack {
       description: 'The domain name of the Distribution',
     });
 
-    // Lambda for chat using langchain (container)
-    const lambdaChatApi = new lambda.DockerImageFunction(this, "lambda-chat", {
-      description: 'lambda for chat api',
-      functionName: 'lambda-chat-api-bedrock',
-      code: lambda.DockerImageCode.fromImageAsset(path.join(__dirname, '../../lambda-chat')),
-      timeout: cdk.Duration.seconds(60),
-      environment: {
-        endpoint: endpoint,
-        s3_bucket: s3Bucket.bucketName,
-        s3_prefix: s3_prefix,
-        tableName: tableName
-      }
-    }); 
-    
+
+    // role for lambda
     const SageMakerPolicy = new iam.PolicyStatement({  // policy statement for sagemaker
       actions: ['sagemaker:*'],
       resources: ['*'],
@@ -103,24 +91,35 @@ export class CdkBedrockAnthropicStack extends cdk.Stack {
       resources: ['*'],
     });
 
-
-    lambdaChatApi.role?.attachInlinePolicy( // add sagemaker policy
-      new iam.Policy(this, 'sagemaker-policy-lambda-chat-bedrock', {
-        statements: [SageMakerPolicy],
-      }),
-    );
-    lambdaChatApi.role?.attachInlinePolicy( // add sagemaker policy
-      new iam.Policy(this, 'bedrock-policy-lambda-chat', {
-        statements: [BedrockPolicy],
-      }),
-    );
-
-    lambdaChatApi.role?.grantAssumeRole(new iam.CompositePrincipal(
+    const roleLambda = new iam.Role(this, "api-role-lambda-chat", {
+      roleName: "api-role-lambda-chat",
+      assumedBy: new iam.CompositePrincipal(
         new iam.ServicePrincipal("edgelambda.amazonaws.com"),
         new iam.ServicePrincipal("lambda.amazonaws.com"),
         new iam.ServicePrincipal("apigateway.amazonaws.com")
-    ))
+    )
+    });
+    roleLambda.addManagedPolicy({
+      managedPolicyArn: 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole',
+    });
+    
 
+    // Lambda for chat using langchain (container)
+    const lambdaChatApi = new lambda.DockerImageFunction(this, "lambda-chat", {
+      description: 'lambda for chat api',
+      functionName: 'lambda-chat-api-bedrock',
+      code: lambda.DockerImageCode.fromImageAsset(path.join(__dirname, '../../lambda-chat')),
+      timeout: cdk.Duration.seconds(60),
+      role: roleLambda,
+      environment: {
+        endpoint: endpoint,
+        s3_bucket: s3Bucket.bucketName,
+        s3_prefix: s3_prefix,
+        tableName: tableName
+      }
+    }); 
+
+    
     lambdaChatApi.grantInvoke(new iam.ServicePrincipal('apigateway.amazonaws.com'));  
     s3Bucket.grantRead(lambdaChatApi); // permission for s3
     dataTable.grantReadWriteData(lambdaChatApi); // permission for dynamo
