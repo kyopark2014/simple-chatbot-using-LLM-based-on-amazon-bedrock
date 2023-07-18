@@ -19,6 +19,21 @@ s3_prefix = os.environ.get('s3_prefix')
 endpoint_name = os.environ.get('endpoint')
 tableName = os.environ.get('tableName')
 
+# Bedrock Contiguration
+bedrock_region = "us-west-2" 
+bedrock_config = {
+        "region_name":bedrock_region,
+        "endpoint_url":"https://prod.us-west-2.frontend.bedrock.aws.dev"
+    }
+bedrock_client = boto3.client(
+    service_name='bedrock',
+    region_name=bedrock_config["region_name"],
+    endpoint_url=bedrock_config["endpoint_url"]
+)
+
+output_text = bedrock_client.list_foundation_models()
+print('models: ', output_text)
+
 # initiate llm model based on langchain
 class ContentHandler(LLMContentHandler):
     content_type = "application/json"
