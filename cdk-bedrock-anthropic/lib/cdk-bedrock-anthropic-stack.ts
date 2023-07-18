@@ -103,7 +103,7 @@ export class CdkBedrockAnthropicStack extends cdk.Stack {
     const BedrockPolicy = new iam.PolicyStatement({  // policy statement for bedrock
       actions: ['bedrock:*'],
       resources: ['*'],
-      principals: [bedrockPrincipal]
+      // principals: [bedrockPrincipal]
     });
    // BedrockPolicy.addPrincipals(new iam.ServicePrincipal("apigateway.amazonaws.com"))    
     //BedrockPolicy.addPrincipals(new iam.ServicePrincipal("apigateway.amazonaws.com"))    
@@ -132,7 +132,8 @@ export class CdkBedrockAnthropicStack extends cdk.Stack {
     });
     role.addToPolicy(new iam.PolicyStatement({
       resources: ['*'],
-      actions: ['lambda:InvokeFunction']
+      actions: ['lambda:InvokeFunction'],
+      principals: [bedrockPrincipal]
     }));
     role.addManagedPolicy({
       managedPolicyArn: 'arn:aws:iam::aws:policy/AWSLambdaExecute',
