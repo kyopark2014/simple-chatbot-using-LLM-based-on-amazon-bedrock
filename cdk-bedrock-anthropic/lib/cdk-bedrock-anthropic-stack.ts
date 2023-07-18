@@ -109,7 +109,7 @@ export class CdkBedrockAnthropicStack extends cdk.Stack {
     );
     lambdaChatApi.role?.attachInlinePolicy( // add bedrock policy
       new iam.Policy(this, 'bedrock-policy-lambda-chat-bedrock', {
-        statements: [SageMakerPolicy],
+        statements: [BedrockPolicy],
       }),
     );
     lambdaChatApi.grantInvoke(new iam.ServicePrincipal('apigateway.amazonaws.com'));  
