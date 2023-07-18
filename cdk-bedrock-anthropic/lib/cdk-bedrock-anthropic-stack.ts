@@ -82,15 +82,6 @@ export class CdkBedrockAnthropicStack extends cdk.Stack {
 
 
     // role for lambda
-    const SageMakerPolicy = new iam.PolicyStatement({  // policy statement for sagemaker
-      actions: ['sagemaker:*'],
-      resources: ['*'],
-    });
-    const BedrockPolicy = new iam.PolicyStatement({  // policy statement for sagemaker
-      actions: ['bedrock:*'],
-      resources: ['*'],
-    });
-
     const roleLambda = new iam.Role(this, "api-role-lambda-chat", {
       roleName: "api-role-lambda-chat",
       assumedBy: new iam.CompositePrincipal(
@@ -99,10 +90,17 @@ export class CdkBedrockAnthropicStack extends cdk.Stack {
         new iam.ServicePrincipal("bedrock.amazonaws.com")
     )
     });
-    roleLambda.grantAssumeRole(new iam.ServicePrincipal("s3.amazonaws.com"));
-
     roleLambda.addManagedPolicy({
       managedPolicyArn: 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole',
+    });
+
+    const SageMakerPolicy = new iam.PolicyStatement({  // policy statement for sagemaker
+      actions: ['sagemaker:*'],
+      resources: ['*'],
+    });
+    const BedrockPolicy = new iam.PolicyStatement({  // policy statement for sagemaker
+      actions: ['bedrock:*'],
+      resources: ['*'],
     });
     roleLambda.attachInlinePolicy( // add sagemaker policy
       new iam.Policy(this, 'sagemaker-policy-lambda-chat-bedrock', {
