@@ -123,7 +123,12 @@ export class CdkBedrockAnthropicStack extends cdk.Stack {
     // role
     const role = new iam.Role(this, "api-role-chatbot", {
       roleName: "api-role-chatbot",
-      assumedBy: new iam.ServicePrincipal("apigateway.amazonaws.com")
+      //assumedBy: new iam.ServicePrincipal("apigateway.amazonaws.com")
+      assumedBy: new iam.CompositePrincipal(
+        new iam.ServicePrincipal("edgelambda.amazonaws.com"),
+        new iam.ServicePrincipal("lambda.amazonaws.com"),
+        new iam.ServicePrincipal("apigateway.amazonaws.com")
+      ),
     });
     role.addToPolicy(new iam.PolicyStatement({
       resources: ['*'],
