@@ -103,20 +103,23 @@ export class CdkBedrockAnthropicStack extends cdk.Stack {
       resources: ['*'],
     });
 
-//    policy1.addServicePrincipal('bedrock.amazonaws.com');
-    const bedrockPrincipal = new iam.ServicePrincipal("apigateway.amazonaws.com");
-    new iam.Policy(this, 'bedrock-policy', {
-      policyName: 'CdkBedrockPolicy',        
-      statements: [SageMakerPolicy, BedrockPolicy]
-    })
 
     lambdaChatApi.role?.attachInlinePolicy( // add sagemaker policy
       new iam.Policy(this, 'sagemaker-policy-lambda-chat-bedrock', {
-        statements: [SageMakerPolicy, BedrockPolicy],
+        statements: [SageMakerPolicy],
+      }),
+    );
+    lambdaChatApi.role?.attachInlinePolicy( // add sagemaker policy
+      new iam.Policy(this, 'bedrock-policy-lambda-chat', {
+        statements: [BedrockPolicy],
       }),
     );
 
-    lambdaChatApi.role?.grantAssumeRole(new iam.ServicePrincipal("apigateway.amazonaws.com"))
+    lambdaChatApi.role?.grantAssumeRole(new iam.CompositePrincipal(
+        new iam.ServicePrincipal("edgelambda.amazonaws.com"),
+        new iam.ServicePrincipal("lambda.amazonaws.com"),
+        new iam.ServicePrincipal("apigateway.amazonaws.com")
+    ))
 
     lambdaChatApi.grantInvoke(new iam.ServicePrincipal('apigateway.amazonaws.com'));  
     s3Bucket.grantRead(lambdaChatApi); // permission for s3
@@ -126,11 +129,6 @@ export class CdkBedrockAnthropicStack extends cdk.Stack {
     const role = new iam.Role(this, "api-role-chatbot", {
       roleName: "api-role-chatbot",
       assumedBy: new iam.ServicePrincipal("apigateway.amazonaws.com")
-      //assumedBy: new iam.CompositePrincipal(
-      //  new iam.ServicePrincipal("edgelambda.amazonaws.com"),
-      //  new iam.ServicePrincipal("lambda.amazonaws.com"),
-      //  new iam.ServicePrincipal("apigateway.amazonaws.com")
-      //),
     });
     role.addToPolicy(new iam.PolicyStatement({
       resources: ['*'],
