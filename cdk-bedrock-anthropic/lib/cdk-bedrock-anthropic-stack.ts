@@ -102,18 +102,19 @@ export class CdkBedrockAnthropicStack extends cdk.Stack {
       actions: ['bedrock:*'],
       resources: ['*'],
     });
+    BedrockPolicy.addServicePrincipal('bedrock.amazonaws.com');
+
     lambdaChatApi.role?.attachInlinePolicy( // add sagemaker policy
       new iam.Policy(this, 'sagemaker-policy-lambda-chat-bedrock', {
         statements: [SageMakerPolicy],
       }),
-    );
+    );    
     lambdaChatApi.role?.attachInlinePolicy( // add bedrock policy
       new iam.Policy(this, 'bedrock-policy-lambda-chat-bedrock', {
         statements: [BedrockPolicy],
       }),
     );
     lambdaChatApi.grantInvoke(new iam.ServicePrincipal('apigateway.amazonaws.com'));  
-    lambdaChatApi.grantInvoke(new iam.ServicePrincipal('bedrock.amazonaws.com'));  
 
     s3Bucket.grantRead(lambdaChatApi); // permission for s3
     dataTable.grantReadWriteData(lambdaChatApi); // permission for dynamo
