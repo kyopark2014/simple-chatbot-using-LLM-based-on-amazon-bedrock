@@ -83,7 +83,7 @@ export class CdkBedrockAnthropicStack extends cdk.Stack {
 
     // role for lambda
     const roleLambda = new iam.Role(this, "api-role-lambda-chat", {
-      roleName: "api-role-lambda-chat",
+      roleName: "api-role-lambda-chat-for-bedrock",
       assumedBy: new iam.CompositePrincipal(
         new iam.ServicePrincipal("lambda.amazonaws.com"),
         new iam.ServicePrincipal("sagemaker.amazonaws.com"),
