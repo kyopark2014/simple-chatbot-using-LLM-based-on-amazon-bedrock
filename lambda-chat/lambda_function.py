@@ -23,7 +23,6 @@ tableName = os.environ.get('tableName')
 print(f"langchain version check: {langchain.__version__}")
 print(f"boto3 version check: {boto3.__version__}")
 
-"""
 # Bedrock Contiguration
 bedrock_region = "us-west-2" 
 bedrock_config = {
@@ -38,7 +37,6 @@ bedrock_client = boto3.client(
 
 output_text = bedrock_client.list_foundation_models()
 print('models: ', output_text)
-"""
 
 # initiate llm model based on langchain
 class ContentHandler(LLMContentHandler):
