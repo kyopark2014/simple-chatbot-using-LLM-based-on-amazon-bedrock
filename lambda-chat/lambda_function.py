@@ -13,30 +13,13 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.docstore.document import Document
 from langchain.chains.summarize import load_summarize_chain
 import langchain
+from utils import bedrock, print_ww
 
 s3 = boto3.client('s3')
 s3_bucket = os.environ.get('s3_bucket') # bucket name
 s3_prefix = os.environ.get('s3_prefix')
 endpoint_name = os.environ.get('endpoint')
 tableName = os.environ.get('tableName')
-
-print(f"langchain version check: {langchain.__version__}")
-print(f"boto3 version check: {boto3.__version__}")
-
-# Bedrock Contiguration
-bedrock_region = "us-west-2" 
-bedrock_config = {
-        "region_name":bedrock_region,
-        "endpoint_url":"https://prod.us-west-2.frontend.bedrock.aws.dev"
-    }
-bedrock_client = boto3.client(
-    service_name='bedrock',
-    region_name=bedrock_config["region_name"],
-    endpoint_url=bedrock_config["endpoint_url"]
-)
-
-output_text = bedrock_client.list_foundation_models()
-print('models: ', output_text)
 
 # initiate llm model based on langchain
 class ContentHandler(LLMContentHandler):
@@ -138,6 +121,26 @@ def lambda_handler(event, context):
     print('body: ', body)
     
     start = int(time.time())    
+
+
+    print(f"langchain version check: {langchain.__version__}")
+    print(f"boto3 version check: {boto3.__version__}")
+
+    # Bedrock Contiguration
+    bedrock_region = "us-west-2" 
+    bedrock_config = {
+            "region_name":bedrock_region,
+            "endpoint_url":"https://prod.us-west-2.frontend.bedrock.aws.dev"
+        }
+    bedrock_client = boto3.client(
+        service_name='bedrock',
+        region_name=bedrock_config["region_name"],
+        endpoint_url=bedrock_config["endpoint_url"]
+    )
+
+    output_text = bedrock_client.list_foundation_models()
+    print('models: ', output_text)
+
 
     msg = ""
     if type == 'text':
