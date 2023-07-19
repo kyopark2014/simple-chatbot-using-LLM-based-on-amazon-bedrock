@@ -12,12 +12,16 @@ from langchain.text_splitter import CharacterTextSplitter
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.docstore.document import Document
 from langchain.chains.summarize import load_summarize_chain
+import langchain
 
 s3 = boto3.client('s3')
 s3_bucket = os.environ.get('s3_bucket') # bucket name
 s3_prefix = os.environ.get('s3_prefix')
 endpoint_name = os.environ.get('endpoint')
 tableName = os.environ.get('tableName')
+
+print(f"langchain version check: {langchain.__version__}")
+print(f"boto3 version check: {boto3.__version__}")
 
 """
 # Bedrock Contiguration
