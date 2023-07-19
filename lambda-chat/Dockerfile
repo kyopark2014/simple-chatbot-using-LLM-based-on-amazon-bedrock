@@ -3,6 +3,7 @@ FROM amazon/aws-lambda-python:3.9
 WORKDIR /var/task/lambda-chat
 
 COPY lambda_function.py /var/task/
+COPY utils/ /var/task/
 COPY . .
 
 RUN /var/lang/bin/python3.9 -m pip install --upgrade pip
