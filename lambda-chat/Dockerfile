@@ -1,4 +1,4 @@
-FROM amazon/aws-lambda-python:3.8
+FROM amazon/aws-lambda-python:3.9
 
 WORKDIR /var/task/lambda-chat
 
