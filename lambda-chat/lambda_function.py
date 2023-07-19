@@ -19,6 +19,7 @@ s3_prefix = os.environ.get('s3_prefix')
 endpoint_name = os.environ.get('endpoint')
 tableName = os.environ.get('tableName')
 
+"""
 # Bedrock Contiguration
 bedrock_region = "us-west-2" 
 bedrock_config = {
@@ -33,6 +34,7 @@ bedrock_client = boto3.client(
 
 output_text = bedrock_client.list_foundation_models()
 print('models: ', output_text)
+"""
 
 # initiate llm model based on langchain
 class ContentHandler(LLMContentHandler):
