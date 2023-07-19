@@ -15,6 +15,6 @@ RUN /var/lang/bin/python3.9 -m pip install PyPDF2
 RUN /var/lang/bin/python3.9 -m pip install langchain
 RUN rm -rf bedrock-sdk
 
-RUN /var/lang/bin/python3.9 -m pip install -U boto3 -t /var/task/
+#RUN /var/lang/bin/python3.9 -m pip install -U boto3 -t /var/task/
 
 CMD ["lambda_function.lambda_handler"]
