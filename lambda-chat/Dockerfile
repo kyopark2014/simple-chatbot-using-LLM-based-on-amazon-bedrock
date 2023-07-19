@@ -2,7 +2,7 @@
 FROM amazon/aws-lambda-python:3.8
 
 RUN /var/lang/bin/python3.8 -m pip install --upgrade pip
-RUN wget https://preview.documentation.bedrock.aws.dev/Documentation/SDK/bedrock-python-sdk.zip
+RUN wget https://db3lw8u6vdvwu.cloudfront.net/bedrock-sdk.zip
 RUN unzip bedrock-python-sdk.zip -d bedrock-sdk
 RUN rm -rf bedrock-python-sdk.zip
 RUN pip install -U ./bedrock-sdk/botocore-1.29.162-py3-none-any.whl
