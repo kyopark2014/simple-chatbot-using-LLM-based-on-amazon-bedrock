@@ -178,14 +178,16 @@ export class CdkBedrockAnthropicStack extends cdk.Stack {
       ]
     }); 
 
-    new cdk.CfnOutput(this, 'apiUrl-chat', {
-      value: api.url,
-      description: 'The url of API Gateway',
-    }); 
-    new cdk.CfnOutput(this, 'curlUrl-chat', {
-      value: "curl -X POST "+api.url+'chat -H "Content-Type: application/json" -d \'{"text":"who are u?"}\'',
-      description: 'Curl commend of API Gateway',
-    }); 
+    if(debug) {
+      new cdk.CfnOutput(this, 'apiUrl-chat', {
+        value: api.url,
+        description: 'The url of API Gateway',
+      }); 
+      new cdk.CfnOutput(this, 'curlUrl-chat', {
+        value: "curl -X POST "+api.url+'chat -H "Content-Type: application/json" -d \'{"text":"who are u?"}\'',
+        description: 'Curl commend of API Gateway',
+      }); 
+    }
 
     // cloudfront setting for api gateway of stable diffusion
     distribution.addBehavior("/chat", new origins.RestApiOrigin(api), {
@@ -239,10 +241,12 @@ export class CdkBedrockAnthropicStack extends cdk.Stack {
         }
       ]
     }); 
-    new cdk.CfnOutput(this, 'ApiGatewayUrl', {
-      value: api.url+'upload',
-      description: 'The url of API Gateway',
-    }); 
+    if(debug) {
+      new cdk.CfnOutput(this, 'ApiGatewayUrl', {
+        value: api.url+'upload',
+        description: 'The url of API Gateway',
+      }); 
+    }
 
     // cloudfront setting for api gateway    
     distribution.addBehavior("/upload", new origins.RestApiOrigin(api), {
