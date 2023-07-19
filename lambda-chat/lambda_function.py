@@ -13,6 +13,9 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.docstore.document import Document
 from langchain.chains.summarize import load_summarize_chain
 import langchain
+import sys
+module_path = "."
+sys.path.append(os.path.abspath(module_path))
 from utils import bedrock, print_ww
 
 s3 = boto3.client('s3')
