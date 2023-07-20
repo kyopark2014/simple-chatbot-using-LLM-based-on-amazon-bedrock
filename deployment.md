@@ -64,6 +64,4 @@ cdk deploy
 ```
 9) 설치가 완료되면 브라우저에서 아래와 같이 WebUrl를 확인하여 브라우저를 이용하여 접속합니다.
 
-
-![noname](https://github.com/kyopark2014/chatbot-based-on-Falcon-FM/assets/52392004/dfc27dcd-3d46-4471-bcaf-04f0f709b4d3)
-
+![noname](https://github.com/kyopark2014/chatbot-based-on-bedrock-anthropic/assets/52392004/369b175f-9bd5-4e34-ad0e-e9f2a50e90fb)
