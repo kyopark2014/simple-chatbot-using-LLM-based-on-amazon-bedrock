@@ -62,7 +62,7 @@ calleeId.textContent = "AWS";
 
 index = 0;
 
-addNotifyMessage("start the interractive chat");
+addNotifyMessage("start chat with Amazon Bedrock");
 
 // Listeners
 message.addEventListener('keyup', function(e){

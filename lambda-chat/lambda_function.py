@@ -139,7 +139,7 @@ def lambda_handler(event, context):
     
     boto3_bedrock = bedrock.get_bedrock_client(
         region=bedrock_config["region_name"],
-        roleArn=roleArn,
+        assumed_role=roleArn,
         url_override=bedrock_config["endpoint_url"])
     output_text = boto3_bedrock.list_foundation_models()
     print('models: ', output_text)
