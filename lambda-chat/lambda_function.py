@@ -133,7 +133,7 @@ def lambda_handler(event, context):
 
     # Bedrock Contiguration
     bedrock_region = "us-west-2" 
-    """    
+
     bedrock_config = {
             "region_name":bedrock_region,
             "endpoint_url":"https://prod.us-west-2.frontend.bedrock.aws.dev"
@@ -145,7 +145,6 @@ def lambda_handler(event, context):
         url_override=bedrock_config["endpoint_url"])
     output_text = boto3_bedrock.list_foundation_models()
     print('models: ', output_text)
-    """
 
     """
     bedrock_client = boto3.client(
@@ -155,6 +154,7 @@ def lambda_handler(event, context):
     )
     """
     
+    """
     from botocore.config import Config
     retry_config = Config(
         region_name = bedrock_region,
@@ -186,6 +186,7 @@ def lambda_handler(event, context):
         )
     output_text = bedrock_client.list_foundation_models()
     print('list_foundation_models: ', output_text)
+    """
     
     msg = ""
     if type == 'text':
