@@ -142,6 +142,14 @@ def lambda_handler(event, context):
     output_text = boto3_bedrock.list_foundation_models()
     print('models: ', output_text)
 
+    """
+    bedrock_client = boto3.client(
+        service_name='bedrock',
+        region_name=bedrock_config["region_name"],
+        endpoint_url=bedrock_config["endpoint_url"]
+    )
+    """
+
     msg = ""
     if type == 'text':
         text = body
