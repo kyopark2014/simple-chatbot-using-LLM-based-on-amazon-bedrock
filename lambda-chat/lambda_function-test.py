@@ -1,7 +1,5 @@
 import numpy as np
-import pandas as pd
 import time
-from xgboost import XGBRegressor
 from lambda_function import handler  
 
 def load_event():
@@ -19,13 +17,6 @@ def load_event():
     return event
 
 def main():
-    # Version check
-    print('np version: ', np.__version__)
-    print('pandas version: ', pd.__version__)
-
-    import xgboost as xgb
-    print('xgb version: ', xgb.__version__)
-
     start = time.time()
 
     # load samples

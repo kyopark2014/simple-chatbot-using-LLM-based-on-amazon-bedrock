@@ -23,6 +23,7 @@ s3_bucket = os.environ.get('s3_bucket') # bucket name
 s3_prefix = os.environ.get('s3_prefix')
 endpoint_name = os.environ.get('endpoint')
 tableName = os.environ.get('tableName')
+roleArn = os.environ.get('tableName')
 
 # initiate llm model based on langchain
 class ContentHandler(LLMContentHandler):
@@ -138,6 +139,7 @@ def lambda_handler(event, context):
     
     boto3_bedrock = bedrock.get_bedrock_client(
         region=bedrock_config["region_name"],
+        roleArn=roleArn,
         url_override=bedrock_config["endpoint_url"])
     output_text = boto3_bedrock.list_foundation_models()
     print('models: ', output_text)
