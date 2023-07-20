@@ -43,7 +43,7 @@ cd ../lambda-chat && wget https://preview.documentation.bedrock.aws.dev/Document
 unzip bedrock-python-sdk.zip -d bedrock-sdk && rm -rf bedrock-python-sdk.zip && cd ../cdk-bedrock-anthropic/
 ```
 
-6) CDK를 위해 Boostraping을 수행합니다.
+6) CDK 사용을 위해 Boostraping을 수행합니다.
 
 아래 명령어로 Account ID를 확인합니다.
 
