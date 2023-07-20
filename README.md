@@ -4,3 +4,17 @@
 
 
 <img src="https://github.com/kyopark2014/chatbot-based-on-bedrock-anthropic/assets/52392004/770ecd69-3aee-49e4-b163-218d4c8a6078" width="700">
+
+
+## Debugging
+
+```text
+docker build -t inference:v1 .
+
+docker run -d -p 8080:8080 inference:v1
+
+docker exec -it 41e297948511 /bin/bash
+```
+
+
+
