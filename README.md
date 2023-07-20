@@ -114,7 +114,7 @@ Container 접속 후 아래 명령어로 동작을 확인합니다.
 python# lambda_function-test.py
 ```
 
-## 실습하가ㅣ
+## 실습하기
 
 ### CDK를 이용한 인프라 설치
 
