@@ -23,7 +23,7 @@ s3_bucket = os.environ.get('s3_bucket') # bucket name
 s3_prefix = os.environ.get('s3_prefix')
 endpoint_name = os.environ.get('endpoint')
 tableName = os.environ.get('tableName')
-roleArn = os.environ.get('tableName')
+roleArn = os.environ.get('roleArn')
 print('roleArn: ', roleArn)
 
 # initiate llm model based on langchain
