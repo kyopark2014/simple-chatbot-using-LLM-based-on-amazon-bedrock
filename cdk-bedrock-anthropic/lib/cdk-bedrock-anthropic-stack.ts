@@ -95,12 +95,12 @@ export class CdkBedrockAnthropicStack extends cdk.Stack {
     });
 
     const SageMakerPolicy = new iam.PolicyStatement({  // policy statement for sagemaker
+      resources: ['*'],
       actions: ['sagemaker:*'],
-      resources: ['*'],
     });
-    const BedrockPolicy = new iam.PolicyStatement({  // policy statement for sagemaker
-      actions: ['bedrock:*'],
+    const BedrockPolicy = new iam.PolicyStatement({  // policy statement for bedrock
       resources: ['*'],
+      actions: ['bedrock:*'],      
     });
     roleLambda.attachInlinePolicy( // add sagemaker policy
       new iam.Policy(this, 'sagemaker-policy-lambda-chat-bedrock', {
@@ -113,7 +113,8 @@ export class CdkBedrockAnthropicStack extends cdk.Stack {
       }),
     );    
     roleLambda.addToPolicy(new iam.PolicyStatement({
-        resources: [roleLambda.roleArn],
+        // resources: [roleLambda.roleArn],
+        resources: ['*'],        
         actions: ['sts:AssumeRole'],
       })
     );
