@@ -164,7 +164,7 @@ def lambda_handler(event, context):
 
     output_text = bedrock_client.list_foundation_models()
     print('output: ', output_text)
-
+    
 
     print(f"langchain version check: {langchain.__version__}")
     print(f"boto3 version check: {boto3.__version__}")
@@ -204,15 +204,16 @@ def lambda_handler(event, context):
     )
 
     boto3_kwargs = {}
-    session = boto3.Session()
+    session = boto3.Session(profile_name="bedrock")
     if roleArn:
-        print(f"  Using role: {roleArn}", end='')
+        print('role: ', roleArn)
         sts = session.client("sts")
         response = sts.assume_role(
             RoleArn=str(roleArn), #
             RoleSessionName="langchain-llm-1"
         )
-        print(" ... successful!")
+        print('sts: ', response)
+
         boto3_kwargs['aws_access_key_id']=response['Credentials']['AccessKeyId']
         boto3_kwargs['aws_secret_access_key']=response['Credentials']['SecretAccessKey']
         boto3_kwargs['aws_session_token']=response['Credentials']['SessionToken']
@@ -226,7 +227,7 @@ def lambda_handler(event, context):
     output_text = bedrock_client.list_foundation_models()
     print('list_foundation_models: ', output_text)
     """
-
+    
     msg = ""
     if type == 'text':
         text = body
