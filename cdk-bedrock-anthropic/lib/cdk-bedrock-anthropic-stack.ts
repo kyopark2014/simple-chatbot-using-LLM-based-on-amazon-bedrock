@@ -85,6 +85,15 @@ export class CdkBedrockAnthropicStack extends cdk.Stack {
       roleName: "role-bedrock",
       assumedBy: new iam.ServicePrincipal("bedrock.amazonaws.com")
     });
+    const BedrockPolicy = new iam.PolicyStatement({  // policy statement for bedrock
+      resources: ['*'],
+      actions: ['bedrock:*'],      
+    });
+    roleBedrock.attachInlinePolicy( // add bedrock policy
+      new iam.Policy(this, 'bedrock-policy-lambda-chat-bedrock', {
+        statements: [BedrockPolicy],
+      }),
+    );   
 
     const roleLambda = new iam.Role(this, "role-lambda-chat", {
       roleName: "role-lambda-for-chat",
@@ -101,20 +110,13 @@ export class CdkBedrockAnthropicStack extends cdk.Stack {
       resources: ['*'],
       actions: ['sagemaker:*'],
     });
-    const BedrockPolicy = new iam.PolicyStatement({  // policy statement for bedrock
-      resources: ['*'],
-      actions: ['bedrock:*'],      
-    });
+    
     roleLambda.attachInlinePolicy( // add sagemaker policy
       new iam.Policy(this, 'sagemaker-policy-lambda-chat-bedrock', {
         statements: [SageMakerPolicy],
       }),
     );    
-    roleLambda.attachInlinePolicy( // add bedrock policy
-      new iam.Policy(this, 'bedrock-policy-lambda-chat-bedrock', {
-        statements: [BedrockPolicy],
-      }),
-    );    
+    
     roleLambda.addToPolicy(
       new iam.PolicyStatement({
         resources: [roleBedrock.roleArn],
