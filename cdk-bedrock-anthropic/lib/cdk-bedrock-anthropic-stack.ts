@@ -80,10 +80,9 @@ export class CdkBedrockAnthropicStack extends cdk.Stack {
       description: 'The domain name of the Distribution',
     });
 
-
     // role for lambda
     const roleLambda = new iam.Role(this, "api-role-lambda-chat", {
-      roleName: "api-role-lambda-chat-for-bedrock",
+      roleName: "bedrock-role-lambda-chat",
       assumedBy: new iam.CompositePrincipal(
         new iam.ServicePrincipal("lambda.amazonaws.com"),
         new iam.ServicePrincipal("sagemaker.amazonaws.com"),
@@ -112,12 +111,6 @@ export class CdkBedrockAnthropicStack extends cdk.Stack {
         statements: [BedrockPolicy],
       }),
     );    
-  /*  roleLambda.addToPolicy(new iam.PolicyStatement({
-        // resources: [roleLambda.roleArn],
-        resources: ['*'],        
-        actions: ['sts:AssumeRole'],
-      })
-    ); */
 
     // Lambda for chat using langchain (container)
     const lambdaChatApi = new lambda.DockerImageFunction(this, "lambda-chat", {

@@ -28,6 +28,7 @@ def get_bedrock_client(assumed_role=None, region='us-east-1', url_override = Non
 
     boto3_kwargs = {}
 
+    print('assumed_role: ', assumed_role)
     if assumed_role:
         print(f"  Using role: {assumed_role}", end='')
         sts = session.client("sts")
