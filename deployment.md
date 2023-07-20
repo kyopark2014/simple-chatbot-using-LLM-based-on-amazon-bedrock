@@ -10,26 +10,40 @@
 
 ![noname](https://github.com/kyopark2014/chatbot-based-on-Falcon-FM/assets/52392004/b7d0c3c0-3e94-4126-b28d-d269d2635239)
 
-3) 소스를 다운로드합니다.
+3) EBS 크기 변경
+
+아래와 같이 스크립트를 다운로드 합니다. 
+
+```text
+curl https://raw.githubusercontent.com/kyopark2014/technical-summary/main/resize.sh -o resize.sh
+```
+
+이후 아래 명령어로 용량을 100G로 변경합니다.
+```text
+chmod a+rx resize.sh && ./resize.sh 100
+```
+
+
+4) 소스를 다운로드합니다.
 
 ```java
 git clone https://github.com/kyopark2014/chatbot-based-on-bedrock-anthropic
 ```
 
-4) cdk 폴더로 이동하여 필요한 라이브러리를 설치합니다.
+5) cdk 폴더로 이동하여 필요한 라이브러리를 설치합니다.
 
 ```java
 cd chatbot-based-on-bedrock-anthropic/cdk-bedrock-anthropic/ && npm install
 ```
 
-5) bedrock-sdk를 설치합니다.
+6) bedrock-sdk를 설치합니다.
 
 ```java
 cd ../lambda-chat && wget https://preview.documentation.bedrock.aws.dev/Documentation/SDK/bedrock-python-sdk.zip
 unzip bedrock-python-sdk.zip -d bedrock-sdk && rm -rf bedrock-python-sdk.zip && cd ../cdk-bedrock-anthropic/
 ```
 
-5) CDK를 위해 Boostraping을 수행합니다.
+6) CDK를 위해 Boostraping을 수행합니다.
 
 아래 명령어로 Account ID를 확인합니다.
 
@@ -43,13 +57,13 @@ aws sts get-caller-identity --query Account --output text
 cdk bootstrap aws://account-id/ap-northeast-2
 ```
 
-6) 인프라를 설치합니다.
+8) 인프라를 설치합니다.
 
 ```java
 cdk deploy
 ```
-
-7) 설치가 완료되면 브라우저에서 아래와 같이 WebUrl를 확인하여 브라우저를 이용하여 접속합니다.
+9) 설치가 완료되면 브라우저에서 아래와 같이 WebUrl를 확인하여 브라우저를 이용하여 접속합니다.
 
 
 ![noname](https://github.com/kyopark2014/chatbot-based-on-Falcon-FM/assets/52392004/dfc27dcd-3d46-4471-bcaf-04f0f709b4d3)
+
