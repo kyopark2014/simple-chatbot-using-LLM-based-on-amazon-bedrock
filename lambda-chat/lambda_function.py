@@ -24,6 +24,7 @@ s3_prefix = os.environ.get('s3_prefix')
 endpoint_name = os.environ.get('endpoint')
 tableName = os.environ.get('tableName')
 roleArn = os.environ.get('tableName')
+print('roleArn: ', roleArn)
 
 # initiate llm model based on langchain
 class ContentHandler(LLMContentHandler):
@@ -183,7 +184,8 @@ def lambda_handler(event, context):
         region_name= bedrock_region,
         **boto3_kwargs
         )
-    
+    output_text = bedrock_client.list_foundation_models()
+    print('list_foundation_models: ', output_text)
     
     msg = ""
     if type == 'text':
