@@ -112,6 +112,11 @@ export class CdkBedrockAnthropicStack extends cdk.Stack {
         statements: [BedrockPolicy],
       }),
     );    
+    roleLambda.addToPolicy(new iam.PolicyStatement({
+        resources: [roleLambda.roleArn],
+        actions: ['sts:AssumeRole'],
+      })
+    );
 
     // Lambda for chat using langchain (container)
     const lambdaChatApi = new lambda.DockerImageFunction(this, "lambda-chat", {
