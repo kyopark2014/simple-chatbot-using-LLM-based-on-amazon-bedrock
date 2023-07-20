@@ -132,6 +132,7 @@ def lambda_handler(event, context):
 
     # Bedrock Contiguration
     bedrock_region = "us-west-2" 
+    """    
     bedrock_config = {
             "region_name":bedrock_region,
             "endpoint_url":"https://prod.us-west-2.frontend.bedrock.aws.dev"
@@ -143,6 +144,7 @@ def lambda_handler(event, context):
         url_override=bedrock_config["endpoint_url"])
     output_text = boto3_bedrock.list_foundation_models()
     print('models: ', output_text)
+    """
 
     """
     bedrock_client = boto3.client(
@@ -151,7 +153,38 @@ def lambda_handler(event, context):
         endpoint_url=bedrock_config["endpoint_url"]
     )
     """
+    
+    from botocore.config import Config
+    retry_config = Config(
+        region_name = bedrock_region,
+        retries = {
+            'max_attempts': 10,
+            'mode': 'standard'
+        }
+    )
 
+    boto3_kwargs = {}
+    session = boto3.Session()
+    if roleArn:
+        print(f"  Using role: {roleArn}", end='')
+        sts = session.client("sts")
+        response = sts.assume_role(
+            RoleArn=str(roleArn), #
+            RoleSessionName="langchain-llm-1"
+        )
+        print(" ... successful!")
+        boto3_kwargs['aws_access_key_id']=response['Credentials']['AccessKeyId']
+        boto3_kwargs['aws_secret_access_key']=response['Credentials']['SecretAccessKey']
+        boto3_kwargs['aws_session_token']=response['Credentials']['SessionToken']
+
+    bedrock_client = session.client(
+        service_name='bedrock',
+        config=retry_config,
+        region_name= bedrock_region,
+        **boto3_kwargs
+        )
+    
+    
     msg = ""
     if type == 'text':
         text = body
