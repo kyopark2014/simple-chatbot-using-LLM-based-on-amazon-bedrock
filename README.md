@@ -113,3 +113,11 @@ Container 접속 후 아래 명령어로 동작을 확인합니다.
 ```text
 python# lambda_function-test.py
 ```
+
+## 실습하가ㅣ
+
+### CDK를 이용한 인프라 설치
+
+[인프라 설치](https://github.com/kyopark2014/chatbot-based-on-bedrock-anthropic/blob/main/deployment.md)에 따라 CDK로 인프라 설치를 진행합니다.
+
+
