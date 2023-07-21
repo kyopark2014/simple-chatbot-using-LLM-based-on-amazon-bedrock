@@ -175,8 +175,8 @@ export class CdkBedrockAnthropicStack extends cdk.Stack {
     dataTable.grantReadWriteData(lambdaChatApi); // permission for dynamo
 
     // role
-    const role = new iam.Role(this, "api-role-chatbot", {
-      roleName: "api-role-chatbot",
+    const role = new iam.Role(this, "api-role-chatbot-bedrock", {
+      roleName: "api-role-chatbot-bedrock",
       assumedBy: new iam.ServicePrincipal("apigateway.amazonaws.com")
     });
     role.addToPolicy(new iam.PolicyStatement({
