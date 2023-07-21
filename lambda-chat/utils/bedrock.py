@@ -8,11 +8,12 @@ from enum import Enum
 import boto3
 from botocore.config import Config
 
-def get_bedrock_client(assumed_role=None, region='us-east-1', url_override = None):
+def get_bedrock_client(assumed_role=None, region='us-west-2', url_override = None):
     boto3_kwargs = {}
     session = boto3.Session()
 
     target_region = os.environ.get('AWS_DEFAULT_REGION',region)
+    target_region = 'us-west-2'
 
     print(f"Create new client\n  Using region: {target_region}")
     if 'AWS_PROFILE' in os.environ:
