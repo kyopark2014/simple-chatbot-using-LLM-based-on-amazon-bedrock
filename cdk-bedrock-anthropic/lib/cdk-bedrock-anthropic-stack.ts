@@ -250,9 +250,9 @@ export class CdkBedrockAnthropicStack extends cdk.Stack {
     });
 
     // Lambda - Upload
-    const lambdaUpload = new lambda.Function(this, "LambdaUpload", {
+    const lambdaUpload = new lambda.Function(this, "lambda-upload-bedrock", {
       runtime: lambda.Runtime.NODEJS_16_X, 
-      functionName: "lambda-upload",
+      functionName: "lambda-upload-bedrock",
       code: lambda.Code.fromAsset("../lambda-upload"), 
       handler: "index.handler", 
       timeout: cdk.Duration.seconds(10),
