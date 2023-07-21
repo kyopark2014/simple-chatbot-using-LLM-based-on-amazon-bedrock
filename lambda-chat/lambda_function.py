@@ -128,6 +128,7 @@ def lambda_handler(event, context):
     start = int(time.time())    
 
     # guide1
+    """
     bedrock_region = "us-west-2" 
 
     is_internal_use = True # 내부 직원 용
@@ -164,15 +165,13 @@ def lambda_handler(event, context):
 
     output_text = bedrock_client.list_foundation_models()
     print('output: ', output_text)
-    
+    """
 
     print(f"langchain version check: {langchain.__version__}")
     print(f"boto3 version check: {boto3.__version__}")
-
+     
     # Bedrock Contiguration
     bedrock_region = "us-west-2" 
-
-    """
     bedrock_config = {
             "region_name":bedrock_region,
             "endpoint_url":"https://prod.us-west-2.frontend.bedrock.aws.dev"
@@ -180,12 +179,13 @@ def lambda_handler(event, context):
     
     boto3_bedrock = bedrock.get_bedrock_client(
         region=bedrock_config["region_name"],
-        assumed_role=roleArn,
+        #assumed_role=roleArn,
         url_override=bedrock_config["endpoint_url"])
+    
     output_text = boto3_bedrock.list_foundation_models()
     print('models: ', output_text)
-
     
+    """
     bedrock_client = boto3.client(
         service_name='bedrock',
         region_name=bedrock_config["region_name"],
