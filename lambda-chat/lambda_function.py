@@ -152,12 +152,11 @@ def lambda_handler(event, context):
     global modelId, llm
     
     save_configuration(userId, modelId)
-    
+
     modelId = load_configuration(userId)
     if(modelId==""): 
         modelId = os.environ.get('model_id')
-
-    
+        save_configuration(userId, modelId)
 
     start = int(time.time())    
 
