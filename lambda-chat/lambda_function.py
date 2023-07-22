@@ -59,6 +59,7 @@ def load_configuration(userId):
 
         resp = client.get_item(TableName=configTableName, Key=key)
         print('resp: ', resp)
+        print('model-id: ', resp['Item']['model-id'])
 
         return resp['Item']['model-id']
     except: 
@@ -153,7 +154,7 @@ def lambda_handler(event, context):
     save_configuration(userId, modelId)
 
     modelId = load_configuration(userId)
-    print('model-id: ', model-id)
+    print('model-id: ', modelId)
     if(modelId==""): 
         modelId = os.environ.get('model_id')
         save_configuration(userId, modelId)
