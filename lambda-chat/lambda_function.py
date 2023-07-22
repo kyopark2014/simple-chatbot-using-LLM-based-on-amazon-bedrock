@@ -59,9 +59,9 @@ def load_configuration(userId):
 
         resp = client.get_item(TableName=configTableName, Key=key)
         print('resp: ', resp)
-        print('model-id: ', resp['Item']['model-id'])
+        print('model-id: ', resp['Item']['model-id']['S'])
 
-        return resp['Item']['model-id']
+        return resp['Item']['model-id']['S']
     except: 
         raise Exception ("Not able to load from dynamodb")                
 
@@ -154,7 +154,6 @@ def lambda_handler(event, context):
     save_configuration(userId, modelId)
 
     modelId = load_configuration(userId)
-    print('model-id: ', modelId)
     if(modelId==""): 
         modelId = os.environ.get('model_id')
         save_configuration(userId, modelId)
