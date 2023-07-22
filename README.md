@@ -39,6 +39,81 @@ llm = Bedrock(model_id=modelId, client=boto3_bedrock)
 llm(text)
 ```
 
+## Summerization
+
+아래와 같이 PyPDF2를 이용하여 S3로 업로드된 문서 파일을 읽어올 수 있습니다. 여기서는 pdf, txt, csv에 대한 파일을 로딩할 수 있습니다.
+
+```python
+import PyPDF2
+
+s3r = boto3.resource("s3")
+doc = s3r.Object(s3_bucket, s3_prefix + '/' + s3_file_name)
+
+if file_type == 'pdf':
+    contents = doc.get()['Body'].read()
+reader = PyPDF2.PdfReader(BytesIO(contents))
+
+raw_text = []
+for page in reader.pages:
+    raw_text.append(page.extract_text())
+contents = '\n'.join(raw_text)    
+        
+    elif file_type == 'txt':
+contents = doc.get()['Body'].read()
+    elif file_type == 'csv':
+body = doc.get()['Body'].read()
+reader = csv.reader(body)
+
+        from langchain.document_loaders import CSVLoader
+        contents = CSVLoader(reader)
+
+print('contents: ', contents)
+new_contents = str(contents).replace("\n", " ")
+print('length: ', len(new_contents))
+```
+
+문서가 긴 경우에 token 크기를 고려하여 아래와 같이 chunk들로 분리합니다. 이후 Document를 이용하여 앞에 3개의 chunk를 문서로 만듧니다.
+
+```python
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.docstore.document import Document
+
+text_splitter = RecursiveCharacterTextSplitter(chunk_size = 1000, chunk_overlap = 0)
+texts = text_splitter.split_text(new_contents)
+print('texts[0]: ', texts[0])
+
+docs = [
+    Document(
+        page_content = t
+    ) for t in texts[: 3]
+]
+```
+
+template를 정의하고 load_summarize_chain을 이용하여 summerization를 수행합니다.
+
+```python
+from langchain.chains.summarize import load_summarize_chain
+
+prompt_template = """Write a concise summary of the following:
+
+{ text }
+        
+    CONCISE SUMMARY """
+
+PROMPT = PromptTemplate(template = prompt_template, input_variables = ["text"])
+chain = load_summarize_chain(llm, chain_type = "stuff", prompt = PROMPT)
+summary = chain.run(docs)
+print('summary: ', summary)
+
+if summary == '':  # error notification
+summary = 'Fail to summarize the document. Try agan...'
+return summary
+    else:
+        # return summary[1: len(summary) - 1]
+return summary
+```
+
+
 ## IAM Role
 
 Bedrock의 IAM Policy는 아래와 같습니다.
