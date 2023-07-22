@@ -26,14 +26,14 @@ from utils import bedrock, print_ww
 s3 = boto3.client('s3')
 s3_bucket = os.environ.get('s3_bucket') # bucket name
 s3_prefix = os.environ.get('s3_prefix')
-endpoint_name = os.environ.get('endpoint')
 tableName = os.environ.get('tableName')
+endpoint_url = os.environ.get('endpoint_url')
 
 # Bedrock Contiguration
 bedrock_region = "us-west-2" 
 bedrock_config = {
     "region_name":bedrock_region,
-    "endpoint_url":"https://prod.us-west-2.frontend.bedrock.aws.dev"
+    "endpoint_url":endpoint_url
 }
     
 # supported llm list from bedrock
@@ -45,7 +45,7 @@ modelInfo = boto3_bedrock.list_foundation_models()
 print('models: ', modelInfo)
 
 # LangChaing
-modelId = 'amazon.titan-tg1-large'
+modelId = 'amazon.titan-tg1-large'  # anthropic.claude-v1
 llm = Bedrock(model_id=modelId, client=boto3_bedrock)
 
 def get_summary(file_type, s3_file_name):

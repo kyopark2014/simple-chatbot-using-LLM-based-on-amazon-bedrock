@@ -13,9 +13,9 @@ import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 
 const debug = false;
 const stage = 'dev';
-const endpoint = 'jumpstart-dft-hf-llm-falcon-7b-instruct-bf16';
 const s3_prefix = 'docs';
-const bucketName = 'bedrock-contents-storage'
+const bucketName = 'bedrock-contents-storage';
+const endpoint_url = "https://prod.us-west-2.frontend.bedrock.aws.dev";
 
 export class CdkBedrockAnthropicStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -80,51 +80,6 @@ export class CdkBedrockAnthropicStack extends cdk.Stack {
       description: 'The domain name of the Distribution',
     });
 
-    // role for lambda
-    /*
-    const roleBedrock = new iam.Role(this, "role-bedrock", {
-      roleName: "role-bedrock",
-      assumedBy: new iam.ServicePrincipal("bedrock.amazonaws.com")
-    });
-    const BedrockPolicy = new iam.PolicyStatement({  // policy statement for bedrock
-      resources: ['*'],
-      actions: ['bedrock:*'],      
-    });
-    roleBedrock.attachInlinePolicy( // add bedrock policy
-      new iam.Policy(this, 'bedrock-policy-lambda-chat-bedrock', {
-        statements: [BedrockPolicy],
-      }),
-    );   
-
-    const roleLambda = new iam.Role(this, "role-lambda-chat", {
-      roleName: "role-lambda-for-chat",
-      assumedBy: new iam.CompositePrincipal(
-        new iam.ServicePrincipal("lambda.amazonaws.com"),
-        new iam.ServicePrincipal("sagemaker.amazonaws.com"),
-      )
-    });
-    roleLambda.addManagedPolicy({
-      managedPolicyArn: 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole',
-    });
-
-    const SageMakerPolicy = new iam.PolicyStatement({  // policy statement for sagemaker
-      resources: ['*'],
-      actions: ['sagemaker:*'],
-    });
-    
-    roleLambda.attachInlinePolicy( // add sagemaker policy
-      new iam.Policy(this, 'sagemaker-policy-lambda-chat-bedrock', {
-        statements: [SageMakerPolicy],
-      }),
-    );    
-    
-    roleLambda.addToPolicy(
-      new iam.PolicyStatement({
-        resources: [roleBedrock.roleArn],
-        actions: ['sts:AssumeRole'],
-      })
-    ); */
-
     const roleLambda = new iam.Role(this, "role-lambda-chat", {
       roleName: "role-lambda-for-chat",
       assumedBy: new iam.CompositePrincipal(
@@ -163,10 +118,10 @@ export class CdkBedrockAnthropicStack extends cdk.Stack {
       timeout: cdk.Duration.seconds(60),
       role: roleLambda,
       environment: {
-        endpoint: endpoint,
+        endpoint_url: endpoint_url,
         s3_bucket: s3Bucket.bucketName,
         s3_prefix: s3_prefix,
-        tableName: tableName,
+        tableName: tableName        
       }
     });     
     lambdaChatApi.grantInvoke(new iam.ServicePrincipal('apigateway.amazonaws.com'));  
