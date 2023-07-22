@@ -138,8 +138,9 @@ def lambda_handler(event, context):
             isChanged = False
             for model in lists:
                 if model['modelId'] == new_model:
-                    model_id=new_model
-                    llm = Bedrock(model_id=model_id, client=boto3_bedrock)
+                    print(f"new modelId: {new_model}")
+                    #model_id=new_model
+                    #llm = Bedrock(model_id=model_id, client=boto3_bedrock)
                     isChanged = True
 
             if isChanged:
