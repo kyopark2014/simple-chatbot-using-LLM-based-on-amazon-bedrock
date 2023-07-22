@@ -30,6 +30,7 @@ tableName = os.environ.get('tableName')
 endpoint_url = os.environ.get('endpoint_url')
 bedrock_region = os.environ.get('bedrock_region')
 modelId = os.environ.get('modelId')
+print('modelId: ', modelId)
 
 # Bedrock Contiguration
 bedrock_region = bedrock_region
@@ -112,9 +113,6 @@ def lambda_handler(event, context):
     print('body: ', body)
 
     start = int(time.time())    
-
-    # LangChaing
-    llm = Bedrock(model_id=modelId, client=boto3_bedrock)
 
     msg = ""
     if type == 'text' and body[:11] == 'list models':
