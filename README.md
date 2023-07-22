@@ -106,11 +106,10 @@ summary = chain.run(docs)
 print('summary: ', summary)
 
 if summary == '':  # error notification
-summary = 'Fail to summarize the document. Try agan...'
-return summary
-    else:
-        # return summary[1: len(summary) - 1]
-return summary
+    summary = 'Fail to summarize the document. Try agan...'
+    return summary
+else:
+    return summary
 ```
 
 
