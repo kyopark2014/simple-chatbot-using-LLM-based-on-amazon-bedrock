@@ -3,7 +3,7 @@
 여기서는 AWS Bedrock의 Anthropic FM(Foundation Model)을 이용한 한국어 챗봇 만들기에 대해 설명합니다. 아직 Bedrock은 Preview 상태이므로 먼저 AWS를 통해 Preview Access 권한을 획득하여야 합니다. 챗봇을 위한 인프라는 AWS CDK를 이용하여 설치합니다. 사용자게 메시지 전송시 LLM을 통해 답변을 얻고 이를 화면에 보여줍니다. 또한 사용자가 pdf, txt, csv와 같은 파일을 업로드시 요약(summerization)을 할 수 있습니다. 입력한 모든 내용은 DynamoDB에 call log로 저장됩니다.
 
 
-<img src="https://github.com/kyopark2014/chatbot-based-on-bedrock-anthropic/assets/52392004/770ecd69-3aee-49e4-b163-218d4c8a6078" width="650">
+<img src="https://github.com/kyopark2014/chatbot-based-on-bedrock-anthropic/assets/52392004/c93b6b74-55e8-4f84-b3c7-8422e5385482" width="650">
 
 ## Bedrock 모델정보 가져오기
 
