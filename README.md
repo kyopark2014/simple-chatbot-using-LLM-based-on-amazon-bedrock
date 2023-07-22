@@ -98,7 +98,7 @@ Docker를 실행합니다.
 docker run -d -p 8080:8080 lambda_function-test:v1
 ```
 
-아래와 같이 Container ID를 확인 할 수 있습니다.
+아래와 같이 "docker ps"명령어로 Container ID를 확인 할 수 있습니다.
 ```text
 CONTAINER ID   IMAGE          COMMAND                  CREATED         STATUS         PORTS                    NAMES
 41e297948511   inference:v1   "/lambda-entrypoint.…"   6 seconds ago   Up 4 seconds   0.0.0.0:8080->8080/tcp   stupefied_carson
