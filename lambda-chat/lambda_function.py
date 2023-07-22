@@ -15,6 +15,10 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.docstore.document import Document
 from langchain.chains.summarize import load_summarize_chain
 
+from langchain.agents import create_csv_agent
+from langchain.agents.agent_types import AgentType
+from langchain.llms.bedrock import Bedrock
+
 module_path = "."
 sys.path.append(os.path.abspath(module_path))
 from utils import bedrock, print_ww
@@ -28,18 +32,7 @@ roleArn = os.environ.get('roleArn')
 print('roleArn: ', roleArn)
 
 aws_region = boto3.Session().region_name
-
-parameters = {
-    "max_new_tokens": 512,
-    "return_full_text": False,
-    "do_sample": False,
-    "temperature": 0.5,
-    "repetition_penalty": 1.03,
-    "top_p": 0.9,
-    "top_k":1,
-    "stop": ["<|endoftext|>", "</s>"]
-}        
-        
+  
 def lambda_handler(event, context):
     print(event)
     requestid  = event['request-id']
@@ -68,9 +61,14 @@ def lambda_handler(event, context):
     output_text = boto3_bedrock.list_foundation_models()    
     print('models: ', output_text)
 
+    # LangChaing
+    modelId = 'amazon.titan-tg1-large'
+    llm = Bedrock(model_id=modelId, client=boto3_bedrock)
 
-       
+    msg = llm(body) 
+    print('output: ', msg)
+
     return {
         'statusCode': 200,
-        'msg': output_text,
+        'msg': msg,
     }

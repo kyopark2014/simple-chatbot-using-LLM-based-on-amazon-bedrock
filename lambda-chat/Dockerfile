@@ -13,7 +13,6 @@ RUN /var/lang/bin/python3 -m pip install PyPDF2
 RUN /var/lang/bin/python3 -m pip install langchain
 
 RUN /var/lang/bin/python3 -m pip install -U /var/task/bedrock-sdk/botocore-1.29.162-py3-none-any.whl -t /var/task
-#RUN /var/lang/bin/python3 -m pip install -U ./bedrock-sdk/boto3-1.26.162-py3-none-any.whl -t .
-#RUN /var/lang/bin/python3 -m pip install -U ./bedrock-sdk/awscli-1.27.162-py3-none-any.whl -t .
+RUN rm -rf /var/task/bedrock-sdk
 
 CMD ["lambda_function.lambda_handler"]
