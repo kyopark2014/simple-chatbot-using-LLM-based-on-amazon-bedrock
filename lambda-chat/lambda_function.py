@@ -41,7 +41,7 @@ def save_configuration(userId, modelId):
 
     client = boto3.client('dynamodb')
     try:
-        resp =  client.put_item(TableName=callLogTableName, Item=item)
+        resp =  client.put_item(TableName=configTableName, Item=item)
     except: 
         raise Exception ("Not able to write into dynamodb")
         
@@ -193,6 +193,7 @@ def lambda_handler(event, context):
             'request-id': {'S':requestId},
             'type': {'S':type},
             'body': {'S':body},
+            'elapsed_time': {'N':elapsed_time},
             'msg': {'S':msg}
         }
 
