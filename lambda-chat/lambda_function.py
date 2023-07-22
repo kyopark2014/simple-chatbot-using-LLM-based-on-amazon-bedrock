@@ -60,8 +60,10 @@ def load_configuration(userId):
             },
         )
         print('resp, ', resp)    
+
+        return resp['Items']
     except: 
-        raise Exception ("Not able to write into dynamodb")            
+        raise Exception ("Not able to write into dynamodb")                
 
 # Bedrock Contiguration
 bedrock_region = bedrock_region
@@ -149,9 +151,13 @@ def lambda_handler(event, context):
 
     global modelId, llm
     
-    load_configuration(userId)
-
     save_configuration(userId, modelId)
+    
+    modelId = load_configuration(userId)
+    if(modelId==""): 
+        modelId = os.environ.get('model_id')
+
+    
 
     start = int(time.time())    
 
