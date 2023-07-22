@@ -112,7 +112,7 @@ export class CdkBedrockAnthropicStack extends cdk.Stack {
       environment: {
         bedrock_region: bedrock_region,
         endpoint_url: endpoint_url,
-        modelId: model_id,
+        model_id: model_id,
         s3_bucket: s3Bucket.bucketName,
         s3_prefix: s3_prefix,
         tableName: tableName
