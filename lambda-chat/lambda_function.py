@@ -131,6 +131,23 @@ def lambda_handler(event, context):
         new_model = body.rsplit('to ', 1)[-1]
         print(f"new model: {new_model}, current model: {model_id}")
 
+        if model_id == new_model:
+            msg = "No change! The new model is the same as the current model."
+        else:        
+            lists = modelInfo['modelSummaries']
+            isChanged = False
+            for model in lists:
+                if model['modelId'] == new_model:
+                    model_id=new_model
+                    llm = Bedrock(model_id=model_id, client=boto3_bedrock)
+                    isChanged = True
+
+            if isChanged:
+                msg = f"The model is changed to {model_id}"
+            else:
+                msg = f"{model_id} is not in lists."
+        print('msg: ', msg)
+
     else:             
         if type == 'text':
             text = body
