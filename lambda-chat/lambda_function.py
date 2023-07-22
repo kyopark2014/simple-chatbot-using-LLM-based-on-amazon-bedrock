@@ -46,9 +46,6 @@ boto3_bedrock = bedrock.get_bedrock_client(
 modelInfo = boto3_bedrock.list_foundation_models()    
 print('models: ', modelInfo)
 
-# LangChaing
-llm = Bedrock(model_id=modelId, client=boto3_bedrock)
-
 def get_summary(file_type, s3_file_name):
     summary = ''
     
@@ -116,6 +113,9 @@ def lambda_handler(event, context):
 
     start = int(time.time())    
 
+    # LangChaing
+    llm = Bedrock(model_id=modelId, client=boto3_bedrock)
+
     msg = ""
     if type == 'text' and body[:11] == 'list models':
         print('It will show the list of models.')
@@ -129,7 +129,7 @@ def lambda_handler(event, context):
 
     elif type == 'text' and body[:20] == 'change the model to ':
         new_model = body.rsplit('to ', 1)[-1]
-        print('new_model: ', new_model)
+        print('new model: , current model', new_model, modelId)
 
         if modelId == new_model:
             msg = "The new model is the same as the current model."
