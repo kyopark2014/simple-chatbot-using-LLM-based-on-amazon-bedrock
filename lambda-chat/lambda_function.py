@@ -47,6 +47,8 @@ boto3_bedrock = bedrock.get_bedrock_client(
 modelInfo = boto3_bedrock.list_foundation_models()    
 print('models: ', modelInfo)
 
+llm = Bedrock(model_id=modelId, client=boto3_bedrock)
+
 def get_summary(file_type, s3_file_name):
     summary = ''
     
@@ -137,7 +139,7 @@ def lambda_handler(event, context):
             for model in lists:
                 if model['modelId'] == new_model:
                     modelId = new_model  
-                    llm = Bedrock(model_id=modelId, client=boto3_bedrock)
+                  #  llm = Bedrock(model_id=modelId, client=boto3_bedrock)
                     isChanged = True
 
             if isChanged:
