@@ -15,12 +15,13 @@ RUN /var/lang/bin/python3 -m pip install -U /var/task/lambda-chat/bedrock-sdk/bo
 RUN /var/lang/bin/python3 -m pip install -U /var/task/lambda-chat/bedrock-sdk/boto3-1.26.162-py3-none-any.whl -t /var/task/ 
 RUN /var/lang/bin/python3 -m pip install -U /var/task/lambda-chat/bedrock-sdk/awscli-1.27.162-py3-none-any.whl -t /var/task/ 
 
-RUN /var/lang/bin/python3.9 -m pip install PyPDF2
-RUN /var/lang/bin/python3.9 -m pip install langchain
+RUN /var/lang/bin/python3 -m pip install PyPDF2
+RUN /var/lang/bin/python3 -m pip install langchain
 #RUN rm -rf bedrock-sdk
 
 #RUN /var/lang/bin/python3.9 -m pip install -U boto3 -t /var/task/
 
-RUN python3 -m pip install -U ./bedrock-sdk/botocore-1.29.162-py3-none-any.whl
+#RUN python3 -m pip install -U ./bedrock-sdk/botocore-1.29.162-py3-none-any.whl
+RUN python3 -m pip install -U ./bedrock-sdk/boto3-1.26.162-py3-none-any.whl
 
 CMD ["lambda_function.lambda_handler"]
