@@ -47,6 +47,22 @@ def save_configuration(userId, modelId):
         
     print('resp, ', resp)
 
+def load_configuration(userId):
+    global modelId
+    
+    client = boto3.client('dynamodb')    
+    try:
+        table = client.Table(configTableName)
+        resp = table.query(
+            KeyConditionExpression="user_id = :userId",
+            ExpressionAttributeValues={
+                ":userId": userId
+            },
+        )
+        print('resp, ', resp)    
+    except: 
+        raise Exception ("Not able to write into dynamodb")            
+
 # Bedrock Contiguration
 bedrock_region = bedrock_region
 bedrock_config = {
@@ -132,6 +148,9 @@ def lambda_handler(event, context):
     print('body: ', body)
 
     global modelId, llm
+    
+    load_configuration(userId)
+
     save_configuration(userId, modelId)
 
     start = int(time.time())    
