@@ -139,7 +139,8 @@ def lambda_handler(event, context):
             for model in lists:
                 if model['modelId'] == new_model:
                     print(f"new modelId: {new_model}")
-                    globals()["model_id"] = new_model
+                    #globals()["model_id"] = new_model
+                    global model_id
                     model_id = new_model
                     llm = Bedrock(model_id=new_model, client=boto3_bedrock)
                     isChanged = True
