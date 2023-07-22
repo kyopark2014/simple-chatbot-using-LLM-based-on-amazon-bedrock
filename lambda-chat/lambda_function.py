@@ -127,27 +127,6 @@ def lambda_handler(event, context):
         msg += f"current model: {model_id}"
         print('model lists: ', msg)
 
-    elif type == 'text' and body[:20] == 'change the model to ':
-        new_model = body.rsplit('to ', 1)[-1]
-        print('new model: , current model', new_model, model_id)
-
-        if model_id == new_model:
-            msg = "No change! The new model is the same as the current model."
-        else:        
-            lists = modelInfo['modelSummaries']
-            isChanged = False
-            for model in lists:
-                if model['modelId'] == new_model:
-                    model_id=new_model
-                    llm = Bedrock(model_id=model_id, client=boto3_bedrock)
-                    isChanged = True
-
-            if isChanged:
-                msg = f"The model is changed to {model_id}"
-            else:
-                msg = f"{model_id} is not in lists."
-        print('msg: ', msg)            
-
     else:             
         if type == 'text':
             text = body
@@ -180,7 +159,28 @@ def lambda_handler(event, context):
             raise Exception ("Not able to write into dynamodb")
         
         print('resp, ', resp)
-            
+    """
+    elif type == 'text' and body[:20] == 'change the model to ':
+        new_model = body.rsplit('to ', 1)[-1]
+        print('new model: , current model', new_model, model_id)
+
+        if model_id == new_model:
+            msg = "No change! The new model is the same as the current model."
+        else:        
+            lists = modelInfo['modelSummaries']
+            isChanged = False
+            for model in lists:
+                if model['modelId'] == new_model:
+                    model_id=new_model
+                    llm = Bedrock(model_id=model_id, client=boto3_bedrock)
+                    isChanged = True
+
+            if isChanged:
+                msg = f"The model is changed to {model_id}"
+            else:
+                msg = f"{model_id} is not in lists."
+        print('msg: ', msg)            
+    """            
     return {
         'statusCode': 200,
         'msg': msg,
