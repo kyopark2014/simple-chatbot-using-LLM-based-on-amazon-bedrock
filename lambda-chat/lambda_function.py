@@ -68,7 +68,7 @@ def load_configuration(userId):
         resp = client.query(
             TableName=configTableName, 
             KeyConditionExpression="user_id = :userId",
-            ExpressionAttributeValues={":userId": {"S": "userId"}})
+            ExpressionAttributeValues={":userId": {"S": userId}})
         print('resp: ', resp)
 
         return resp['Items']
