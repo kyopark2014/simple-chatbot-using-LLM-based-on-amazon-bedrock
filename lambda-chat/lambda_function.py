@@ -50,6 +50,7 @@ def save_configuration(userId, modelId):
 
 def load_configuration(userId):
     print('configTableName: ', configTableName)
+    print('userId: ', userId)
 
     client = boto3.client('dynamodb')    
     try:
@@ -64,12 +65,13 @@ def load_configuration(userId):
         )
         print('resp, ', resp)    
         """
+        
 
         resp = client.query(
             TableName=configTableName, 
             IndexName=configIndexName,
             KeyConditionExpression="user_id = :userId",
-            ExpressionAttributeValues={":userId": {"S": userId}})
+            ExpressionAttributeValues={":userId": userId})
         print('resp: ', resp)
 
         return resp['Items']
