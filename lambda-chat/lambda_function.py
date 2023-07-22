@@ -28,9 +28,10 @@ s3_bucket = os.environ.get('s3_bucket') # bucket name
 s3_prefix = os.environ.get('s3_prefix')
 tableName = os.environ.get('tableName')
 endpoint_url = os.environ.get('endpoint_url')
+bedrock_region = os.environ.get('bedrock_region')
 
 # Bedrock Contiguration
-bedrock_region = "us-west-2" 
+bedrock_region = bedrock_region
 bedrock_config = {
     "region_name":bedrock_region,
     "endpoint_url":endpoint_url

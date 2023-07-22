@@ -15,6 +15,7 @@ const debug = false;
 const stage = 'dev';
 const s3_prefix = 'docs';
 const bucketName = 'bedrock-contents-storage';
+const bedrock_region = "us-west-2";
 const endpoint_url = "https://prod.us-west-2.frontend.bedrock.aws.dev";
 
 export class CdkBedrockAnthropicStack extends cdk.Stack {
@@ -84,26 +85,16 @@ export class CdkBedrockAnthropicStack extends cdk.Stack {
       roleName: "role-lambda-for-chat",
       assumedBy: new iam.CompositePrincipal(
         new iam.ServicePrincipal("lambda.amazonaws.com"),
-        new iam.ServicePrincipal("sagemaker.amazonaws.com"),
         new iam.ServicePrincipal("bedrock.amazonaws.com"),
       )
     });
     roleLambda.addManagedPolicy({
       managedPolicyArn: 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole',
     });
-    const SageMakerPolicy = new iam.PolicyStatement({  // policy statement for sagemaker
-      resources: ['*'],
-      actions: ['sagemaker:*'],
-    });
     const BedrockPolicy = new iam.PolicyStatement({  // policy statement for sagemaker
       resources: ['*'],
       actions: ['bedrock:*'],
     });        
-    roleLambda.attachInlinePolicy( // add sagemaker policy
-      new iam.Policy(this, 'sagemaker-policy-lambda-chat-bedrock', {
-        statements: [SageMakerPolicy],
-      }),
-    );    
     roleLambda.attachInlinePolicy( // add bedrock policy
       new iam.Policy(this, 'bedrock-policy-lambda-chat-bedrock', {
         statements: [BedrockPolicy],
@@ -118,6 +109,7 @@ export class CdkBedrockAnthropicStack extends cdk.Stack {
       timeout: cdk.Duration.seconds(60),
       role: roleLambda,
       environment: {
+        bedrock_region: bedrock_region,
         endpoint_url: endpoint_url,
         s3_bucket: s3Bucket.bucketName,
         s3_prefix: s3_prefix,
