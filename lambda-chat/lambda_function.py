@@ -28,6 +28,7 @@ s3_bucket = os.environ.get('s3_bucket') # bucket name
 s3_prefix = os.environ.get('s3_prefix')
 callLogTableName = os.environ.get('callLogTableName')
 configTableName = os.environ.get('configTableName')
+configIndexName = os.environ.get('configIndexName')
 endpoint_url = os.environ.get('endpoint_url')
 bedrock_region = os.environ.get('bedrock_region')
 modelId = os.environ.get('model_id')
@@ -48,15 +49,16 @@ def save_configuration(userId, modelId):
     print('resp, ', resp)
 
 def load_configuration(userId):
-    global modelId
-    
+    print('configTableName: ', configTableName)
+
     client = boto3.client('dynamodb')    
     try:
         table = client.Table(configTableName)
         resp = table.query(
+            #IndexName=configIndexName,
             KeyConditionExpression="user_id = :userId",
             ExpressionAttributeValues={
-                ":userId": userId
+                ":userId": {"S": userId}
             },
         )
         print('resp, ', resp)    
