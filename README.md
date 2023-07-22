@@ -237,7 +237,7 @@ cd .. && python3 test.py
 
 "list models"를 입력하면 아래와 같이 현재 지원되는 모델리스트를 보여줍니다. 
 
-![image](https://github.com/kyopark2014/chatbot-based-on-bedrock-anthropic/assets/52392004/cc5d6712-da0e-485e-9e2b-a3f7268300c5)
+![image](https://github.com/kyopark2014/chatbot-based-on-bedrock-anthropic/assets/52392004/cc7b7c2d-9c11-4e0c-b09c-5fdb8459da0f)
 
 
 2) 사용 모델 변경하기
