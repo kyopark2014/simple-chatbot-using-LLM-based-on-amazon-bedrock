@@ -224,8 +224,9 @@ docker exec -it  41e297948511 /bin/bash
 ```
 
 Container 접속 후 아래 명령어로 동작을 확인합니다.
+
 ```text
-python# lambda_function-test.py
+cd .. && python3 test.py
 ```
 
 
