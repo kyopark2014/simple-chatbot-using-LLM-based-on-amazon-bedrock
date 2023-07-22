@@ -29,8 +29,8 @@ s3_prefix = os.environ.get('s3_prefix')
 tableName = os.environ.get('tableName')
 endpoint_url = os.environ.get('endpoint_url')
 bedrock_region = os.environ.get('bedrock_region')
-modelId = os.environ.get('modelId')
-print('modelId: ', modelId)
+model_id = os.environ.get('model_id')
+print('model_id: ', model_id)
 
 # Bedrock Contiguration
 bedrock_region = bedrock_region
@@ -47,7 +47,7 @@ boto3_bedrock = bedrock.get_bedrock_client(
 modelInfo = boto3_bedrock.list_foundation_models()    
 print('models: ', modelInfo)
 
-llm = Bedrock(model_id=modelId, client=boto3_bedrock)
+llm = Bedrock(model_id=model_id, client=boto3_bedrock)
 
 def get_summary(file_type, s3_file_name):
     summary = ''
@@ -118,34 +118,34 @@ def lambda_handler(event, context):
 
     msg = ""
     if type == 'text' and body[:11] == 'list models':
-        print('It will show the list of models.')
+        print('The list of models: \n')
         lists = modelInfo['modelSummaries']
         
         for model in lists:
-            msg += f"{model['modelId']}\n"
+            msg += f"{model['model_id']}\n"
         
-        msg += f"current model: {modelId}"
+        msg += f"current model: {model_id}"
         print('model lists: ', msg)
 
     elif type == 'text' and body[:20] == 'change the model to ':
         new_model = body.rsplit('to ', 1)[-1]
-        print('new model: , current model', new_model, modelId)
+        print('new model: , current model', new_model, model_id)
 
-        if modelId == new_model:
+        if model_id == new_model:
             msg = "The new model is the same as the current model."
         else:        
             lists = modelInfo['modelSummaries']
             isChanged = False
             for model in lists:
                 if model['modelId'] == new_model:
-                    modelId = new_model  
-                  #  llm = Bedrock(model_id=modelId, client=boto3_bedrock)
+                    model_id=new_model
+                    llm = Bedrock(model_id=model_id, client=boto3_bedrock)
                     isChanged = True
 
             if isChanged:
-                msg = f"The model is changed to {modelId}"
+                msg = f"The model is changed to {model_id}"
             else:
-                msg = f"{modelId} is not in lists."
+                msg = f"{model_id} is not in lists."
         print('msg: ', msg)            
 
     else:             
