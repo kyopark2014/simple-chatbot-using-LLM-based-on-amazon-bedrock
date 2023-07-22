@@ -76,7 +76,7 @@ def get_summary(file_type, s3_file_name):
     new_contents = str(contents).replace("\n"," ") 
     print('length: ', len(new_contents))
 
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000,chunk_overlap=0)
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=4000,chunk_overlap=0)
     texts = text_splitter.split_text(new_contents) 
     print('texts[0]: ', texts[0])
         
@@ -100,8 +100,9 @@ def get_summary(file_type, s3_file_name):
         summary = 'Fail to summarize the document. Try agan...'
         return summary
     else:
-        return summary[1:len(summary)-1]   
-
+        # return summary[1:len(summary)-1]   
+        return summary
+    
 def lambda_handler(event, context):
     print(event)
     requestid  = event['request-id']
