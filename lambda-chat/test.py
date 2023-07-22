@@ -16,7 +16,7 @@ def main():
     # load samples
     event = load_event()
 
-    # Inference
+    # run
     results = lambda_handler(event,"")  
     
     # results
