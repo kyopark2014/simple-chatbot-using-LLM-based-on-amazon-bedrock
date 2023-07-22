@@ -29,6 +29,7 @@ s3_prefix = os.environ.get('s3_prefix')
 tableName = os.environ.get('tableName')
 endpoint_url = os.environ.get('endpoint_url')
 bedrock_region = os.environ.get('bedrock_region')
+modelId = os.environ.get('modelId')
 
 # Bedrock Contiguration
 bedrock_region = bedrock_region
@@ -46,7 +47,6 @@ modelInfo = boto3_bedrock.list_foundation_models()
 print('models: ', modelInfo)
 
 # LangChaing
-modelId = 'amazon.titan-tg1-large'  # anthropic.claude-v1
 llm = Bedrock(model_id=modelId, client=boto3_bedrock)
 
 def get_summary(file_type, s3_file_name):
@@ -123,6 +123,8 @@ def lambda_handler(event, context):
         
         for model in lists:
             msg += f"{model['modelId']}\n"
+        
+        msg += f"current model: {modelId}"
         print('model lists: ', msg)
 
     elif type == 'text' and body[:20] == 'change the model to ':

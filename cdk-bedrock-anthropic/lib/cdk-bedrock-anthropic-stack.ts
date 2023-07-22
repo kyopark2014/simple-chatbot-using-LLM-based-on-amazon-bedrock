@@ -17,6 +17,7 @@ const s3_prefix = 'docs';
 const bucketName = 'bedrock-contents-storage';
 const bedrock_region = "us-west-2";
 const endpoint_url = "https://prod.us-west-2.frontend.bedrock.aws.dev";
+const modelId = "amazon.titan-tg1-large";   // anthropic.claude-v1
 
 export class CdkBedrockAnthropicStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -111,6 +112,7 @@ export class CdkBedrockAnthropicStack extends cdk.Stack {
       environment: {
         bedrock_region: bedrock_region,
         endpoint_url: endpoint_url,
+        modelId: modelId,
         s3_bucket: s3Bucket.bucketName,
         s3_prefix: s3_prefix,
         tableName: tableName        
