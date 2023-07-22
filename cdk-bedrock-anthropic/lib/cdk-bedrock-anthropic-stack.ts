@@ -167,7 +167,6 @@ export class CdkBedrockAnthropicStack extends cdk.Stack {
         s3_bucket: s3Bucket.bucketName,
         s3_prefix: s3_prefix,
         tableName: tableName,
-        roleArn: roleLambda.roleArn
       }
     });     
     lambdaChatApi.grantInvoke(new iam.ServicePrincipal('apigateway.amazonaws.com'));  
