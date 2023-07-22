@@ -7,6 +7,14 @@ from io import BytesIO
 import PyPDF2
 import csv
 import sys
+
+from langchain import PromptTemplate, SagemakerEndpoint
+from langchain.llms.sagemaker_endpoint import LLMContentHandler
+from langchain.text_splitter import CharacterTextSplitter
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.docstore.document import Document
+from langchain.chains.summarize import load_summarize_chain
+
 module_path = "."
 sys.path.append(os.path.abspath(module_path))
 from utils import bedrock, print_ww
@@ -52,89 +60,16 @@ def lambda_handler(event, context):
             "endpoint_url":"https://prod.us-west-2.frontend.bedrock.aws.dev"
         }
     
-    # guide1
-    bedrock_region = "us-west-2" 
-
-    is_internal_use = True # 내부 직원 용
-    # is_internal_use = False # 고객 용
-
-    if bedrock_region == "us-east-1":    
-        bedrock_config = {
-            "region_name":bedrock_region,
-            "endpoint_url":"https://bedrock.us-east-1.amazonaws.com"
-        }
-    elif bedrock_region == "us-west-2":  
-        bedrock_config = {
-            "region_name":bedrock_region,
-            "endpoint_url":"https://prod.us-west-2.frontend.bedrock.aws.dev"
-        }
+    boto3_bedrock = bedrock.get_bedrock_client(
+        region=bedrock_config["region_name"],
+        #assumed_role=roleArn,
+        url_override=bedrock_config["endpoint_url"])
     
-    if is_internal_use:
-        bedrock_client = boto3.client(
-            service_name='bedrock',
-            region_name=bedrock_config["region_name"],
-            endpoint_url=bedrock_config["endpoint_url"]
-        )
-    else:
-        bedrock_client = boto3.client(
-            service_name='bedrock',
-            region_name=bedrock_config["region_name"]
-        ) 
-
-    bedrock_client = boto3.client(
-        service_name='bedrock',
-        region_name=bedrock_config["region_name"],
-        endpoint_url=bedrock_config["endpoint_url"]
-    )
-
-    output_text = bedrock_client.list_foundation_models()
-    print('output: ', output_text)
+    output_text = boto3_bedrock.list_foundation_models()    
+    print('models: ', output_text)
 
 
-    """
-    bedrock_client = boto3.client(
-        service_name='bedrock',
-        region_name=bedrock_config["region_name"],
-        endpoint_url=bedrock_config["endpoint_url"]
-    )
-    """
-    
-    """
-    from botocore.config import Config
-    retry_config = Config(
-        region_name = bedrock_region,
-        retries = {
-            'max_attempts': 10,
-            'mode': 'standard'
-        }
-    )
-
-    boto3_kwargs = {}
-    session = boto3.Session(profile_name="bedrock")
-    if roleArn:
-        print('role: ', roleArn)
-        sts = session.client("sts")
-        response = sts.assume_role(
-            RoleArn=str(roleArn), #
-            RoleSessionName="langchain-llm-1"
-        )
-        print('sts: ', response)
-
-        boto3_kwargs['aws_access_key_id']=response['Credentials']['AccessKeyId']
-        boto3_kwargs['aws_secret_access_key']=response['Credentials']['SecretAccessKey']
-        boto3_kwargs['aws_session_token']=response['Credentials']['SessionToken']
-
-    bedrock_client = session.client(
-        service_name='bedrock',
-        config=retry_config,
-        region_name= bedrock_region,
-        **boto3_kwargs
-        )
-    output_text = bedrock_client.list_foundation_models()
-    print('list_foundation_models: ', output_text)
-    """
-    
-   
+       
     return {
         'statusCode': 200,
         'msg': output_text,
