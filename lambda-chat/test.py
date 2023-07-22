@@ -1,6 +1,6 @@
 import numpy as np
 import time
-from lambda_function import handler  
+from lambda_function import lambda_handler  
 
 def load_event():
     json_data = {
@@ -23,7 +23,7 @@ def main():
     event = load_event()
 
     # Inference
-    results = handler(event,"")  
+    results = lambda_handler(event,"")  
     
     # results
     print(results['statusCode'])
