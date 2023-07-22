@@ -146,5 +146,5 @@ def lambda_handler(event, context):
    
     return {
         'statusCode': 200,
-        'msg': 'OK',
+        'msg': output_text,
     }
