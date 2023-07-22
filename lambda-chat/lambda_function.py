@@ -67,13 +67,14 @@ def load_configuration(userId):
 
         resp = client.query(
             TableName=configTableName, 
+            IndexName=configIndexName,
             KeyConditionExpression="user_id = :userId",
             ExpressionAttributeValues={":userId": {"S": userId}})
         print('resp: ', resp)
 
         return resp['Items']
     except: 
-        raise Exception ("Not able to write into dynamodb")                
+        raise Exception ("Not able to load from dynamodb")                
 
 # Bedrock Contiguration
 bedrock_region = bedrock_region
