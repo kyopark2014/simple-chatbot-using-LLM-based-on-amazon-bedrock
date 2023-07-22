@@ -53,6 +53,7 @@ def load_configuration(userId):
 
     client = boto3.client('dynamodb')    
     try:
+        """
         table = client.Table(configTableName)
         resp = table.query(
             IndexName=configIndexName,
@@ -62,6 +63,13 @@ def load_configuration(userId):
             },
         )
         print('resp, ', resp)    
+        """
+
+        resp = client.query(
+            TableName=configTableName, 
+            KeyConditionExpression="user_id = :userId",
+            ExpressionAttributeValues={":userId": {"S": "userId"}})
+        print('resp: ', resp)
 
         return resp['Items']
     except: 
