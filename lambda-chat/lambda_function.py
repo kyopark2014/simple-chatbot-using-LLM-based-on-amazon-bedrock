@@ -77,7 +77,7 @@ def get_summary(file_type, s3_file_name):
     new_contents = str(contents).replace("\n"," ") 
     print('length: ', len(new_contents))
 
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=4000,chunk_overlap=0)
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000,chunk_overlap=0)
     texts = text_splitter.split_text(new_contents) 
     print('texts[0]: ', texts[0])
         
@@ -86,6 +86,7 @@ def get_summary(file_type, s3_file_name):
             page_content=t
         ) for t in texts[:3]
     ]
+    
     prompt_template = """Write a concise summary of the following:
 
     {text}
