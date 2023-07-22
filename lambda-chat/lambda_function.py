@@ -65,13 +65,11 @@ def load_configuration(userId):
         )
         print('resp, ', resp)    
         """
+        key = {
+                'user-id': userId
+        }
         
-
-        resp = client.query(
-            TableName=configTableName, 
-            IndexName=configIndexName,
-            KeyConditionExpression="user_id = :userId",
-            ExpressionAttributeValues={":userId": userId})
+        resp = client.get(TableName=configTableName, Key=key)
         print('resp: ', resp)
 
         return resp['Items']
