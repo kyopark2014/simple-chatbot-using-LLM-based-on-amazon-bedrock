@@ -9,7 +9,7 @@
 
 Bedrock은 완전관리형 서비스로 API를 이용하여 접속하며, 여기서는 "us-west-2"를 이용하여 아래의 endpoint_url로 접속합니다. 이 주소는 preview 권한을 받을때 안내 받을 수 있습니다. 아래와 같이 get_bedrock_client()을 이용하여 client를 생성합니다. 이후 list_foundation_models()을 이용하여 현재 지원 가능한 LLM에 대한 정보를 획득할 수 있습니다.
 
-```java
+```python
 bedrock_region = "us-west-2" 
 bedrock_config = {
     "region_name":bedrock_region,
@@ -22,6 +22,21 @@ boto3_bedrock = bedrock.get_bedrock_client(
     
 modelInfo = boto3_bedrock.list_foundation_models()
 print('models: ', modelInfo)
+```
+
+## LangChain 
+
+아래와 같이 model id와 Bedrock client를 이용하여 LangChain을 정의합니다.
+
+```python
+modelId = 'amazon.titan-tg1-large'  # anthropic.claude-v1
+llm = Bedrock(model_id=modelId, client=boto3_bedrock)
+```
+
+이후 text prompt에 대한 답변을 LangChain을 통해 얻을 수 있습니다.
+
+```python
+llm(text)
 ```
 
 ## IAM Role
