@@ -1,9 +1,28 @@
 # AWS Bedrock에서 Anthropic FM 기반의 한국어 챗봇 만들기
 
-여기서는 AWS Bedrock의 Anthropic FM(Foundation Model)을 이용한 한국어 챗본 만들기에 대해 설명합니다.
+여기서는 AWS Bedrock의 Anthropic FM(Foundation Model)을 이용한 한국어 챗봇 만들기에 대해 설명합니다. 아직 Bedrock은 Preview 상태이므로 먼저 AWS를 통해 Preview Access 권한을 획득하여야 합니다. 
 
 
 <img src="https://github.com/kyopark2014/chatbot-based-on-bedrock-anthropic/assets/52392004/770ecd69-3aee-49e4-b163-218d4c8a6078" width="700">
+
+## Bedrock 모델정보 가져오기
+
+Bedrock은 완전관리형 서비스로 API를 이용하여 접속하며, 여기서는 "us-west-2"를 이용하여 아래의 endpoint_url로 접속합니다. 이 주소는 preview 권한을 받을때 안내 받을 수 있습니다. 아래와 같이 get_bedrock_client()을 이용하여 client를 생성합니다. 이후 list_foundation_models()을 이용하여 현재 지원 가능한 LLM에 대한 정보를 획득할 수 있습니다.
+
+```java
+bedrock_region = "us-west-2" 
+bedrock_config = {
+    "region_name":bedrock_region,
+    "endpoint_url":"https://prod.us-west-2.frontend.bedrock.aws.dev"
+}
+    
+boto3_bedrock = bedrock.get_bedrock_client(
+    region=bedrock_config["region_name"],
+    url_override=bedrock_config["endpoint_url"])
+    
+modelInfo = boto3_bedrock.list_foundation_models()
+print('models: ', modelInfo)
+```
 
 ## IAM Role
 
