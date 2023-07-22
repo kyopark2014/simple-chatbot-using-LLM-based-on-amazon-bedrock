@@ -140,7 +140,7 @@ def lambda_handler(event, context):
                 if model['modelId'] == new_model:
                     print(f"new modelId: {new_model}")
                     #model_id=new_model
-                    #llm = Bedrock(model_id=model_id, client=boto3_bedrock)
+                    llm = Bedrock(model_id=new_model, client=boto3_bedrock)
                     isChanged = True
 
             if isChanged:
