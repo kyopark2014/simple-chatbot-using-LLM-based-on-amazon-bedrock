@@ -129,7 +129,7 @@ def lambda_handler(event, context):
     
     elif type == 'text' and body[:20] == 'change the model to ':
         new_model = body.rsplit('to ', 1)[-1]
-        print('new model: , current model', new_model, model_id)
+        print(f"new model: {new_model}, current model: {model_id}")
 
     else:             
         if type == 'text':
