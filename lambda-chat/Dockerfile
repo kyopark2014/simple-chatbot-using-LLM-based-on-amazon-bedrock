@@ -4,6 +4,7 @@ WORKDIR /var/task/lambda-chat
 
 COPY lambda_function.py /var/task/
 COPY utils/ /var/task/utils/
+COPY bedrock-sdk/ /var/task/lambda-chat/bedrock-sdk/
 COPY . .
 
 RUN /var/lang/bin/python3.9 -m pip install --upgrade pip
