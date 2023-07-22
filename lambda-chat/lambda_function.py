@@ -117,7 +117,7 @@ def lambda_handler(event, context):
     start = int(time.time())    
 
     msg = ""
-    if type == 'text' and body == 'list models':
+    if type == 'text' and body[:11] == 'list models':
         print('It will show the list of models.')
         lists = modelInfo['modelSummaries']
         
