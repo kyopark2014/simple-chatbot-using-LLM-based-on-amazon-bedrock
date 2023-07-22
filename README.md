@@ -128,6 +128,8 @@ else:
 
 "change the model to amazon.titan-e1t-medium"와 같이 모델명을 변경할 수 있습니다.
 
+![image](https://github.com/kyopark2014/simple-chatbot-using-LLM-based-on-amazon-bedrock/assets/52392004/66ffbc00-d298-4a82-b758-799483f3518b)
+
 현재 amazon.titan-e1t-medium으로 변경시 에러 발생하고 있습니다. 
 
 
