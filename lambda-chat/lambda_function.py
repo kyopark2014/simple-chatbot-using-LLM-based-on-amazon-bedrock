@@ -62,12 +62,11 @@ def load_configuration(userId):
         return resp['Item']['model-id']['S']
     except: 
         # raise Exception ("Not able to load from dynamodb")                
-        print('No record!')
+        print('No record of configuration!')
         modelId = os.environ.get('model_id')
         save_configuration(userId, modelId)
 
         return modelId
-
 
 # Bedrock Contiguration
 bedrock_region = bedrock_region
