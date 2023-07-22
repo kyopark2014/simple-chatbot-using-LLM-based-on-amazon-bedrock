@@ -40,7 +40,7 @@ cd chatbot-based-on-bedrock-anthropic/cdk-bedrock-anthropic/ && npm install
 
 ```java
 cd ../lambda-chat && wget https://preview.documentation.bedrock.aws.dev/Documentation/SDK/bedrock-python-sdk.zip
-unzip bedrock-python-sdk.zip -d bedrock-sdk && rm -rf bedrock-python-sdk.zip && cd ../cdk-bedrock-anthropic/
+unzip bedrock-python-sdk.zip -d bedrock-sdk && python3 -m pip install -U ./bedrock-sdk/boto3-1.26.162-py3-none-any.whl -t . && python3 -m pip install -U ./bedrock-sdk/awscli-1.27.162-py3-none-any.whl -t . cd ../cdk-bedrock-anthropic/
 ```
 
 6) CDK 사용을 위해 Boostraping을 수행합니다.
