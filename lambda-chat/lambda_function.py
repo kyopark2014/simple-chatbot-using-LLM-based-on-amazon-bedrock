@@ -193,7 +193,6 @@ def lambda_handler(event, context):
             'request-id': {'S':requestId},
             'type': {'S':type},
             'body': {'S':body},
-            'elapsed_time': {'N':elapsed_time},
             'msg': {'S':msg}
         }
 
