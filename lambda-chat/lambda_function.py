@@ -54,25 +54,14 @@ def load_configuration(userId):
 
     client = boto3.client('dynamodb')    
     try:
-        """
-        table = client.Table(configTableName)
-        resp = table.query(
-            IndexName=configIndexName,
-            KeyConditionExpression="user_id = :userId",
-            ExpressionAttributeValues={
-                ":userId": {"S": userId}
-            },
-        )
-        print('resp, ', resp)    
-        """
         key = {
-                'user-id': userId
+            'user-id': {'S':userId}
         }
 
         resp = client.get_item(TableName=configTableName, Key=key)
         print('resp: ', resp)
 
-        return resp['Items']
+        return resp['Item']
     except: 
         raise Exception ("Not able to load from dynamodb")                
 
