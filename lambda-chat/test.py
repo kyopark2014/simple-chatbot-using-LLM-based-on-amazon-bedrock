@@ -21,7 +21,7 @@ def main():
     
     # results
     print(results['statusCode'])
-    print(results['body'])
+    print(results['msg'])
 
     print('Elapsed time: %0.2fs' % (time.time()-start))   
 
