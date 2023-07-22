@@ -1,6 +1,6 @@
 # AWS Bedrock의 LLM을 이용한 Simple Chatbot 만들기
 
-여기서는 AWS Bedrock의 LLM(Large language Model)을 이용하여 간단한 질문과 답변(Question/Answering) 및 문서 요약이 가능한 Simple chatbot을 구현하고자 합니다. LLM application 개발을 위해 LangChain을 활용하며, Bedrock은 여러가지의 LLM 모델을 바꾸어가면서 각종 시나리오를 테스트해볼 수 있습니다. Bedrock은 Preview 아직 상태이므로 먼저 AWS를 통해 Preview Access 권한을 획득하여야 합니다. 챗봇을 위한 인프라는 AWS CDK를 이용하여 설치합니다. 사용자게 메시지 전송시 LLM을 통해 답변을 얻고 이를 화면에 보여줍니다. 또한 사용자가 pdf, txt, csv와 같은 파일을 업로드시 요약(summerization)을 할 수 있습니다. 입력한 모든 내용은 DynamoDB에 call log로 저장됩니다.
+여기서는 AWS Bedrock의 LLM(Large language Model)을 이용하여 Prompt에 기반한 간단한 질문/답변 및 문서 요약이 가능한 Simple chatbot을 구현하고자 합니다. LLM application 개발을 위해 LangChain을 활용하며, Bedrock은 여러가지의 LLM 모델을 바꾸어가면서 각종 시나리오를 테스트해볼 수 있습니다. Bedrock은 Preview 아직 상태이므로 먼저 AWS를 통해 Preview Access 권한을 획득하여야 합니다. 챗봇을 위한 인프라는 AWS CDK를 이용하여 설치합니다. 사용자게 메시지 전송시 LLM을 통해 답변을 얻고 이를 화면에 보여줍니다. 또한 사용자가 pdf, txt, csv와 같은 파일을 업로드시 요약(summerization)을 할 수 있습니다. 입력한 모든 내용은 DynamoDB에 call log로 저장됩니다.
 
 <img src="https://github.com/kyopark2014/chatbot-based-on-bedrock-anthropic/assets/52392004/6e05b1bf-7cb9-4b93-8930-6bd10a16c2be" width="700">
 
@@ -32,13 +32,15 @@ modelId = 'amazon.titan-tg1-large'  # anthropic.claude-v1
 llm = Bedrock(model_id=modelId, client=boto3_bedrock)
 ```
 
-이후 text prompt에 대한 답변을 LangChain을 통해 얻을 수 있습니다.
+## 질문/답변하기 (Prompt)
+
+LangChang을 이용하여 아래와 같이 간단한 질문과 답변을 Prompt을 이용하여 구현할 수 있습니다. 아래에서 입력인 text prompt를 LangChain 인터페이스를 통해 요청하면 Bedrock의 LLM 모델을 통해 답변을 얻을 수 있습니다.
 
 ```python
 llm(text)
 ```
 
-## Summerization
+## 문서 요약하기 (Summerization)
 
 아래와 같이 PyPDF2를 이용하여 S3로 업로드된 문서 파일을 읽어올 수 있습니다. 여기서는 pdf, txt, csv에 대한 파일을 로딩할 수 있습니다.
 
