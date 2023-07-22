@@ -55,7 +55,7 @@ def load_configuration(userId):
     try:
         table = client.Table(configTableName)
         resp = table.query(
-            #IndexName=configIndexName,
+            IndexName=configIndexName,
             KeyConditionExpression="user_id = :userId",
             ExpressionAttributeValues={
                 ":userId": {"S": userId}
