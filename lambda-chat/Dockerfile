@@ -4,7 +4,7 @@ WORKDIR /var/task/lambda-chat
 
 COPY lambda_function.py /var/task/
 COPY utils/ /var/task/utils/
-COPY bedrock-sdk/ /var/task/lambda-chat/bedrock-sdk/
+#COPY bedrock-sdk/ /var/task/lambda-chat/bedrock-sdk/
 COPY . .
 
 RUN /var/lang/bin/python3.9 -m pip install --upgrade pip
@@ -15,7 +15,7 @@ RUN /var/lang/bin/python3.9 -m pip install -U /var/task/lambda-chat/bedrock-sdk/
 
 RUN /var/lang/bin/python3.9 -m pip install PyPDF2
 RUN /var/lang/bin/python3.9 -m pip install langchain
-RUN rm -rf bedrock-sdk
+#RUN rm -rf bedrock-sdk
 
 #RUN /var/lang/bin/python3.9 -m pip install -U boto3 -t /var/task/
 
