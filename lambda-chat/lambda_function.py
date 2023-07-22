@@ -116,7 +116,7 @@ def lambda_handler(event, context):
 
     start = int(time.time())    
 
-    global model_id
+    global model_id, llm
 
     msg = ""
     if type == 'text' and body[:11] == 'list models':
