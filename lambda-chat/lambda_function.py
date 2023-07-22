@@ -42,10 +42,9 @@ def save_configuration(userId, modelId):
     client = boto3.client('dynamodb')
     try:
         resp =  client.put_item(TableName=configTableName, Item=item)
+        print('resp, ', resp)
     except: 
-        raise Exception ("Not able to write into dynamodb")
-        
-    print('resp, ', resp)
+        raise Exception ("Not able to write into dynamodb")            
 
 def load_configuration(userId):
     print('configTableName: ', configTableName)
@@ -58,7 +57,6 @@ def load_configuration(userId):
         }
 
         resp = client.get_item(TableName=configTableName, Key=key)
-        print('resp: ', resp)
         print('model-id: ', resp['Item']['model-id']['S'])
 
         return resp['Item']['model-id']['S']
@@ -151,8 +149,6 @@ def lambda_handler(event, context):
 
     global modelId, llm
     
-    save_configuration(userId, modelId)
-
     modelId = load_configuration(userId)
     if(modelId==""): 
         modelId = os.environ.get('model_id')
