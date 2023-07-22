@@ -8,13 +8,7 @@ def load_event():
         "type": "text",
         "body": "Building a website can be done in 10 simple steps."
     }
-    event = {
-        'body': json_data,
-        'isBase64Encoded': False
-    }
-    print('event: ', event)
-
-    return event
+    return json_data
 
 def main():
     start = time.time()
