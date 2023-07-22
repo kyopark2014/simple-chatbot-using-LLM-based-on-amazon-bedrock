@@ -70,11 +70,6 @@ export class CdkBedrockSimpleChatbotStack extends cdk.Stack {
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
     });
-    const configIndexName = 'index-type';
-    configDataTable.addGlobalSecondaryIndex({ // GSI
-      indexName: configIndexName,
-      partitionKey: { name: 'user-id', type: dynamodb.AttributeType.STRING },
-    });
 
     // copy web application files into s3 bucket
     new s3Deploy.BucketDeployment(this, "upload-HTML", {
@@ -131,8 +126,7 @@ export class CdkBedrockSimpleChatbotStack extends cdk.Stack {
         s3_bucket: s3Bucket.bucketName,
         s3_prefix: s3_prefix,
         callLogTableName: callLogTableName,
-        configTableName: configTableName,
-        configIndexName: configIndexName
+        configTableName: configTableName
       }
     });     
     lambdaChatApi.grantInvoke(new iam.ServicePrincipal('apigateway.amazonaws.com'));  

@@ -28,7 +28,6 @@ s3_bucket = os.environ.get('s3_bucket') # bucket name
 s3_prefix = os.environ.get('s3_prefix')
 callLogTableName = os.environ.get('callLogTableName')
 configTableName = os.environ.get('configTableName')
-configIndexName = os.environ.get('configIndexName')
 endpoint_url = os.environ.get('endpoint_url')
 bedrock_region = os.environ.get('bedrock_region')
 modelId = os.environ.get('model_id')
@@ -61,7 +60,7 @@ def load_configuration(userId):
         resp = client.get_item(TableName=configTableName, Key=key)
         print('resp: ', resp)
 
-        return resp['Item']
+        return resp['Item']['model-id']
     except: 
         raise Exception ("Not able to load from dynamodb")                
 
@@ -154,6 +153,7 @@ def lambda_handler(event, context):
     save_configuration(userId, modelId)
 
     modelId = load_configuration(userId)
+    print('model-id: ', model-id)
     if(modelId==""): 
         modelId = os.environ.get('model_id')
         save_configuration(userId, modelId)
