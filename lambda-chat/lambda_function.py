@@ -116,9 +116,6 @@ def lambda_handler(event, context):
 
     start = int(time.time())    
 
-    print('partial body: ', body[:11])
-    print('partial body2: ', body[:20])
-
     msg = ""
     if type == 'text' and body == 'list models':
         print('It will show the list of models.')
@@ -129,10 +126,26 @@ def lambda_handler(event, context):
         print('model lists: ', msg)
 
     elif type == 'text' and body[:20] == 'change the model to ':
-        new_model = body.rsplit(' ', 1)[-1]
+        new_model = body.rsplit('to ', 1)[-1]
         print('new_model: ', new_model)
-        msg = new_model
-        print('msg: ', msg)
+
+        #if modelId == new_model:
+        #    msg = "The model is not different with the current model!"
+        #else:
+        
+        lists = modelInfo['modelSummaries']
+        isChanged = False
+        for model in lists:
+            if model == new_model:
+                modelId = new_model  
+                llm = Bedrock(model_id=modelId, client=boto3_bedrock)
+                isChanged = True
+
+        if isChanged:
+            msg = f'The model is changed to {modelId}'
+        else:
+            msg = f'{modelId} is not in lists.'        
+        print('msg: ', msg)            
 
     else:             
         if type == 'text':
