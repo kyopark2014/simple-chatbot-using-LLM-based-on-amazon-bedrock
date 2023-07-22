@@ -113,42 +113,50 @@ def lambda_handler(event, context):
     print('type: ', type)
     body = event['body']
     print('body: ', body)
-    
+
     start = int(time.time())    
 
     msg = ""
-    if type == 'text':
-        text = body
-        msg = llm(text)
+    if type == 'text' and body == 'list models':
+        lists = modelInfo['modelSummaries']
         
-    elif type == 'document':
-        object = body
-    
-        file_type = object[object.rfind('.')+1:len(object)]
-        print('file_type: ', file_type)
-        
-        msg = get_summary(file_type, object)
+        for model in lists:
+            msg += f"{model['modelId']}\n"
+        print('msg: ', msg)
+
+    else:             
+        if type == 'text':
+            text = body
+            msg = llm(text)
             
-    elapsed_time = int(time.time()) - start
-    print("total run time(sec): ", elapsed_time)
-
-    print('msg: ', msg)
-
-    item = {
-        'request-id': {'S':requestid},
-        'type': {'S':type},
-        'body': {'S':body},
-        'msg': {'S':msg}
-    }
-
-    client = boto3.client('dynamodb')
-    try:
-        resp =  client.put_item(TableName=tableName, Item=item)
-    except: 
-        raise Exception ("Not able to write into dynamodb")
-    
-    print('resp, ', resp)
+        elif type == 'document':
+            object = body
         
+            file_type = object[object.rfind('.')+1:len(object)]
+            print('file_type: ', file_type)
+            
+            msg = get_summary(file_type, object)
+                
+        elapsed_time = int(time.time()) - start
+        print("total run time(sec): ", elapsed_time)
+
+        print('msg: ', msg)
+
+        item = {
+            'request-id': {'S':requestid},
+            'type': {'S':type},
+            'body': {'S':body},
+            'msg': {'S':msg}
+        }
+
+        client = boto3.client('dynamodb')
+        try:
+            resp =  client.put_item(TableName=tableName, Item=item)
+        except: 
+            raise Exception ("Not able to write into dynamodb")
+        
+        print('resp, ', resp)
+            
     return {
         'statusCode': 200,
         'msg': msg,
