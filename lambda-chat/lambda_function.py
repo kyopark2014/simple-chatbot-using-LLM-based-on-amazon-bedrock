@@ -118,7 +118,7 @@ def lambda_handler(event, context):
 
     msg = ""
     if type == 'text' and body[:11] == 'list models':
-        print(f"The list of models: \n")
+        msg = f"The list of models: \n"
         lists = modelInfo['modelSummaries']
         
         for model in lists:
@@ -126,6 +126,10 @@ def lambda_handler(event, context):
         
         msg += f"current model: {model_id}"
         print('model lists: ', msg)
+    
+    elif type == 'text' and body[:20] == 'change the model to ':
+        new_model = body.rsplit('to ', 1)[-1]
+        print('new model: , current model', new_model, model_id)
 
     else:             
         if type == 'text':
