@@ -29,6 +29,25 @@ s3_prefix = os.environ.get('s3_prefix')
 endpoint_name = os.environ.get('endpoint')
 tableName = os.environ.get('tableName')
 
+# Bedrock Contiguration
+bedrock_region = "us-west-2" 
+bedrock_config = {
+    "region_name":bedrock_region,
+    "endpoint_url":"https://prod.us-west-2.frontend.bedrock.aws.dev"
+}
+    
+# supported llm list from bedrock
+boto3_bedrock = bedrock.get_bedrock_client(
+    region=bedrock_config["region_name"],
+    url_override=bedrock_config["endpoint_url"])
+    
+modelInfo = boto3_bedrock.list_foundation_models()    
+print('models: ', modelInfo)
+
+# LangChaing
+modelId = 'amazon.titan-tg1-large'
+llm = Bedrock(model_id=modelId, client=boto3_bedrock)
+
 def get_summary(file_type, s3_file_name):
     summary = ''
     
@@ -93,27 +112,6 @@ def lambda_handler(event, context):
     print('body: ', body)
     
     start = int(time.time())    
-
-    print(f"boto3 version check: {boto3.__version__}")
-     
-    # Bedrock Contiguration
-    bedrock_region = "us-west-2" 
-    bedrock_config = {
-            "region_name":bedrock_region,
-            "endpoint_url":"https://prod.us-west-2.frontend.bedrock.aws.dev"
-        }
-    
-    # supported llm list from bedrock
-    boto3_bedrock = bedrock.get_bedrock_client(
-        region=bedrock_config["region_name"],
-        url_override=bedrock_config["endpoint_url"])
-    
-    output_text = boto3_bedrock.list_foundation_models()    
-    print('models: ', output_text)
-
-    # LangChaing
-    modelId = 'amazon.titan-tg1-large'
-    llm = Bedrock(model_id=modelId, client=boto3_bedrock)
 
     msg = ""
     if type == 'text':
