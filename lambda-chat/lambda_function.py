@@ -132,7 +132,7 @@ def lambda_handler(event, context):
         print('new model: , current model', new_model, model_id)
 
         if model_id == new_model:
-            msg = "The new model is the same as the current model."
+            msg = "No change! The new model is the same as the current model."
         else:        
             lists = modelInfo['modelSummaries']
             isChanged = False
