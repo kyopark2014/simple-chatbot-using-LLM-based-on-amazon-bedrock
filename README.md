@@ -222,7 +222,7 @@ roleLambda.attachInlinePolicy( // add bedrock policy
 
 ## Debugging
 
-이미지를 빌드합니다.
+아래와 같이 [test.py](./lambda-chat/test.py)"를 이용하여 local에서 컨테이너 이미지를 디버깅할 수 있습니다. 먼저 아래와 같이 이미지를 빌드합니다.
 
 ```text
 docker build -t lambda_function-test:v1 .
