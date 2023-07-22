@@ -48,17 +48,27 @@ export class CdkBedrockAnthropicStack extends cdk.Stack {
     }
 
     // DynamoDB for call log
-    const tableName = 'db-calllog';
-    const dataTable = new dynamodb.Table(this, 'dynamodb-calllog', {
-      tableName: tableName,
-      partitionKey: { name: 'request-id', type: dynamodb.AttributeType.STRING },
+    const callLogTableName = 'db-call-log';
+    const callLogDataTable = new dynamodb.Table(this, 'dynamodb-call-log', {
+      tableName: callLogTableName,
+      partitionKey: { name: 'user-id', type: dynamodb.AttributeType.STRING },
+      sortKey: { name: 'request-id', type: dynamodb.AttributeType.STRING }, 
       billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
     });
     const indexName = 'index-type';
-    dataTable.addGlobalSecondaryIndex({ // GSI
+    callLogDataTable.addGlobalSecondaryIndex({ // GSI
       indexName: indexName,
       partitionKey: { name: 'type', type: dynamodb.AttributeType.STRING },
+    });
+
+    // DynamoDB for configuration
+    const configTableName = 'db-configuration';
+    const configDataTable = new dynamodb.Table(this, 'dynamodb-configuration', {
+      tableName: configTableName,
+      partitionKey: { name: 'user-id', type: dynamodb.AttributeType.STRING },      
+      billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
     });
 
     // copy web application files into s3 bucket
@@ -115,12 +125,14 @@ export class CdkBedrockAnthropicStack extends cdk.Stack {
         model_id: model_id,
         s3_bucket: s3Bucket.bucketName,
         s3_prefix: s3_prefix,
-        tableName: tableName
+        callLogTableName: callLogTableName,
+        configTableName: configTableName
       }
     });     
     lambdaChatApi.grantInvoke(new iam.ServicePrincipal('apigateway.amazonaws.com'));  
     s3Bucket.grantRead(lambdaChatApi); // permission for s3
-    dataTable.grantReadWriteData(lambdaChatApi); // permission for dynamo
+    callLogDataTable.grantReadWriteData(lambdaChatApi); // permission for dynamo
+    configDataTable.grantReadWriteData(lambdaChatApi); // permission for dynamo
 
     // role
     const role = new iam.Role(this, "api-role-chatbot-bedrock", {

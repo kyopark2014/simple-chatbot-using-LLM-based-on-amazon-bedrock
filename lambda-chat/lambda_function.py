@@ -26,11 +26,26 @@ from utils import bedrock, print_ww
 s3 = boto3.client('s3')
 s3_bucket = os.environ.get('s3_bucket') # bucket name
 s3_prefix = os.environ.get('s3_prefix')
-tableName = os.environ.get('tableName')
+callLogTableName = os.environ.get('callLogTableName')
+configTableName = os.environ.get('configTableName')
 endpoint_url = os.environ.get('endpoint_url')
 bedrock_region = os.environ.get('bedrock_region')
-model_id = os.environ.get('model_id')
-print('model_id: ', model_id)
+modelId = os.environ.get('model_id')
+print('model_id: ', modelId)
+
+def save_configuration(userId, modelId):
+    item = {
+        'user-id': {'S':userId},
+        'model-id': {'S':modelId}
+    }
+
+    client = boto3.client('dynamodb')
+    try:
+        resp =  client.put_item(TableName=callLogTableName, Item=item)
+    except: 
+        raise Exception ("Not able to write into dynamodb")
+        
+    print('resp, ', resp)
 
 # Bedrock Contiguration
 bedrock_region = bedrock_region
@@ -47,7 +62,7 @@ boto3_bedrock = bedrock.get_bedrock_client(
 modelInfo = boto3_bedrock.list_foundation_models()    
 print('models: ', modelInfo)
 
-llm = Bedrock(model_id=model_id, client=boto3_bedrock)
+llm = Bedrock(model_id=modelId, client=boto3_bedrock)
 
 def get_summary(file_type, s3_file_name):
     summary = ''
@@ -107,16 +122,19 @@ def get_summary(file_type, s3_file_name):
     
 def lambda_handler(event, context):
     print(event)
-    requestid  = event['request-id']
-    print('requestid: ', requestid)
+    userId  = event['user-id']
+    print('userId: ', userId)
+    requestId  = event['request-id']
+    print('requestId: ', requestId)
     type  = event['type']
     print('type: ', type)
     body = event['body']
     print('body: ', body)
 
-    start = int(time.time())    
+    global modelId, llm
+    save_configuration(userId, modelId)
 
-    global model_id, llm
+    start = int(time.time())    
 
     msg = ""
     if type == 'text' and body[:11] == 'list models':
@@ -126,14 +144,14 @@ def lambda_handler(event, context):
         for model in lists:
             msg += f"{model['modelId']}\n"
         
-        msg += f"current model: {model_id}"
+        msg += f"current model: {modelId}"
         print('model lists: ', msg)
     
     elif type == 'text' and body[:20] == 'change the model to ':
         new_model = body.rsplit('to ', 1)[-1]
-        print(f"new model: {new_model}, current model: {model_id}")
+        print(f"new model: {new_model}, current model: {modelId}")
 
-        if model_id == new_model:
+        if modelId == new_model:
             msg = "No change! The new model is the same as the current model."
         else:        
             lists = modelInfo['modelSummaries']
@@ -141,14 +159,15 @@ def lambda_handler(event, context):
             for model in lists:
                 if model['modelId'] == new_model:
                     print(f"new modelId: {new_model}")
-                    model_id = new_model
-                    llm = Bedrock(model_id=model_id, client=boto3_bedrock)
+                    modelId = new_model
+                    llm = Bedrock(model_id=modelId, client=boto3_bedrock)
                     isChanged = True
+                    save_configuration(userId, modelId)
 
             if isChanged:
-                msg = f"The model is changed to {model_id}"
+                msg = f"The model is changed to {modelId}"
             else:
-                msg = f"{model_id} is not in lists."
+                msg = f"{modelId} is not in lists."
         print('msg: ', msg)
 
     else:             
@@ -170,7 +189,8 @@ def lambda_handler(event, context):
         print('msg: ', msg)
 
         item = {
-            'request-id': {'S':requestid},
+            'user-id': {'S':userId},
+            'request-id': {'S':requestId},
             'type': {'S':type},
             'body': {'S':body},
             'msg': {'S':msg}
@@ -178,7 +198,7 @@ def lambda_handler(event, context):
 
         client = boto3.client('dynamodb')
         try:
-            resp =  client.put_item(TableName=tableName, Item=item)
+            resp =  client.put_item(TableName=callLogTableName, Item=item)
         except: 
             raise Exception ("Not able to write into dynamodb")
         

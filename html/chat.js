@@ -42,6 +42,7 @@ var maxMsgItems = 50;
 var msgHistory = new HashMap();
 var callee = "John";
 var index=0;
+var userId = uuidv4();
 
 for (i=0;i<maxMsgItems;i++) {
     msglist.push(document.getElementById('msgLog'+i));
@@ -269,6 +270,7 @@ function sendRequest(text) {
     };
 
     var requestObj = {
+        "user-id": userId,
         "request-id": uuidv4(),
         "type": "text",
         "body":text
@@ -295,6 +297,7 @@ function sendRequestForSummay(object) {
     };
 
     var requestObj = {
+        "user-id": userId,
         "request-id": uuidv4(),
         "type": "document",
         "body": object
