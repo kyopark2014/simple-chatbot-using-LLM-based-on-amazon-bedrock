@@ -68,8 +68,8 @@ def load_configuration(userId):
         key = {
                 'user-id': userId
         }
-        
-        resp = client.get(TableName=configTableName, Key=key)
+
+        resp = client.get_item(TableName=configTableName, Key=key)
         print('resp: ', resp)
 
         return resp['Items']
