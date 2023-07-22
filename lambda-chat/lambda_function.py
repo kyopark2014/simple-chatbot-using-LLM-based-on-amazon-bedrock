@@ -122,7 +122,7 @@ def lambda_handler(event, context):
         lists = modelInfo['modelSummaries']
         
         for model in lists:
-            msg += f"{model['model_id']}\n"
+            msg += f"{model['modelId']}\n"
         
         msg += f"current model: {model_id}"
         print('model lists: ', msg)
