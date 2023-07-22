@@ -229,4 +229,23 @@ Container 접속 후 아래 명령어로 동작을 확인합니다.
 cd .. && python3 test.py
 ```
 
+## 예약어
+
+테스트의 편의상을 위해 몇가지 예약어를 이용합니다.
+
+1) 모델 정보 확인하기
+
+"list models"를 입력하면 아래와 같이 현재 지원되는 모델리스트를 보여줍니다. 
+
+![image](https://github.com/kyopark2014/chatbot-based-on-bedrock-anthropic/assets/52392004/cc5d6712-da0e-485e-9e2b-a3f7268300c5)
+
+
+2) 사용 모델 변경하기
+
+"change the model to amazon.titan-e1t-medium"와 같이 모델명을 변경할 수 있습니다.
+
+현재 amazon.titan-e1t-medium으로 변경시 에러 발생하고 있습니다. 
+
+
+
 
