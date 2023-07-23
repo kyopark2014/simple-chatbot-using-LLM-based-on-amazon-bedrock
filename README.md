@@ -40,38 +40,46 @@ LangChang을 이용하여 아래와 같이 간단한 질문과 답변을 Prompt�
 llm(text)
 ```
 
+
 ## 문서 요약하기 (Summerization)
 
-아래와 같이 PyPDF2를 이용하여 S3로 업로드된 문서 파일을 읽어올 수 있습니다. 여기서는 pdf, txt, csv에 대한 파일을 로딩할 수 있습니다.
+### 파일읽어오기
+
+S3에서 아래와 같이 Object를 읽어옵니다.
+
+```python
+s3r = boto3.resource("s3")
+doc = s3r.Object(s3_bucket, s3_prefix + '/' + s3_file_name)
+```
+
+PDF파일은 PyPDF2를 이용하여 S3에서 직접 읽어옵니다.
 
 ```python
 import PyPDF2
-
-s3r = boto3.resource("s3")
-doc = s3r.Object(s3_bucket, s3_prefix + '/' + s3_file_name)
-
-if file_type == 'pdf':
-    contents = doc.get()['Body'].read()
+contents = doc.get()['Body'].read()
 reader = PyPDF2.PdfReader(BytesIO(contents))
 
 raw_text = []
 for page in reader.pages:
     raw_text.append(page.extract_text())
 contents = '\n'.join(raw_text)    
-        
-    elif file_type == 'txt':
+```
+
+파일 확장자가 txt이라면 body에서 추출하여 사용합니다.
+```python
 contents = doc.get()['Body'].read()
-    elif file_type == 'csv':
+```
+
+파일 확장자가 csv일 경우에 CSVLoader을 이용하여 읽어옵니다.
+
+```python
+from langchain.document_loaders import CSVLoader
 body = doc.get()['Body'].read()
 reader = csv.reader(body)
-
-        from langchain.document_loaders import CSVLoader
-        contents = CSVLoader(reader)
-
-print('contents: ', contents)
-new_contents = str(contents).replace("\n", " ")
-print('length: ', len(new_contents))
+contents = CSVLoader(reader)
 ```
+
+### 텍스트 나누기 
 
 문서가 긴 경우에 token 크기를 고려하여 아래와 같이 chunk들로 분리합니다. 이후 Document를 이용하여 앞에 3개의 chunk를 문서로 만듧니다.
 
@@ -89,6 +97,8 @@ docs = [
     ) for t in texts[: 3]
 ]
 ```
+
+### Template를 이용하여 요약하기
 
 template를 정의하고 load_summarize_chain을 이용하여 summerization를 수행합니다.
 
