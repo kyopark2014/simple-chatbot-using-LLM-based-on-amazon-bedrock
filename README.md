@@ -252,7 +252,8 @@ Generate and return the code for each module using the programming language and 
 
 이때의 결과는 아래와 같습니다.
 
-![image](https://github.com/kyopark2014/simple-chatbot-using-LLM-based-on-amazon-bedrock/assets/52392004/2cd31916-e505-42ea-ade1-ce4a2c88d5b7)
+![image](https://github.com/kyopark2014/chatbot-based-on-Falcon-FM/assets/52392004/ed53c663-e035-49dc-9b77-b54dae565cb7)
+
 
 
 ## Debugging
