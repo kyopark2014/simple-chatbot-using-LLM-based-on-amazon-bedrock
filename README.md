@@ -1,8 +1,8 @@
 # Amazon Bedrock의 LLM을 이용한 Simple Chatbot 만들기
 
-여기서는 AWS Bedrock의 LLM(Large language Model)을 이용하여 Prompt에 기반한 간단한 질문/답변을 보여주는 simple Chatbot을 구현합니다. 또한 파일 버튼을 선택하면, Text, PDF, CSV와 같은 문서 파일을 S3로 업로드할 수 있는데, 업로드가 끝나면 텍스트를 추출하여 문서 요약(Summerization) 기능도 제공합니다. LLM 어플리케이션 개발을 위해 LangChain을 활용하며, Bedrock이 제공하는 LLM 모델을 확인하고 필요시 변경할 수 있습니다.
+여기서는 AWS Bedrock의 LLM(Large language Model)을 이용하여 Prompt에 기반한 간단한 질문/답변을 보여주는 simple Chatbot을 구현합니다. 브라우저에서 Chatbot으로 메시지를 전송하면, LLM을 통해 답변을 얻고 이를 화면에 보여줍니다. 입력한 모든 내용은 DynamoDB에 call log로 저장됩니다. 또한 파일 버튼을 선택하면, Text, PDF, CSV와 같은 문서 파일을 S3로 업로드할 수 있는데, 업로드가 끝나면 텍스트를 추출하여 문서 요약(Summerization) 기능도 제공합니다. LLM 어플리케이션 개발을 위해 LangChain을 활용하며, Bedrock이 제공하는 LLM 모델을 확인하고 필요시 변경할 수 있습니다.
 
-Chatbot의 위한 API를 테스트 하기 위하여 Web Client를 제공하여, Chatbot을 위한 인프라는 AWS CDK를 이용하여 편리하게 설치합니다. 설치가 모두 끝나면 노출되는 Ouput 화면에서 브라우저로 접속할 수 있는 URL을 알 수 있습니다. Bedrock은 아직 Preview이므로 먼저 AWS를 통해 Preview Access 권한을 획득하여야 합니다.  사용자게 메시지 전송시 LLM을 통해 답변을 얻고 이를 화면에 보여줍니다. 입력한 모든 내용은 DynamoDB에 call log로 저장됩니다.
+Chatbot의 위한 API를 테스트 하기 위하여 Web Client를 제공하여, Chatbot을 위한 인프라는 AWS CDK를 이용하여 편리하게 설치합니다. 설치가 모두 끝나면 노출되는 Ouput 화면에서 브라우저로 접속할 수 있는 URL을 알 수 있습니다. Bedrock은 아직 Preview이므로 먼저 AWS를 통해 Preview Access 권한을 획득하여야 합니다. 
 
 <img src="https://github.com/kyopark2014/simple-chatbot-using-LLM-based-on-amazon-bedrock/assets/52392004/eba951fb-b02f-44a4-a2a6-28f0d1e5e1fa" width="800">
 
