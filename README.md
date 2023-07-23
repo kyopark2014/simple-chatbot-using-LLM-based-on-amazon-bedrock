@@ -30,6 +30,8 @@ print('models: ', modelInfo)
 아래와 같이 model id와 Bedrock client를 이용하여 LangChain을 정의합니다.
 
 ```python
+from langchain.llms.bedrock import Bedrock
+
 modelId = 'amazon.titan-tg1-large'  # anthropic.claude-v1
 llm = Bedrock(model_id=modelId, client=boto3_bedrock)
 ```
