@@ -59,7 +59,7 @@ s3r = boto3.resource("s3")
 doc = s3r.Object(s3_bucket, s3_prefix + '/' + s3_file_name)
 ```
 
-PDF파일은 PyPDF2를 이용하여 S3에서 직접 읽어옵니다.
+pdf파일은 PyPDF2를 이용하여 S3에서 직접 읽어옵니다.
 
 ```python
 import PyPDF2
