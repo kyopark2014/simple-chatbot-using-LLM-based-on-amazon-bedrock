@@ -12,7 +12,7 @@ Bedrock은 완전관리형 서비스로 API를 이용하여 접속하며, 여기
 
 ```python
 import boto3
-from langchain.llms.bedrock
+from utils import bedrock
 
 bedrock_region = "us-west-2" 
 bedrock_config = {
