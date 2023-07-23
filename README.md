@@ -107,9 +107,10 @@ docs = [
 
 ### Template를 이용하여 요약하기
 
-template를 정의하고 load_summarize_chain을 이용하여 summerization를 수행합니다.
+Template를 정의하고 load_summarize_chain을 이용하여 summerization를 수행합니다.
 
 ```python
+from langchain import PromptTemplate
 from langchain.chains.summarize import load_summarize_chain
 
 prompt_template = """Write a concise summary of the following:
