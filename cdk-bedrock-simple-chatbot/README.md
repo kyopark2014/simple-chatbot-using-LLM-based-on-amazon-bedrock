@@ -1,4 +1,4 @@
-# CDK로 인프라 정의하기
+# CDK로 인프라 정의하기
 
 여기서는 [cdk-bedrock-simple-chatbot-stack.ts](./lib/cdk-bedrock-simple-chatbot-stack.ts)에 대하여 설명합니다.
 
