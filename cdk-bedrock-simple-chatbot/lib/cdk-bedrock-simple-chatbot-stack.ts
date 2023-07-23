@@ -108,7 +108,7 @@ export class CdkBedrockSimpleChatbotStack extends cdk.Stack {
       actions: ['bedrock:*'],
     });        
     roleLambda.attachInlinePolicy( // add bedrock policy
-      new iam.Policy(this, 'bedrock-policy-lambda-chat-bedrock', {
+      new iam.Policy(this, `bedrock-policy-lambda-chat-for-${projectName}`, {
         statements: [BedrockPolicy],
       }),
     );      
@@ -193,7 +193,7 @@ export class CdkBedrockSimpleChatbotStack extends cdk.Stack {
       }); 
     }
 
-    // cloudfront setting for api gateway of stable diffusion
+    // cloudfront setting 
     distribution.addBehavior("/chat", new origins.RestApiOrigin(api), {
       cachePolicy: cloudFront.CachePolicy.CACHING_DISABLED,
       allowedMethods: cloudFront.AllowedMethods.ALLOW_ALL,  
@@ -252,7 +252,7 @@ export class CdkBedrockSimpleChatbotStack extends cdk.Stack {
       }); 
     }
 
-    // cloudfront setting for api gateway    
+    // cloudfront setting  
     distribution.addBehavior("/upload", new origins.RestApiOrigin(api), {
       cachePolicy: cloudFront.CachePolicy.CACHING_DISABLED,
       allowedMethods: cloudFront.AllowedMethods.ALLOW_ALL,  
