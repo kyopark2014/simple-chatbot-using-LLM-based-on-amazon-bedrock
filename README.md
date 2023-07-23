@@ -229,6 +229,31 @@ roleLambda.attachInlinePolicy( // add bedrock policy
 
 [인프라 설치](https://github.com/kyopark2014/chatbot-based-on-bedrock-anthropic/blob/main/deployment.md)에 따라 CDK로 인프라 설치를 진행합니다.
 
+### 실행결과
+
+아래와 같이 이메일 작성을 요청합니다.
+
+```text
+Write an email from Bob, Customer Service Manager, to the customer "John Doe" 
+who provided negative feedback on the service provided by our customer support 
+engineer
+```
+
+요청에 맞춰서 적절한 이메일 문장을 생성하였습니다.
+
+![image](https://github.com/kyopark2014/simple-chatbot-using-LLM-based-on-amazon-bedrock/assets/52392004/c3d2eb31-28de-451e-9069-3b0400c36d1f)
+
+
+아래와 같이 코드 생성을 요청합니다.
+
+```text
+Generate and return the code for each module using the programming language and programming framework requested in. Modify this code and return markdowns for each module using the suggestions in: Python Streamlit code for a banking app using DynamoDB
+```
+
+이때의 결과는 아래와 같습니다.
+
+![image](https://github.com/kyopark2014/simple-chatbot-using-LLM-based-on-amazon-bedrock/assets/52392004/2cd31916-e505-42ea-ade1-ce4a2c88d5b7)
+
 
 ## Debugging
 
