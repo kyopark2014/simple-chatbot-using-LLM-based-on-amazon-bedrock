@@ -63,6 +63,7 @@ pdf파일은 PyPDF2를 이용하여 S3에서 직접 읽어옵니다.
 
 ```python
 import PyPDF2
+
 contents = doc.get()['Body'].read()
 reader = PyPDF2.PdfReader(BytesIO(contents))
 
@@ -196,7 +197,7 @@ Bedrock의 IAM Policy는 아래와 같습니다.
 }
 ```
 
-Lambda가 Bedrock에 대한 Role을 가지도록 아래와 같이 설정합니다.
+Lambda가 Bedrock에 대한 Role을 가지도록 아래와 같이 CDK에서 IAM Role을 생성할 수 있습니다.
 
 ```python
 const roleLambda = new iam.Role(this, "api-role-lambda-chat", {
