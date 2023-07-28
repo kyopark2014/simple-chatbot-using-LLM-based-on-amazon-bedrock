@@ -189,6 +189,8 @@ attachFile.addEventListener('click', function(){
                 contentType = 'text/csv'
             }
 
+            addSentMessage("uploading the selected pdf in order to summerize...")
+
             const uri = "upload";
             const xhr = new XMLHttpRequest();
         
@@ -197,7 +199,7 @@ attachFile.addEventListener('click', function(){
                 if (xhr.readyState === 4 && xhr.status === 200) {
                     response = JSON.parse(xhr.responseText);
                     console.log("response: " + JSON.stringify(response));
-                    
+                                        
                     // upload the file
                     const body = JSON.parse(response.body);
                     console.log('body: ', body);
