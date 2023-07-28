@@ -132,6 +132,8 @@ function addSentMessageForSummary(text) {
 
     msglist[index].innerHTML = 
         `<div class="chat-sender chat-sender--right"><h1>${timestr}</h1>${text}&nbsp;<h2 id="status${index}"></h2></div>`;   
+
+    chatPanel.scrollTop = chatPanel.scrollHeight;  // scroll needs to move bottom
 }  
 
 function addReceivedMessage(msg) {
@@ -189,7 +191,7 @@ attachFile.addEventListener('click', function(){
                 contentType = 'text/csv'
             }
 
-            addSentMessageForSummary("uploading the selected pdf in order to summerize...")
+            addSentMessageForSummary("uploading the selected pdf in order to summerize...");
 
             const uri = "upload";
             const xhr = new XMLHttpRequest();
