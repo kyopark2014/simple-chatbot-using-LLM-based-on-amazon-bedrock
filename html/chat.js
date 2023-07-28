@@ -198,7 +198,7 @@ attachFile.addEventListener('click', function(){
                     response = JSON.parse(xhr.responseText);
                     console.log("response: " + JSON.stringify(response));
                     
-                    addReceivedMessage("uploading the selected pdf in order to summerize...")
+                    addSentMessage("uploading the selected pdf in order to summerize...")
 
                     // upload the file
                     const body = JSON.parse(response.body);
