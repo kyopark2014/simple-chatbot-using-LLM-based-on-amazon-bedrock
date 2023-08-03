@@ -36,7 +36,14 @@ print('models: ', modelInfo)
 from langchain.llms.bedrock import Bedrock
 
 modelId = 'amazon.titan-tg1-large'  # anthropic.claude-v1
-llm = Bedrock(model_id=modelId, client=boto3_bedrock)
+parameters = {
+    "maxTokenCount":512,
+    "stopSequences":[],
+    "temperature":0,
+    "topP":0.9
+}
+
+llm = Bedrock(model_id=modelId, client=boto3_bedrock, model_kwargs=parameters)
 ```
 
 ## 질문/답변하기 (Prompt)
