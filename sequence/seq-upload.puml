@@ -31,6 +31,7 @@ participant "<color:#D86613><$Lambda></color>\nAmazon Lambda\n(upload)" as lambd
 participant "<color:#green><$SimpleStorageServiceS3></color>\nAmazon S3" as s3
 participant "<color:#D86613><$Lambda></color>\nAmazon Lambda\n(chat)" as lambdaChat
 participant "<color:#green><$SageMaker></color>\nLLM" as llm
+participant "<color:#blue><$DynamoDB></color>\nDynamoDB" as dynamodb
 
 user -> cdn: POST /upload
 
@@ -62,6 +63,10 @@ lambdaChat -> lambdaChat: Extract text
 lambdaChat -> llm ++: Summerization
 
 llm -> lambdaChat --: 200OK \n(summerized text)
+
+lambdaChat -> dynamodb ++: Store call log
+
+dynamodb -> lambdaChat --: 200OK
 
 lambdaChat -> api --: 200OK \n(summerized text)
 
