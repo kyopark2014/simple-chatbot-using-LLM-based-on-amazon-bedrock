@@ -6,6 +6,15 @@ LLM 어플리케이션 개발을 위해 LangChain을 활용하였으며, Bedrock
 
 <img src="https://github.com/kyopark2014/simple-chatbot-using-LLM-based-on-amazon-bedrock/assets/52392004/a62d871e-ad88-400b-9d80-6cdf8b3d63a7" width="800">
 
+채팅을 위한 call flow는 아래와 같습니다.
+![seq-chat](./sequence/seq-chat.png)
+
+파일업로드 후에 문서 요약(Summerization)을 위한 call flow는 아래와 같습니다.
+
+![seq-upload](./sequence/seq-upload.png)
+
+
+
 ## Bedrock 모델 정보 가져오기
 
 Bedrock은 완전관리형 서비스로 API를 이용하여 접속하며, 여기서는 "us-west-2"를 이용하여 아래의 endpoint_url로 접속합니다. 이 주소는 preview 권한을 받을때 안내 받을 수 있습니다. 아래와 같이 get_bedrock_client()을 이용하여 client를 생성합니다. 이후 list_foundation_models()을 이용하여 현재 지원 가능한 LLM에 대한 정보를 획득할 수 있습니다.
