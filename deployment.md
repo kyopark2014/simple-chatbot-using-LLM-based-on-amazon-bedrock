@@ -1,4 +1,4 @@
-# CDK를 이용한 인프라 설치하기
+![image](https://github.com/kyopark2014/simple-chatbot-using-LLM-based-on-amazon-bedrock/assets/52392004/37ff3a44-bbf3-471c-a0b1-083465b2e8a4)# CDK를 이용한 인프라 설치하기
 
 여기서는 [Cloud9](https://aws.amazon.com/ko/cloud9/)에서 [AWS CDK](https://aws.amazon.com/ko/cdk/)를 이용하여 인프라를 설치합니다.
 
@@ -42,7 +42,7 @@ cd simple-chatbot-using-LLM-based-on-amazon-bedrock/cdk-bedrock-simple-chatbot/ 
 cd ../lambda-chat && wget https://db3lw8u6vdvwu.cloudfront.net/bedrock/bedrock-python-sdk.zip && unzip bedrock-python-sdk.zip -d bedrock-sdk && python3 -m pip install -U ./bedrock-sdk/boto3-1.26.162-py3-none-any.whl -t . && python3 -m pip install -U ./bedrock-sdk/awscli-1.27.162-py3-none-any.whl -t . && cd ../cdk-bedrock-simple-chatbot/
 ```
 
-6) CDK 사용을 위해 Boostraping을 수행합니다.
+6) CDK 사용을 위해 Bootstrapping을 수행합니다.
 
 아래 명령어로 Account ID를 확인합니다.
 
