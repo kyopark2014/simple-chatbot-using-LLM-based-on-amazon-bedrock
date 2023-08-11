@@ -170,8 +170,8 @@ export class CdkBedrockSimpleChatbotStack extends cdk.Stack {
         stageName: stage,
 
         // logging for debug
-        loggingLevel: apiGateway.MethodLoggingLevel.INFO, 
-        dataTraceEnabled: true,
+        // loggingLevel: apiGateway.MethodLoggingLevel.INFO, 
+        // dataTraceEnabled: true,
       },
     });  
 
