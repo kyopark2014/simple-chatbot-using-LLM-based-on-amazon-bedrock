@@ -32,6 +32,7 @@ endpoint_url = os.environ.get('endpoint_url')
 bedrock_region = os.environ.get('bedrock_region')
 modelId = os.environ.get('model_id')
 print('model_id: ', modelId)
+accessType = os.environ.get('accessType')
 
 def save_configuration(userId, modelId):
     item = {
@@ -76,9 +77,13 @@ bedrock_config = {
 }
     
 # supported llm list from bedrock
-boto3_bedrock = bedrock.get_bedrock_client(
-    region=bedrock_config["region_name"],
-    url_override=bedrock_config["endpoint_url"])
+if accessType=='aws':  # internal user of aws
+    boto3_bedrock = bedrock.get_bedrock_client(
+        region=bedrock_config["region_name"],
+        url_override=bedrock_config["endpoint_url"])
+else: # preview user
+    boto3_bedrock = bedrock.get_bedrock_client(
+        region=bedrock_config["region_name"])
     
 modelInfo = boto3_bedrock.list_foundation_models()    
 print('models: ', modelInfo)
