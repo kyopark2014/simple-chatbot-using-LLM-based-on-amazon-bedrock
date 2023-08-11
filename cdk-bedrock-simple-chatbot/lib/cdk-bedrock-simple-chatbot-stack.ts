@@ -17,9 +17,9 @@ const s3_prefix = 'docs';
 const bedrock_region = "us-west-2";
 const endpoint_url = "https://prod.us-west-2.frontend.bedrock.aws.dev";
 const model_id = "amazon.titan-tg1-large"; // amazon.titan-e1t-medium, anthropic.claude-v1
-const projectName = "simple-chatbot-using-llm";
 const userName = "kyopark";
-const bucketName = `storage-for-${projectName}-${userName}`;
+const projectName = `simple-chatbot-${userName}`;
+const bucketName = `storage-for-${projectName}`;
 const accessType = "aws"; // aws or preview
 
 export class CdkBedrockSimpleChatbotStack extends cdk.Stack {
