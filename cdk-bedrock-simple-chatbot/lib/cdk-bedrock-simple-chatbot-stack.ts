@@ -11,6 +11,7 @@ import * as apiGateway from 'aws-cdk-lib/aws-apigateway';
 import * as s3Deploy from "aws-cdk-lib/aws-s3-deployment";
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 
+const region = process.env.CDK_DEFAULT_REGION;    
 const debug = false;
 const stage = 'dev';
 const s3_prefix = 'docs';
@@ -19,7 +20,7 @@ const endpoint_url = "https://prod.us-west-2.frontend.bedrock.aws.dev";
 const model_id = "amazon.titan-tg1-large"; // amazon.titan-e1t-medium, anthropic.claude-v1
 const userName = "kyopark";
 const projectName = `simple-chatbot-${userName}`; 
-const bucketName = `storage-for-${projectName}`; 
+const bucketName = `storage-for-${projectName}-${region}`; 
 const accessType = "aws"; // aws or preview
 
 export class CdkBedrockSimpleChatbotStack extends cdk.Stack {
@@ -105,7 +106,6 @@ export class CdkBedrockSimpleChatbotStack extends cdk.Stack {
       description: 'The domain name of the Distribution',
     });
 
-    const region = process.env.CDK_DEFAULT_REGION;
     const roleLambda = new iam.Role(this, `role-lambda-chat-for-${projectName}`, {
       roleName: `role-lambda-chat-for-${projectName}-${region}`,
       assumedBy: new iam.CompositePrincipal(
