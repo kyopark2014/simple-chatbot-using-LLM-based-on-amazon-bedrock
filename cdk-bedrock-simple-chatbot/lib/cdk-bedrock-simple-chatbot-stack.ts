@@ -105,8 +105,9 @@ export class CdkBedrockSimpleChatbotStack extends cdk.Stack {
       description: 'The domain name of the Distribution',
     });
 
+    const region = process.env.CDK_DEFAULT_REGION;
     const roleLambda = new iam.Role(this, `role-lambda-chat-for-${projectName}`, {
-      roleName: `role-lambda-chat-for-${projectName}`,
+      roleName: `role-lambda-chat-for-${projectName}-${region}`,
       assumedBy: new iam.CompositePrincipal(
         new iam.ServicePrincipal("lambda.amazonaws.com"),
         new iam.ServicePrincipal("bedrock.amazonaws.com"),
@@ -150,7 +151,7 @@ export class CdkBedrockSimpleChatbotStack extends cdk.Stack {
 
     // role
     const role = new iam.Role(this, `api-role-for-${projectName}`, {
-      roleName: `api-role-for-${projectName}`,
+      roleName: `api-role-for-${projectName}-${region}`,
       assumedBy: new iam.ServicePrincipal("apigateway.amazonaws.com")
     });
     role.addToPolicy(new iam.PolicyStatement({
