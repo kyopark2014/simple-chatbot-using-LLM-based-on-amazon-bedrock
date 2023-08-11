@@ -18,7 +18,7 @@ const bedrock_region = "us-west-2";
 const endpoint_url = "https://prod.us-west-2.frontend.bedrock.aws.dev";
 const model_id = "amazon.titan-tg1-large"; // amazon.titan-e1t-medium, anthropic.claude-v1
 const projectName = "simple-chatbot-using-llm";
-const userName = "ksdyb";
+const userName = "kyopark";
 const bucketName = `storage-for-${projectName}-${userName}`;
 const accessType = "aws"; // aws or preview
 
