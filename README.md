@@ -135,7 +135,7 @@ docs = [
 
 ### Template를 이용하여 요약하기
 
-Template를 정의하고 load_summarize_chain을 이용하여 summarization를 수행합니다.
+Template를 정의하고 [load_summarize_chain](https://sj-langchain.readthedocs.io/en/latest/chains/langchain.chains.summarize.__init__.load_summarize_chain.html?highlight=load_summarize_chain)을 이용하여 summarization를 수행합니다.
 
 ```python
 from langchain import PromptTemplate
