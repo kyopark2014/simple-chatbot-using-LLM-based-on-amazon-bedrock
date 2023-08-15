@@ -28,9 +28,9 @@ s3_bucket = os.environ.get('s3_bucket') # bucket name
 s3_prefix = os.environ.get('s3_prefix')
 callLogTableName = os.environ.get('callLogTableName')
 configTableName = os.environ.get('configTableName')
-endpoint_url = os.environ.get('endpoint_url')
-bedrock_region = os.environ.get('bedrock_region')
-modelId = os.environ.get('model_id')
+endpoint_url = os.environ.get('endpoint_url', 'https://prod.us-west-2.frontend.bedrock.aws.dev')
+bedrock_region = os.environ.get('bedrock_region', 'us-west-2')
+modelId = os.environ.get('model_id', 'amazon.titan-tg1-large')
 print('model_id: ', modelId)
 accessType = os.environ.get('accessType')
 
