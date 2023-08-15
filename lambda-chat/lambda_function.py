@@ -32,7 +32,7 @@ endpoint_url = os.environ.get('endpoint_url', 'https://prod.us-west-2.frontend.b
 bedrock_region = os.environ.get('bedrock_region', 'us-west-2')
 modelId = os.environ.get('model_id', 'amazon.titan-tg1-large')
 print('model_id: ', modelId)
-accessType = os.environ.get('accessType')
+accessType = os.environ.get('accessType', 'aws')
 
 def save_configuration(userId, modelId):
     item = {
