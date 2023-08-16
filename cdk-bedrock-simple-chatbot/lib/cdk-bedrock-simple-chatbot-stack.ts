@@ -20,8 +20,8 @@ const model_id = "amazon.titan-tg1-large"; // amazon.titan-e1t-medium, anthropic
 const userName = "kyopark";
 const projectName = `simple-chatbot-${userName}`; 
 const bucketName = `storage-for-${projectName}-${region}`; 
-const accessType = "aws"; // aws or preview
-const bedrock_region = "us-west-2";  // "us-east-1" "us-west-2" 
+const accessType = "preview"; // aws or preview
+const bedrock_region = "us-east-1";  // "us-east-1" "us-west-2" 
 
 export class CdkBedrockSimpleChatbotStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
