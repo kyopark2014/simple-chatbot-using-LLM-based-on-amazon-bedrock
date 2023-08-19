@@ -73,19 +73,27 @@ bedrock_config = {
 }
    
 # supported llm list from bedrock
-if accessType=='aws':  # internal user of aws
-    boto3_bedrock = boto3.client(
-        service_name='bedrock',
-        region_name=bedrock_config["region_name"],
-        endpoint_url=bedrock_config["endpoint_url"],
-    )
-else: # preview user
-    boto3_bedrock = boto3.client(
-        service_name='bedrock',
-        region_name=bedrock_config["region_name"],
-    )
-    
-modelInfo = boto3_bedrock.list_foundation_models()    
+#if accessType=='aws':  # internal user of aws
+#    boto3_bedrock = boto3.client(
+#        service_name='bedrock',
+#        region_name=bedrock_config["region_name"],
+#        endpoint_url=bedrock_config["endpoint_url"],
+#    )
+#else: # preview user
+#    boto3_bedrock = boto3.client(
+#        service_name='bedrock',
+#        region_name=bedrock_config["region_name"],
+#    )
+session = boto3.Session() #sets the profile name to use for AWS credentials
+
+bedrock = session.client(
+    service_name='bedrock', #creates a Bedrock client
+    region_name=bedrock_config["region_name"],
+    endpoint_url=bedrock_config["endpoint_url"],
+) 
+
+
+modelInfo = bedrock.list_foundation_models()    
 print('models: ', modelInfo)
 
 parameters = {
@@ -95,7 +103,13 @@ parameters = {
     "topP":0.9
 }
 
-llm = Bedrock(model_id=modelId, client=boto3_bedrock, model_kwargs=parameters)
+#llm = Bedrock(model_id=modelId, client=boto3_bedrock, model_kwargs=parameters)
+
+llm = Bedrock( #create a Bedrock llm client
+    region_name=bedrock_config["region_name"],
+    endpoint_url=bedrock_config["endpoint_url"],
+    model_id=modelId
+)
 
 def get_summary(file_type, s3_file_name):
     summary = ''
