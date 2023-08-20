@@ -85,18 +85,11 @@ else: # preview user
         region_name=bedrock_config["region_name"],
     )
 
-#session = boto3.Session() #sets the profile name to use for AWS credentials
-#bedrock = session.client(
-#    service_name='bedrock', #creates a Bedrock client
-#    region_name=bedrock_config["region_name"],
-#    endpoint_url=bedrock_config["endpoint_url"],
-#) 
-
 modelInfo = boto3_bedrock.list_foundation_models()    
 print('models: ', modelInfo)
 
 parameters = {
-    "maxTokenCount":512,
+    "maxTokenCount":1024,
     "stopSequences":[],
     "temperature":0,
     "topP":0.9
