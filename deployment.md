@@ -18,9 +18,9 @@
 curl https://raw.githubusercontent.com/kyopark2014/technical-summary/main/resize.sh -o resize.sh
 ```
 
-이후 아래 명령어로 용량을 100G로 변경합니다.
+이후 아래 명령어로 용량을 80G로 변경합니다.
 ```text
-chmod a+rx resize.sh && ./resize.sh 100
+chmod a+rx resize.sh && ./resize.sh 80
 ```
 
 
@@ -39,7 +39,11 @@ cd simple-chatbot-using-LLM-based-on-amazon-bedrock/cdk-bedrock-simple-chatbot/ 
 6) bedrock-sdk를 설치합니다.
 
 ```java
-cd ../lambda-chat && wget https://db3lw8u6vdvwu.cloudfront.net/bedrock/bedrock-python-sdk.zip && unzip bedrock-python-sdk.zip -d bedrock-sdk && python3 -m pip install -U ./bedrock-sdk/boto3-1.26.162-py3-none-any.whl -t . && python3 -m pip install -U ./bedrock-sdk/awscli-1.27.162-py3-none-any.whl -t . && cd ../cdk-bedrock-simple-chatbot/
+cd ../lambda-chat
+curl https://d2eo22ngex1n9g.cloudfront.net/Documentation/SDK/bedrock-python-sdk.zip --output bedrock-python-sdk.zip
+unzip bedrock-python-sdk.zip -d bedrock-sdk 
+rm bedrock-python-sdk.zip
+cd ../cdk-bedrock-simple-chatbot/
 ```
 
 6) CDK 사용을 위해 Bootstrapping을 수행합니다.
