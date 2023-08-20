@@ -28,7 +28,7 @@ LLM 어플리케이션 개발을 위해 LangChain을 활용하였으며, Bedrock
 
 ## Bedrock 모델 정보 가져오기
 
-Bedrock은 완전관리형 서비스로 API를 이용하여 접속하며, 여기서는 "us-west-2"를 이용하여 아래의 endpoint_url로 접속합니다. 이 주소는 preview 권한을 받을때 안내 받을 수 있습니다. 아래와 같이 get_bedrock_client()을 이용하여 client를 생성합니다. 이후 list_foundation_models()을 이용하여 현재 지원 가능한 LLM에 대한 정보를 획득할 수 있습니다.
+Bedrock은 완전관리형 서비스로 API를 이용하여 접속하며, 여기서는 "us-west-2"를 이용하여 아래의 endpoint_url로 접속합니다. 이 주소는 preview 권한을 받을때 안내 받을 수 있습니다. 아래와 같이 boto3.client()을 이용하여 client를 생성합니다. 이후 list_foundation_models()을 이용하여 현재 지원 가능한 LLM에 대한 정보를 획득할 수 있습니다.
 
 ```python
 import boto3
@@ -40,10 +40,18 @@ bedrock_config = {
     "endpoint_url":"https://prod.us-west-2.frontend.bedrock.aws.dev"
 }
     
-boto3_bedrock = bedrock.get_bedrock_client(
-    region=bedrock_config["region_name"],
-    url_override=bedrock_config["endpoint_url"])
-    
+if accessType=='aws': # internal user of aws
+    boto3_bedrock = boto3.client(
+        service_name='bedrock’,
+        region_name=bedrock_config["region_name"],
+        endpoint_url=bedrock_config["endpoint_url"],
+    )
+else: # preview user
+    boto3_bedrock = boto3.client(
+        service_name='bedrock’,
+        region_name=bedrock_config["region_name"],
+    )
+
 modelInfo = boto3_bedrock.list_foundation_models()
 print('models: ', modelInfo)
 ```
