@@ -104,12 +104,6 @@ parameters = {
 
 llm = Bedrock(model_id=modelId, client=boto3_bedrock, model_kwargs=parameters)
 
-#llm = Bedrock( #create a Bedrock llm client
-#    region_name=bedrock_config["region_name"],
-#    endpoint_url=bedrock_config["endpoint_url"],
-#    model_id=modelId
-#)
-
 def get_summary(file_type, s3_file_name):
     summary = ''
     
