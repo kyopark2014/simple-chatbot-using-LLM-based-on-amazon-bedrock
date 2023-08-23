@@ -41,7 +41,7 @@ cd simple-chatbot-using-LLM-based-on-amazon-bedrock/cdk-bedrock-simple-chatbot/ 
 ```java
 cd ../lambda-chat
 curl https://d2eo22ngex1n9g.cloudfront.net/Documentation/SDK/bedrock-python-sdk.zip --output bedrock-python-sdk.zip
-unzip bedrock-python-sdk.zip -d bedrock-sdk 
+unzip bedrock-python-sdk.zip -d bedrock-sdk
 rm bedrock-python-sdk.zip
 cd ../cdk-bedrock-simple-chatbot/
 ```
