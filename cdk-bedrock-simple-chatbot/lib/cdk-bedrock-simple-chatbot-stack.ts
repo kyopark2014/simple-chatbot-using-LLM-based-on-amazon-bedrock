@@ -16,8 +16,7 @@ const debug = false;
 const stage = 'dev';
 const s3_prefix = 'docs';
 const endpoint_url = "https://prod.us-west-2.frontend.bedrock.aws.dev";
-//const model_id = "amazon.titan-tg1-large"; // amazon.titan-e1t-medium, anthropic.claude-v1
-const model_id = "anthropic.claude-v2"; // amazon.titan-e1t-medium, 
+const model_id = "amazon.titan-tg1-large"; // amazon.titan-e1t-medium, anthropic.claude-v1
 const userName = "kyopark";
 const projectName = `simple-chatbot-${userName}`; 
 const bucketName = `storage-for-${projectName}-${region}`; 
@@ -78,15 +77,6 @@ export class CdkBedrockSimpleChatbotStack extends cdk.Stack {
       partitionKey: { name: 'type', type: dynamodb.AttributeType.STRING },
     });
 
-    // DynamoDB for configuration
-    const configTableName = `db-configuration-for-${projectName}`;
-    const configDataTable = new dynamodb.Table(this, `dynamodb-configuration-for-${projectName}`, {
-      tableName: configTableName,
-      partitionKey: { name: 'user-id', type: dynamodb.AttributeType.STRING },      
-      billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
-      removalPolicy: cdk.RemovalPolicy.DESTROY,
-    });
-
     // copy web application files into s3 bucket
     new s3Deploy.BucketDeployment(this, `upload-HTML-for-${projectName}`, {
       sources: [s3Deploy.Source.asset("../html")],
@@ -142,7 +132,6 @@ export class CdkBedrockSimpleChatbotStack extends cdk.Stack {
         s3_bucket: s3Bucket.bucketName,
         s3_prefix: s3_prefix,
         callLogTableName: callLogTableName,
-        configTableName: configTableName,
         accessType: accessType,
         conversationMode: conversationMode
       }
@@ -150,8 +139,7 @@ export class CdkBedrockSimpleChatbotStack extends cdk.Stack {
     lambdaChatApi.grantInvoke(new iam.ServicePrincipal('apigateway.amazonaws.com'));  
     s3Bucket.grantRead(lambdaChatApi); // permission for s3
     callLogDataTable.grantReadWriteData(lambdaChatApi); // permission for dynamo
-    configDataTable.grantReadWriteData(lambdaChatApi); // permission for dynamo
-
+    
     // role
     const role = new iam.Role(this, `api-role-for-${projectName}`, {
       roleName: `api-role-for-${projectName}-${region}`,
