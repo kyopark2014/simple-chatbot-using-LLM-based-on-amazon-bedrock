@@ -22,6 +22,7 @@ const projectName = `simple-chatbot-${userName}`;
 const bucketName = `storage-for-${projectName}-${region}`; 
 const accessType = "preview"; // aws or preview
 const bedrock_region = "us-east-1";  // "us-east-1" "us-west-2" 
+const conversationMode = 'enabled'; 
 
 export class CdkBedrockSimpleChatbotStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -141,7 +142,8 @@ export class CdkBedrockSimpleChatbotStack extends cdk.Stack {
         s3_prefix: s3_prefix,
         callLogTableName: callLogTableName,
         configTableName: configTableName,
-        accessType: accessType
+        accessType: accessType,
+        conversationMode: conversationMode
       }
     });     
     lambdaChatApi.grantInvoke(new iam.ServicePrincipal('apigateway.amazonaws.com'));  

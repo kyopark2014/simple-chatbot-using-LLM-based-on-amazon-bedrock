@@ -29,6 +29,7 @@ bedrock_region = os.environ.get('bedrock_region', 'us-west-2')
 modelId = os.environ.get('model_id', 'amazon.titan-tg1-large')
 print('model_id: ', modelId)
 accessType = os.environ.get('accessType', 'aws')
+conversationMode = os.environ.get('conversationMode', 'enabled')
 
 def save_configuration(userId, modelId):
     item = {
@@ -88,14 +89,27 @@ else: # preview user
 modelInfo = boto3_bedrock.list_foundation_models()    
 print('models: ', modelInfo)
 
-parameters = {
-    "maxTokenCount":1024,
-    "stopSequences":[],
-    "temperature":0,
-    "topP":0.9
-}
+if modelId == 'amazon.titan-tg1-large': 
+    parameters = {
+        "maxTokenCount":1024,
+        "stopSequences":[],
+        "temperature":0,
+        "topP":0.9
+    }
+elif modelId == 'anthropic.claude-v1':
+    parameters = {
+        "max_tokens_to_sample":1024,
+    }
 
 llm = Bedrock(model_id=modelId, client=boto3_bedrock, model_kwargs=parameters)
+
+# Conversation
+from langchain.chains import ConversationChain
+from langchain.memory import ConversationBufferMemory
+memory = ConversationBufferMemory()
+conversation = ConversationChain(
+    llm=llm, verbose=True, memory=memory
+)
 
 def get_summary(file_type, s3_file_name):
     summary = ''
@@ -210,7 +224,11 @@ def lambda_handler(event, context):
     else:             
         if type == 'text':
             text = body
-            msg = llm(text)
+
+            if conversationMode == 'enabled':
+                msg = conversation.predict(input=text)
+            else:
+                msg = llm(text)
             
         elif type == 'document':
             object = body
