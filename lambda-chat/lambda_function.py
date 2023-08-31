@@ -89,17 +89,20 @@ else: # preview user
 modelInfo = boto3_bedrock.list_foundation_models()    
 print('models: ', modelInfo)
 
-if modelId == 'amazon.titan-tg1-large': 
-    parameters = {
-        "maxTokenCount":1024,
-        "stopSequences":[],
-        "temperature":0,
-        "topP":0.9
-    }
-elif modelId == 'anthropic.claude-v1':
-    parameters = {
-        "max_tokens_to_sample":1024,
-    }
+def get_parameter(modelId):
+    if modelId == 'amazon.titan-tg1-large': 
+        parameters = {
+            "maxTokenCount":1024,
+            "stopSequences":[],
+            "temperature":0,
+            "topP":0.9
+        }
+    elif modelId == 'anthropic.claude-v1':
+        parameters = {
+            "max_tokens_to_sample":1024,
+        }
+    return parameters
+parameters = get_parameter(modelId)
 
 llm = Bedrock(model_id=modelId, client=boto3_bedrock, model_kwargs=parameters)
 
@@ -178,7 +181,7 @@ def lambda_handler(event, context):
     body = event['body']
     print('body: ', body)
 
-    global modelId, llm
+    global modelId, llm, parameters
     
     modelId = load_configuration(userId)
     if(modelId==""): 
@@ -217,6 +220,7 @@ def lambda_handler(event, context):
 
             if isChanged:
                 msg = f"The model is changed to {modelId}"
+                parameters = get_parameter(modelId)
             else:
                 msg = f"{modelId} is not in lists."
         print('msg: ', msg)
