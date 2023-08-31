@@ -91,17 +91,16 @@ print('models: ', modelInfo)
 
 def get_parameter(modelId):
     if modelId == 'amazon.titan-tg1-large': 
-        parameters = {
+        return {
             "maxTokenCount":1024,
             "stopSequences":[],
             "temperature":0,
             "topP":0.9
         }
     elif modelId == 'anthropic.claude-v1':
-        parameters = {
+        return {
             "max_tokens_to_sample":1024,
         }
-    return parameters
 parameters = get_parameter(modelId)
 
 llm = Bedrock(model_id=modelId, client=boto3_bedrock, model_kwargs=parameters)
@@ -181,7 +180,7 @@ def lambda_handler(event, context):
     body = event['body']
     print('body: ', body)
 
-    global modelId, llm, parameters
+    global modelId, llm, parameters, conversation
     
     modelId = load_configuration(userId)
     if(modelId==""): 
