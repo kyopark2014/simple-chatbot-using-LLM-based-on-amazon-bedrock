@@ -82,6 +82,25 @@ LangChang을 이용하여 아래와 같이 간단한 질문과 답변을 Prompt�
 llm(text)
 ```
 
+## Conversation
+
+[ConversationBufferMemory](https://python.langchain.com/docs/modules/memory/types/buffer)을 이용하여 conversation을 정의합니다.
+
+```python
+from langchain.chains import ConversationChain
+from langchain.memory import ConversationBufferMemory
+memory = ConversationBufferMemory()
+conversation = ConversationChain(
+    llm=llm, verbose=True, memory=memory
+)
+```
+
+아후 아래처럼 input인 text에 대해 대화(conversation)을 chat history를 포함하여 구현할 수 있습니다.
+
+```python
+msg = conversation.predict(input=text)
+```
+
 
 ## 문서 요약하기 (Summerization)
 
