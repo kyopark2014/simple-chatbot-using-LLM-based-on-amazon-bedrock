@@ -165,8 +165,8 @@ def lambda_handler(event, context):
             if conversationMode == 'enabled':
                 msg = conversation.predict(input=text)
 
-                history = memory.load_memory_variables({})
-                print('history: ',history)
+                chat_history = memory.load_memory_variables({})
+                print('history: ',chat_history['history'])
 
             else:
                 msg = llm(text)
