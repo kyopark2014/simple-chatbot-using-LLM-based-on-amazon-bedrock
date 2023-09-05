@@ -176,6 +176,7 @@ def lambda_handler(event, context):
                     print('history: ',chat_history['history'])
                 else:
                     msg = llm(text)
+            #print('msg: ', msg)
                 
         elif type == 'document':
             object = body
