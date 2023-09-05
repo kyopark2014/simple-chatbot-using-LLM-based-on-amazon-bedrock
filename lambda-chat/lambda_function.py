@@ -28,7 +28,7 @@ bedrock_region = os.environ.get('bedrock_region', 'us-west-2')
 modelId = os.environ.get('model_id', 'amazon.titan-tg1-large')
 print('model_id: ', modelId)
 accessType = os.environ.get('accessType', 'aws')
-conversationMode = os.environ.get('conversationMode', 'enabled')
+enableConversationMode = os.environ.get('enableConversationMode', 'false')
 
 # Bedrock Contiguration
 bedrock_region = bedrock_region
@@ -162,12 +162,16 @@ def lambda_handler(event, context):
         if type == 'text':
             text = body
 
-            if conversationMode == 'enabled':
+            if text == 'enableConversationMode':
+                enableConversationMode = 'true'
+            elif text == 'disableConversationMode':
+                enableConversationMode = 'false'
+            
+            if(enableConversationMode == 'true'):
                 msg = conversation.predict(input=text)
 
                 chat_history = memory.load_memory_variables({})
                 print('history: ',chat_history['history'])
-
             else:
                 msg = llm(text)
             
