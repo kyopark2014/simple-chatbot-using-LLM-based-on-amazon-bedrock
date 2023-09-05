@@ -164,17 +164,19 @@ def lambda_handler(event, context):
 
             if text == 'enableConversationMode':
                 enableConversationMode = 'true'
+                msg  = "Conversation mode is enabled"
             elif text == 'disableConversationMode':
                 enableConversationMode = 'false'
-            
-            if(enableConversationMode == 'true'):
-                msg = conversation.predict(input=text)
+                msg  = "Conversation mode is disabled"
+            else:            
+                if(enableConversationMode == 'true'):
+                    msg = conversation.predict(input=text)
 
-                chat_history = memory.load_memory_variables({})
-                print('history: ',chat_history['history'])
-            else:
-                msg = llm(text)
-            
+                    chat_history = memory.load_memory_variables({})
+                    print('history: ',chat_history['history'])
+                else:
+                    msg = llm(text)
+                
         elif type == 'document':
             object = body
         
