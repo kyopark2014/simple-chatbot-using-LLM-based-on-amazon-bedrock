@@ -144,7 +144,7 @@ def lambda_handler(event, context):
     body = event['body']
     print('body: ', body)
 
-    global modelId, llm, parameters, conversation
+    global modelId, llm, parameters, conversation, enableConversationMode
     
     start = int(time.time())    
 
