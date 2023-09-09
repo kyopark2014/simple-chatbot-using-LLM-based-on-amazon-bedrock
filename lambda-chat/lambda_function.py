@@ -53,6 +53,8 @@ else: # preview user
 modelInfo = boto3_bedrock.list_foundation_models()    
 print('models: ', modelInfo)
 
+HUMAN_PROMPT = "\n\nHuman:"
+AI_PROMPT = "\n\nAssistant:"
 def get_parameter(modelId):
     if modelId == 'amazon.titan-tg1-large': 
         return {
@@ -63,6 +65,8 @@ def get_parameter(modelId):
         }
     elif modelId == 'anthropic.claude-v1' or modelId == 'anthropic.claude-v2':
         return {
+            #"stop_sequences": [HUMAN_PROMPT],
+            #"model": "claude-2",
             "max_tokens_to_sample":1024,
         }
 parameters = get_parameter(modelId)
@@ -160,7 +164,7 @@ def lambda_handler(event, context):
         print('model lists: ', msg)    
     else:             
         if type == 'text':
-            text = body
+            text = HUMAN_PROMPT+body+AI_PROMPT
 
             if text == 'enableConversationMode':
                 conversationMode = 'true'
