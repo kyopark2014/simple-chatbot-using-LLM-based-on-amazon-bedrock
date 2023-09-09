@@ -164,7 +164,7 @@ def lambda_handler(event, context):
         print('model lists: ', msg)    
     else:             
         if type == 'text':
-            text = HUMAN_PROMPT+body+AI_PROMPT
+            text = body
 
             if text == 'enableConversationMode':
                 conversationMode = 'true'
@@ -176,7 +176,7 @@ def lambda_handler(event, context):
                 if(conversationMode == 'true'):
                     msg = conversation.predict(input=text)
                 else:
-                    msg = llm(text)
+                    msg = llm(HUMAN_PROMPT+text+AI_PROMPT)
             #print('msg: ', msg)
                 
         elif type == 'document':
