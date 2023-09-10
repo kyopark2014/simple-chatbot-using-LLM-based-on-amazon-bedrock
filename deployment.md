@@ -1,4 +1,4 @@
-![image](https://github.com/kyopark2014/simple-chatbot-using-LLM-based-on-amazon-bedrock/assets/52392004/37ff3a44-bbf3-471c-a0b1-083465b2e8a4)# CDK를 이용한 인프라 설치하기
+# CDK를 이용한 인프라 설치하기
 
 여기서는 [Cloud9](https://aws.amazon.com/ko/cloud9/)에서 [AWS CDK](https://aws.amazon.com/ko/cdk/)를 이용하여 인프라를 설치합니다.
 
