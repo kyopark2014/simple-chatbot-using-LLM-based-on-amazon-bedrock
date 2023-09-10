@@ -317,6 +317,23 @@ Generate and return the code for each module using the programming language and 
 
 ![image](https://github.com/kyopark2014/chatbot-based-on-Falcon-FM/assets/52392004/ed53c663-e035-49dc-9b77-b54dae565cb7)
 
+
+### Claude에서 Conversation 활용하기
+
+"서울을 여행하고 싶어. 무엇을 타고 여행하는것이 좋을까?"라고 입력하면 서울의 정보를 알려줍니다.
+
+![image](https://github.com/kyopark2014/simple-chatbot-using-LLM-based-on-amazon-bedrock/assets/52392004/67983108-42dc-4af4-a90e-be4474482cb5)
+
+대명사를 이용해 "그럼 그 도시에서 지하철 요금은 얼마야?"라고 문의하면 서울 지하철 요금을 알려줍니다. Conversation이 정상적으로 동작함을 알수 있습니다.
+
+![image](https://github.com/kyopark2014/simple-chatbot-using-LLM-based-on-amazon-bedrock/assets/52392004/faa76655-e75b-440b-87f0-0382a2e3c9f5)
+
+서울, 지하철을 넣지 않고 "그럼 환승도 가능해?"로 물었을때 아래와 같이 이전 대화이력(chat history)을 이용하여 아래와 같이 서울 지하철의 환승에 대해 설명하여 줍니다.
+
+![image](https://github.com/kyopark2014/simple-chatbot-using-LLM-based-on-amazon-bedrock/assets/52392004/7d7bcabc-e0bd-472a-82ee-78f0a06698e8)
+
+
+
 ## 브라우저에서 Chatbot 동작 시험시 주의할점
 
 Chatbot API를 테스트하기 위해 제공하는 Web client는 일반적인 채팅 App처럼 세션 방식(web socket등)이 아니라 RESTful API를 사용합니다. 따라서 LLM에서 응답이 일정시간(30초)이상 지연되는 경우에 답변을 볼 수 없습니다. 이때 응답을 확인하기 위해서는 CloudWatch에서 [lambda-chat](./lambda-chat/lambda_function.py)의 로그를 확인하거나, DynamoDB에 저장된 call log를 확인합니다.
