@@ -84,7 +84,7 @@ if methodOfConversation == 'ConversationChain':
     )
 elif methodOfConversation == 'PromptTemplate':
     # memory for conversation
-    chat_memory = ConversationBufferMemory(human_prefix='Human', ai_prefix='AI')
+    chat_memory = ConversationBufferMemory(human_prefix='Human', ai_prefix='Assistant')
 
 def get_answer_using_chat_history(query, chat_memory):  
     condense_template = """Using the following conversation, answer friendly for the newest question. If you don't know the answer, just say that you don't know, don't try to make up an answer. You will be acting as a thoughtful advisor.
@@ -226,7 +226,9 @@ def lambda_handler(event, context):
                         msg = conversation.predict(input=text)
                     elif methodOfConversation == 'PromptTemplate':
                         msg = get_answer_using_chat_history(text, chat_memory)
-                        chat_memory.save_context({"input": text}, {"output": msg})     
+
+                        storedMsg = str(msg).replace("\n"," ") 
+                        chat_memory.save_context({"input": text}, {"output": storedMsg})     
                 else:
                     msg = llm(HUMAN_PROMPT+text+AI_PROMPT)
             #print('msg: ', msg)
