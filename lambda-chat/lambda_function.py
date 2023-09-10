@@ -29,6 +29,7 @@ modelId = os.environ.get('model_id', 'amazon.titan-tg1-large')
 print('model_id: ', modelId)
 accessType = os.environ.get('accessType', 'aws')
 conversationMode = os.environ.get('conversationMode', 'false')
+methodOfConversation = 'PromptTemplate' # ConversationChain or PromptTemplate
 
 # Bedrock Contiguration
 bedrock_region = bedrock_region
@@ -65,7 +66,7 @@ def get_parameter(modelId):
         }
     elif modelId == 'anthropic.claude-v1' or modelId == 'anthropic.claude-v2':
         return {
-            #"stop_sequences": [HUMAN_PROMPT],
+            "stop_sequences": [HUMAN_PROMPT],
             #"model": "claude-2",
             "max_tokens_to_sample":1024,
         }
@@ -76,10 +77,53 @@ llm = Bedrock(model_id=modelId, client=boto3_bedrock, model_kwargs=parameters)
 # Conversation
 from langchain.chains import ConversationChain
 from langchain.memory import ConversationBufferMemory
-memory = ConversationBufferMemory()
-conversation = ConversationChain(
-    llm=llm, verbose=True, memory=memory
-)
+if methodOfConversation == 'ConversationChain':
+    memory = ConversationBufferMemory()
+    conversation = ConversationChain(
+        llm=llm, verbose=True, memory=memory
+    )
+elif methodOfConversation == 'PromptTemplate':
+    # memory for conversation
+    chat_memory = ConversationBufferMemory(human_prefix='Human', ai_prefix='AI')
+
+def get_answer_using_chat_history(query, chat_memory):  
+    condense_template = """Using the following conversation, answer friendly for the newest question. If you don't know the answer, just say that you don't know, don't try to make up an answer. You will be acting as a thoughtful advisor.
+    
+    {chat_history}
+    
+    Human: {question}
+
+    AI:"""
+    CONDENSE_QUESTION_PROMPT = PromptTemplate.from_template(condense_template)
+        
+    # extract chat history
+    chats = chat_memory.load_memory_variables({})
+    chat_history_all = chats['history']
+    print('chat_history_all: ', chat_history_all)
+
+    # use last two chunks of chat history
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=2000,chunk_overlap=0)
+    texts = text_splitter.split_text(chat_history_all) 
+
+    pages = len(texts)
+    print('pages: ', pages)
+
+    if pages >= 2:
+        chat_history = f"{texts[pages-2]} {texts[pages-1]}"
+    elif pages == 1:
+        chat_history = texts[0]
+    else:  # 0 page
+        chat_history = ""
+    print('chat_history:\n ', chat_history)
+
+    # make a question using chat history
+    if pages >= 1:
+        result = llm(CONDENSE_QUESTION_PROMPT.format(question=query, chat_history=chat_history))
+    else:
+        result = llm(query)
+    print('result: ', result)
+
+    return result    
 
 def get_summary(file_type, s3_file_name):
     summary = ''
@@ -166,6 +210,10 @@ def lambda_handler(event, context):
         if type == 'text':
             text = body
 
+            querySize = len(text)
+            textCount = len(text.split())
+            print(f"query size: {querySize}, words: {textCount}")
+
             if text == 'enableConversationMode':
                 conversationMode = 'true'
                 msg  = "Conversation mode is enabled"
@@ -173,8 +221,12 @@ def lambda_handler(event, context):
                 conversationMode = 'false'
                 msg  = "Conversation mode is disabled"
             else:            
-                if(conversationMode == 'true'):
-                    msg = conversation.predict(input=text)
+                if conversationMode == 'true':
+                    if methodOfConversation == 'ConversationChain':
+                        msg = conversation.predict(input=text)
+                    elif methodOfConversation == 'PromptTemplate':
+                        msg = get_answer_using_chat_history(text, chat_memory)
+                        chat_memory.save_context({"input": text}, {"output": msg})     
                 else:
                     msg = llm(HUMAN_PROMPT+text+AI_PROMPT)
             #print('msg: ', msg)
