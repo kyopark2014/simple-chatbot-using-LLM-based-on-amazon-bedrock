@@ -186,25 +186,6 @@ else:
     return summary
 ```
 
-## LLM 모델 변경
-
-먼저 지원하는 LLM 모델의 종류를 확인후 아래와 같이 변경할 수 있습니다.
-
-1) 모델 정보 확인하기
-
-"list models"를 입력하면 아래와 같이 현재 지원되는 모델리스트를 보여줍니다. 
-
-![image](https://github.com/kyopark2014/chatbot-based-on-bedrock-anthropic/assets/52392004/cc7b7c2d-9c11-4e0c-b09c-5fdb8459da0f)
-
-
-2) 사용 모델 변경하기
-
-"change the model to amazon.titan-e1t-medium"와 같이 모델명을 변경할 수 있습니다.
-
-![image](https://github.com/kyopark2014/simple-chatbot-using-LLM-based-on-amazon-bedrock/assets/52392004/66ffbc00-d298-4a82-b758-799483f3518b)
-
-현재 amazon.titan-e1t-medium으로 변경시 에러 발생하고 있습니다. 
-
 
 
 ## IAM Role
@@ -294,6 +275,12 @@ roleLambda.attachInlinePolicy( // add bedrock policy
 
 ### 실행결과
 
+"list models"를 입력하면 아래와 같이 현재 지원되는 모델리스트를 보여줍니다. 
+
+![image](https://github.com/kyopark2014/chatbot-based-on-bedrock-anthropic/assets/52392004/cc7b7c2d-9c11-4e0c-b09c-5fdb8459da0f)
+
+### Titan으로 간단한 질의하기
+
 아래와 같이 이메일 작성을 요청합니다.
 
 ```text
@@ -328,7 +315,7 @@ Generate and return the code for each module using the programming language and 
 
 ![image](https://github.com/kyopark2014/simple-chatbot-using-LLM-based-on-amazon-bedrock/assets/52392004/faa76655-e75b-440b-87f0-0382a2e3c9f5)
 
-서울, 지하철을 넣지 않고 "그럼 환승도 가능해?"로 물었을때 아래와 같이 이전 대화이력(chat history)을 이용하여 아래와 같이 서울 지하철의 환승에 대해 설명하여 줍니다.
+서울, 지하철을 넣지 않고 "그럼 환승도 가능해?"로 물었을때 아래와 같이 이전 대화이력(chat history)을 이용하여 서울 지하철의 환승에 대해 설명하여 줍니다.
 
 ![image](https://github.com/kyopark2014/simple-chatbot-using-LLM-based-on-amazon-bedrock/assets/52392004/7d7bcabc-e0bd-472a-82ee-78f0a06698e8)
 
