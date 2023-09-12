@@ -7,6 +7,7 @@ from io import BytesIO
 import PyPDF2
 import csv
 import sys
+import re
 
 from langchain import PromptTemplate, SagemakerEndpoint
 from langchain.llms.sagemaker_endpoint import LLMContentHandler
@@ -162,6 +163,10 @@ def get_summary(file_type, s3_file_name):
             page_content=t
         ) for t in texts[:3]
     ]
+
+    print('docs: ', docs)
+    hanCount = len(re.findall(u'[\u3130-\u318F\uAC00-\uD7A3]+', texts))
+    print('hanCount: ', hanCount)
     
     if modelId == 'anthropic.claude-v1' or modelId == 'anthropic.claude-v2':
         #prompt_template = """\n\nHuman: 다음 텍스트를 간결하게 요약하세오. 텍스트의 요점을 다루는 글머리 기호로 응답을 반환합니다.
