@@ -166,10 +166,10 @@ def get_summary(file_type, s3_file_name):
 
     print('docs: ', docs)
     hangul = re.compile('[\u3131-\u3163\uac00-\ud7a3]+')  
-    result = hangul.findall(texts)
+    result = hangul.findall(str(texts))
     print('result: ', result)
 
-    sresult = hangul.search(texts)
+    sresult = hangul.search(sr(texts))
     print('sresult: ', sresult)
 
     
