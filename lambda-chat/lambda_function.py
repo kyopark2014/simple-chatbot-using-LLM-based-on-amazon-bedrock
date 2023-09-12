@@ -164,27 +164,24 @@ def get_summary(file_type, s3_file_name):
         ) for t in texts[:3]
     ]
 
-    print('docs: ', docs)
     hangul = re.compile('[\u3131-\u3163\uac00-\ud7a3]+') 
     word = hangul.search(str(texts))
     print('word: ', word)
-
     
     if word:
-        prompt_template = """\n\nWrite a concise summary of the following:
-
-        {text}
-        
-        Assistant:"""
-    else:         
         #prompt_template = """\n\nHuman: 다음 텍스트를 간결하게 요약하세오. 텍스트의 요점을 다루는 글머리 기호로 응답을 반환합니다.
         prompt_template = """\n\nHuman: 다음 텍스트를 요약해서 500자 이내로 설명하세오.
 
         {text}
         
-        Assistant:"""
-    
+        Assistant:"""        
+    else:         
+        prompt_template = """\n\nWrite a concise summary of the following:
 
+        {text}
+        
+        Assistant:"""
+        
     PROMPT = PromptTemplate(template=prompt_template, input_variables=["text"])
     chain = load_summarize_chain(llm, chain_type="stuff", prompt=PROMPT)
     summary = chain.run(docs)
