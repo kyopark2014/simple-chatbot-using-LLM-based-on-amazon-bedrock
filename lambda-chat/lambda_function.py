@@ -155,7 +155,7 @@ def get_summary(file_type, s3_file_name):
     print('length: ', len(new_contents))
 
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000,chunk_overlap=0)
-    texts = text_splitter.split_text(new_contents).decode('utf-8')
+    texts = text_splitter.split_text(new_contents)
     print('texts[0]: ', texts[0])
         
     docs = [
@@ -168,6 +168,10 @@ def get_summary(file_type, s3_file_name):
     hangul = re.compile('[\u3131-\u3163\uac00-\ud7a3]+')  
     result = hangul.findall(texts)
     print('result: ', result)
+
+    sresult = hangul.search(texts)
+    print('sresult: ', sresult)
+
     
     if modelId == 'anthropic.claude-v1' or modelId == 'anthropic.claude-v2':
         #prompt_template = """\n\nHuman: 다음 텍스트를 간결하게 요약하세오. 텍스트의 요점을 다루는 글머리 기호로 응답을 반환합니다.
