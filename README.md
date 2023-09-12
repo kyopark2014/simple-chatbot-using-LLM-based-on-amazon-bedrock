@@ -84,6 +84,10 @@ llm(text)
 
 ## Conversation
 
+채팅 이력(chat history)을 포함하여 대화를 할수 있게 하는 방식에는 [ConversationChain](https://api.python.langchain.com/en/latest/chains/langchain.chains.conversation.base.ConversationChain.html)을 이용하는 방법과 직접 [PromptTemplate](https://python.langchain.com/docs/modules/model_io/prompts/prompt_templates/)을 이용하는 방법이 있습니다. 
+
+### ConversationChain
+
 [ConversationBufferMemory](https://python.langchain.com/docs/modules/memory/types/buffer)을 이용하여 conversation을 정의합니다.
 
 ```python
@@ -100,6 +104,55 @@ conversation = ConversationChain(
 ```python
 msg = conversation.predict(input=text)
 ```
+
+### PromptTemplate을 이용하여 직접 구현하는 방법
+
+아래와 같이 human_prefix와 ai_prefix을 이용하여 chat_memory를 생성한 후에 chat history에서 일정 부분만을 이용하여 prompt에 사용할 대화 이력을 만든 후에 PromptTemplate을 이용해 template을 생성합니다.
+
+```python
+chat_memory = ConversationBufferMemory(human_prefix='Human', ai_prefix='Assistant')
+
+msg = get_answer_using_chat_history(text, chat_memory)
+
+def get_answer_using_chat_history(query, chat_memory):  
+    condense_template = """Using the following conversation, answer friendly for the newest question. If you don't know the answer, just say that you don't know, don't try to make up an answer. You will be acting as a thoughtful advisor.
+    
+    {chat_history}
+    
+    Human: {question}
+
+    Assistant:"""
+    CONDENSE_QUESTION_PROMPT = PromptTemplate.from_template(condense_template)
+        
+    # extract chat history
+    chats = chat_memory.load_memory_variables({})
+    chat_history_all = chats['history']
+    print('chat_history_all: ', chat_history_all)
+
+    # use last two chunks of chat history
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=2000,chunk_overlap=0)
+    texts = text_splitter.split_text(chat_history_all) 
+
+    pages = len(texts)
+    if pages >= 2:
+        chat_history = f"{texts[pages-2]} {texts[pages-1]}"
+    elif pages == 1:
+        chat_history = texts[0]
+    else:  # 0 page
+        chat_history = ""
+    print('chat_history:\n ', chat_history)
+
+    # make a question using chat history
+    if pages >= 1:
+        result = llm(CONDENSE_QUESTION_PROMPT.format(question=query, chat_history=chat_history))
+    else:
+        result = llm(query)
+
+    return result    
+```
+
+
+
 
 
 ## 문서 요약하기 (Summerization)
