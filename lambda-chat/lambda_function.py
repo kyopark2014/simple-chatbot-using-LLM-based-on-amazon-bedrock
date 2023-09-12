@@ -121,7 +121,7 @@ def get_answer_using_chat_history(query, chat_memory):
     if pages >= 1:
         result = llm(CONDENSE_QUESTION_PROMPT.format(question=query, chat_history=chat_history))
     else:
-        result = llm(query)
+        result = llm(HUMAN_PROMPT+query+AI_PROMPT)
     #print('result: ', result)
 
     return result    
