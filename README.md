@@ -107,12 +107,15 @@ msg = conversation.predict(input=text)
 
 ### PromptTemplate을 이용하여 직접 구현하는 방법
 
-아래와 같이 human_prefix와 ai_prefix을 이용하여 chat_memory를 생성한 후에 chat history에서 일정 부분만을 이용하여 prompt에 사용할 대화 이력을 만든 후에 PromptTemplate을 이용해 template을 생성합니다.
+아래와 같이 human_prefix와 ai_prefix을 이용하여 chat_memory를 생성한 후에 chat history에서 일정 부분만을 이용하여 prompt에 사용할 대화 이력을 만든 후에 PromptTemplate을 이용해 template을 생성합니다. 새로운 대화 이력은 편의상 개행문자('\n')을 지우고, chat_memory에 아래와 같이 추가합니다.
 
 ```python
 chat_memory = ConversationBufferMemory(human_prefix='Human', ai_prefix='Assistant')
 
 msg = get_answer_using_chat_history(text, chat_memory)
+
+storedMsg = str(msg).replace("\n"," ") 
+chat_memory.save_context({"input": text}, {"output": storedMsg}) 
 
 def get_answer_using_chat_history(query, chat_memory):  
     condense_template = """Using the following conversation, answer friendly for the newest question. If you don't know the answer, just say that you don't know, don't try to make up an answer. You will be acting as a thoughtful advisor.
