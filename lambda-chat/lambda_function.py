@@ -15,10 +15,12 @@ from langchain.text_splitter import CharacterTextSplitter
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.docstore.document import Document
 from langchain.chains.summarize import load_summarize_chain
-
+from langchain.document_loaders import CSVLoader
 from langchain.agents import create_csv_agent
 from langchain.agents.agent_types import AgentType
 from langchain.llms.bedrock import Bedrock
+from langchain.chains import ConversationChain
+from langchain.memory import ConversationBufferMemory
 
 s3 = boto3.client('s3')
 s3_bucket = os.environ.get('s3_bucket') # bucket name
@@ -76,8 +78,6 @@ parameters = get_parameter(modelId)
 llm = Bedrock(model_id=modelId, client=boto3_bedrock, model_kwargs=parameters)
 
 # Conversation
-from langchain.chains import ConversationChain
-from langchain.memory import ConversationBufferMemory
 if methodOfConversation == 'ConversationChain':
     memory = ConversationBufferMemory()
     conversation = ConversationChain(
@@ -88,13 +88,27 @@ elif methodOfConversation == 'PromptTemplate':
     chat_memory = ConversationBufferMemory(human_prefix='Human', ai_prefix='Assistant')
 
 def get_answer_using_chat_history(query, chat_memory):  
-    condense_template = """Using the following conversation, answer friendly for the newest question. If you don't know the answer, just say that you don't know, don't try to make up an answer. You will be acting as a thoughtful advisor.
+     # check korean
+    pattern_hangul = re.compile('[\u3131-\u3163\uac00-\ud7a3]+') 
+    word_kor = pattern_hangul.search(str(texts))
+    print('word_kor: ', word_kor)
     
-    {chat_history}
+    if word_kor:
+        condense_template = """\n\nHuman: 다음은 Human과 Assistant의 친근한 대화입니다. Assistant은 상황에 맞는 구체적인 세부 정보를 충분히 제공합니다. Assistant는 모르는 질문을 받으면 솔직히 모른다고 말합니다.
     
-    Human: {question}
+        {chat_history}
+        
+        Human: {question}
 
-    Assistant:"""
+        Assistant:"""
+    else:
+        condense_template = """Using the following conversation, answer friendly for the newest question. If you don't know the answer, just say that you don't know, don't try to make up an answer. You will be acting as a thoughtful advisor.
+        
+        {chat_history}
+        
+        Human: {question}
+
+        Assistant:"""
     CONDENSE_QUESTION_PROMPT = PromptTemplate.from_template(condense_template)
         
     # extract chat history
@@ -126,9 +140,8 @@ def get_answer_using_chat_history(query, chat_memory):
 
     return result    
 
-def get_summary(file_type, s3_file_name):
-    summary = ''
-    
+# load documents from s3
+def load_document(file_type, s3_file_name):
     s3r = boto3.resource("s3")
     doc = s3r.Object(s3_bucket, s3_prefix+'/'+s3_file_name)
     
@@ -145,30 +158,33 @@ def get_summary(file_type, s3_file_name):
         contents = doc.get()['Body'].read()
     elif file_type == 'csv':        
         body = doc.get()['Body'].read()
-        reader = csv.reader(body)
-
-        from langchain.document_loaders import CSVLoader
+        reader = csv.reader(body)        
         contents = CSVLoader(reader)
     
-    print('contents: ', contents)
+    #print('contents: ', contents)
     new_contents = str(contents).replace("\n"," ") 
     print('length: ', len(new_contents))
 
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000,chunk_overlap=0)
-    texts = text_splitter.split_text(new_contents)
-    print('texts[0]: ', texts[0])
-        
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000,chunk_overlap=100) 
+
+    texts = text_splitter.split_text(new_contents) 
+    #print('texts[0]: ', texts[0])
+            
+    return texts
+
+def get_summary(texts):
     docs = [
         Document(
             page_content=t
         ) for t in texts[:3]
     ]
 
-    hangul = re.compile('[\u3131-\u3163\uac00-\ud7a3]+') 
-    word = hangul.search(str(texts))
-    print('word: ', word)
+    # check korean
+    pattern_hangul = re.compile('[\u3131-\u3163\uac00-\ud7a3]+') 
+    word_kor = pattern_hangul.search(str(texts))
+    print('word_kor: ', word_kor)
     
-    if word:
+    if word_kor:
         #prompt_template = """\n\nHuman: 다음 텍스트를 간결하게 요약하세오. 텍스트의 요점을 다루는 글머리 기호로 응답을 반환합니다.
         prompt_template = """\n\nHuman: 다음 텍스트를 요약해서 500자 이내로 설명하세오.
 
@@ -252,7 +268,8 @@ def lambda_handler(event, context):
             file_type = object[object.rfind('.')+1:len(object)]
             print('file_type: ', file_type)
             
-            msg = get_summary(file_type, object)
+            texts = load_document(file_type, object)
+            msg = get_summary(texts)
                 
         elapsed_time = int(time.time()) - start
         print("total run time(sec): ", elapsed_time)
