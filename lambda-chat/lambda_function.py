@@ -164,18 +164,18 @@ def get_summary(file_type, s3_file_name):
     ]
     
     if modelId == 'anthropic.claude-v1' or modelId == 'anthropic.claude-v2':
-        prompt_template = """다음 텍스트를 간결하게 요약하십시오.
+        prompt_template = """\n\nHuman: 다음 텍스트를 간결하게 요약하세오.
 텍스트의 요점을 다루는 글머리 기호로 응답을 반환합니다.
 
         {text}
         
-        SUMMARY """
+        Assistant:"""
     else:
-        prompt_template = """Write a concise summary of the following:
+        prompt_template = """\n\nWrite a concise summary of the following:
 
         {text}
         
-        CONCISE SUMMARY """
+        Assistant:"""
 
     PROMPT = PromptTemplate(template=prompt_template, input_variables=["text"])
     chain = load_summarize_chain(llm, chain_type="stuff", prompt=PROMPT)
