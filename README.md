@@ -357,6 +357,33 @@ cd .. && python3 test.py
 ```
 
 
+### TroubleShooting: Too many request
+
+현재 Bedrock은 Preview이어서, 너무 많은 요청을 하면 ThrottlingException이 발생합니다.
+
+```python
+[ERROR] ValueError: Error raised by bedrock service: An error occurred (ThrottlingException) when calling the InvokeModel operation (reached max retries: 4): Too many requests, please wait before trying again. You have sent too many requests.  Wait before trying again.
+Traceback (most recent call last):
+  File "/var/task/lambda_function.py", line 236, in lambda_handler
+    msg = get_answer_using_chat_history(text, chat_memory)
+  File "/var/task/lambda_function.py", line 121, in get_answer_using_chat_history
+    result = llm(CONDENSE_QUESTION_PROMPT.format(question=query, chat_history=chat_history))
+  File "/var/lang/lib/python3.11/site-packages/langchain/llms/base.py", line 825, in __call__
+    self.generate(
+  File "/var/lang/lib/python3.11/site-packages/langchain/llms/base.py", line 621, in generate
+    output = self._generate_helper(
+  File "/var/lang/lib/python3.11/site-packages/langchain/llms/base.py", line 523, in _generate_helper
+    raise e
+  File "/var/lang/lib/python3.11/site-packages/langchain/llms/base.py", line 510, in _generate_helper
+    self._generate(
+  File "/var/lang/lib/python3.11/site-packages/langchain/llms/base.py", line 1000, in _generate
+    self._call(prompt, stop=stop, run_manager=run_manager, **kwargs)
+  File "/var/lang/lib/python3.11/site-packages/langchain/llms/bedrock.py", line 217, in _call
+    text = self._prepare_input_and_invoke(prompt=prompt, stop=stop, **kwargs)
+  File "/var/lang/lib/python3.11/site-packages/langchain/llms/bedrock.py", line 150, in _prepare_input_and_invoke
+    raise ValueError(f"Error raised by bedrock service: {e}")
+```
+
 
 
 
