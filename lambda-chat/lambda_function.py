@@ -166,7 +166,10 @@ def get_summary(file_type, s3_file_name):
 
     print('docs: ', docs)
     hangul = re.compile('[\u3131-\u3163\uac00-\ud7a3]+')  
-    print('word: ', hangul.search(str(texts)).group())
+    word = hangul.search(str(texts))
+    print('word: ', word.group(1))
+
+    print('word:2 ', hangul.search(str(texts)).group(1))
 
     if hangul.search(str(texts)).group() == "":         
         #prompt_template = """\n\nHuman: 다음 텍스트를 간결하게 요약하세오. 텍스트의 요점을 다루는 글머리 기호로 응답을 반환합니다.
