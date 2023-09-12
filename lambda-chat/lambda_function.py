@@ -169,7 +169,7 @@ def get_summary(file_type, s3_file_name):
     result = hangul.findall(str(texts))
     print('result: ', result)
 
-    sresult = hangul.search(sr(texts))
+    sresult = hangul.search(str(texts))
     print('sresult: ', sresult)
 
     
