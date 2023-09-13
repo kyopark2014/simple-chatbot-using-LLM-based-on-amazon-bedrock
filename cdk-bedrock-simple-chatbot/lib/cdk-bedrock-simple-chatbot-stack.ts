@@ -76,16 +76,6 @@ export class CdkBedrockSimpleChatbotStack extends cdk.Stack {
       partitionKey: { name: 'type', type: dynamodb.AttributeType.STRING },
     });
 
-    // DynamoDB for call log
-    const chatLogTableName = `db-chat-log-for-${projectName}`;
-    const chatLogDataTable = new dynamodb.Table(this, `db-chat-log-for-${projectName}`, {
-      tableName: chatLogTableName,
-      partitionKey: { name: 'user-id', type: dynamodb.AttributeType.STRING },
-      sortKey: { name: 'request-id', type: dynamodb.AttributeType.STRING }, 
-      billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
-      removalPolicy: cdk.RemovalPolicy.DESTROY,
-    });
-
     // copy web application files into s3 bucket
     new s3Deploy.BucketDeployment(this, `upload-HTML-for-${projectName}`, {
       sources: [s3Deploy.Source.asset("../html")],
@@ -142,14 +132,12 @@ export class CdkBedrockSimpleChatbotStack extends cdk.Stack {
         s3_prefix: s3_prefix,
         callLogTableName: callLogTableName,
         accessType: accessType,
-        conversationMode: conversationMode,
-        chatLogTableName: chatLogTableName
+        conversationMode: conversationMode
       }
     });     
     lambdaChatApi.grantInvoke(new iam.ServicePrincipal('apigateway.amazonaws.com'));  
     s3Bucket.grantRead(lambdaChatApi); // permission for s3
     callLogDataTable.grantReadWriteData(lambdaChatApi); // permission for dynamo
-    chatLogDataTable.grantReadWriteData(lambdaChatApi); // permission for dynamo
     
     // role
     const role = new iam.Role(this, `api-role-for-${projectName}`, {

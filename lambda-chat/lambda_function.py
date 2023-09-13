@@ -26,7 +26,6 @@ s3 = boto3.client('s3')
 s3_bucket = os.environ.get('s3_bucket') # bucket name
 s3_prefix = os.environ.get('s3_prefix')
 callLogTableName = os.environ.get('callLogTableName')
-chatLogTableName = os.environ.get('chatLogTableName')
 endpoint_url = os.environ.get('endpoint_url', 'https://prod.us-west-2.frontend.bedrock.aws.dev')
 bedrock_region = os.environ.get('bedrock_region', 'us-west-2')
 modelId = os.environ.get('model_id', 'amazon.titan-tg1-large')
@@ -80,7 +79,7 @@ llm = Bedrock(model_id=modelId, client=boto3_bedrock, model_kwargs=parameters)
 
 map = dict() # Conversation
 
-def get_answer_using_chat_history(query, chat_memory, history_memory):  
+def get_answer_using_chat_history(query, chat_memory):  
     # check korean
     pattern_hangul = re.compile('[\u3131-\u3163\uac00-\ud7a3]+') 
     word_kor = pattern_hangul.search(str(query))
@@ -108,10 +107,6 @@ def get_answer_using_chat_history(query, chat_memory, history_memory):
     chats = chat_memory.load_memory_variables({})
     chat_history_all = chats['history']
     print('chat_history_all: ', chat_history_all)
-
-    #history = history_memory.load_memory_variables({})
-    #history_all = history['history']
-    #print('history_all: ', history_all)
 
     # use last two chunks of chat history
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=2000,chunk_overlap=0)
@@ -207,7 +202,7 @@ def get_summary(texts):
     else:
         # return summary[1:len(summary)-1]   
         return summary
-
+    
 def lambda_handler(event, context):
     print(event)
     userId  = event['user-id']
@@ -220,20 +215,6 @@ def lambda_handler(event, context):
     print('body: ', body)
 
     global modelId, llm, parameters, conversation, conversationMode, map
-
-    from langchain.memory.chat_message_histories import DynamoDBChatMessageHistory    
-    my_key = {
-        "user-id": userId,  # partition key
-        "request-id": requestId, # sort key
-    }
-    message_history = DynamoDBChatMessageHistory(
-        table_name=chatLogTableName, 
-        session_id=userId,
-        key=my_key
-    )
-    history_memory = ConversationBufferMemory(
-        chat_memory=message_history, return_messages=True
-    )
 
     if userId in map:
         chat_memory = map[userId]
@@ -278,46 +259,10 @@ def lambda_handler(event, context):
                     if methodOfConversation == 'ConversationChain':
                         msg = conversation.predict(input=text)
                     elif methodOfConversation == 'PromptTemplate':
-                        msg = get_answer_using_chat_history(text, chat_memory, history_memory)
+                        msg = get_answer_using_chat_history(text, chat_memory)
 
                         storedMsg = str(msg).replace("\n"," ") 
                         chat_memory.save_context({"input": text}, {"output": storedMsg})     
-                        history_memory.save_context({"input": text}, {"output": storedMsg}) 
-
-
-                        from langchain.schema import messages_from_dict, messages_to_dict
-                        from langchain.schema import HumanMessage
-                        from langchain.schema import (
-                            AIMessage,
-                            HumanMessage,
-                            SystemMessage
-                        )
-  
-                        messages = history_memory.load_memory_variables({})['history']
-                        print('messages: ', messages)
-
-                        from langchain.load.dump import dumps
-                        json_string = dumps(messages)
-                        print('json_string: ', json_string)
-
-                        json_str = json.loads(json_string)
-                        print('json_str: ', json_str)
-
-                        print('json[0]: ', json_str[0])
-
-                        print('Human: ', json_str[0]['kwargs']['content'])
-                        print('Assistant: ', json_str[1]['kwargs']['content'])
-                        
-                        
-                        #history_all = history['history'].to_json()
-                        #history_all = history['history'].json()
-                        #temp = json.dumps(history_memory.to_json())
-                        #print('temp: ', temp)
-                        
-                        #retrieve_from_db = json.loads(json.dumps(history_memory.to_json()))
-                        
-                        #print('history_all: ', retrieve_from_db)
-                        
                 else:
                     msg = llm(HUMAN_PROMPT+text+AI_PROMPT)
             #print('msg: ', msg)
