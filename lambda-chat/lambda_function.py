@@ -117,8 +117,6 @@ def get_answer_using_chat_history(query, chat_memory):
         
     # extract chat history
     chats = chat_memory.load_memory_variables({})
-    print('chats: ', chats)
-
     chat_history_all = chats['chat_history']
     print('chat_history_all: ', chat_history_all)
 
@@ -135,12 +133,12 @@ def get_answer_using_chat_history(query, chat_memory):
         elif pages == 1:
             chat_history = texts[0]
     
-    else:  # 0 page
+    else:  # no history
         chat_history = ""
     print('chat_history:\n ', chat_history)
 
     # make a question using chat history
-    if pages >= 1:
+    if chat_history:
         result = llm(CONDENSE_QUESTION_PROMPT.format(question=query, chat_history=chat_history))
     else:
         result = llm(HUMAN_PROMPT+query+AI_PROMPT)
