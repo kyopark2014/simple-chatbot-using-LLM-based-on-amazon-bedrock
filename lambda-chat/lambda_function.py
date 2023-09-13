@@ -293,15 +293,16 @@ def lambda_handler(event, context):
                             SystemMessage
                         )
   
-                        history = history_memory.load_memory_variables({})
-                        print('history: ', history)
-                        messages = history['history']
-
+                        messages = history_memory.load_memory_variables({})['history']
                         print('messages: ', messages)
 
                         from langchain.load.dump import dumps
                         json_string = dumps(messages)
                         print('json_string: ', json_string)
+
+                        print('Human: ', json_string[0]['kwargs']['content'])
+                        print('Assistant: ', json_string[1]['kwargs']['content'])
+                        
                         
                         #history_all = history['history'].to_json()
                         #history_all = history['history'].json()
