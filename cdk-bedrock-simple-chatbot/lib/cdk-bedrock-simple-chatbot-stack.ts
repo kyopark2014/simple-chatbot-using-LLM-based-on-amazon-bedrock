@@ -122,7 +122,7 @@ export class CdkBedrockSimpleChatbotStack extends cdk.Stack {
       description: 'lambda for chat api',
       functionName: `lambda-chat-api-for-${projectName}`,
       code: lambda.DockerImageCode.fromImageAsset(path.join(__dirname, '../../lambda-chat')),
-      timeout: cdk.Duration.seconds(60),
+      timeout: cdk.Duration.seconds(300),
       role: roleLambda,
       environment: {
         bedrock_region: bedrock_region,
