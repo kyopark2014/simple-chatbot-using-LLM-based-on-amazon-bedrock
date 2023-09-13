@@ -81,9 +81,7 @@ llm = Bedrock(model_id=modelId, client=boto3_bedrock, model_kwargs=parameters)
 if methodOfConversation == 'ConversationChain':
     memory = ConversationBufferMemory(human_prefix='Human', ai_prefix='Assistant')
     conversation = ConversationChain(
-        llm=llm, 
-        verbose=True, 
-        memory=memory
+        llm=llm, verbose=True, memory=memory
     )
 elif methodOfConversation == 'PromptTemplate':
     # memory for conversation
