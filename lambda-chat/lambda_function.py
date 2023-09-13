@@ -77,14 +77,7 @@ parameters = get_parameter(modelId)
 
 llm = Bedrock(model_id=modelId, client=boto3_bedrock, model_kwargs=parameters)
 
-# Conversation
-if methodOfConversation == 'ConversationChain':
-    memory = ConversationBufferMemory(human_prefix='Human', ai_prefix='Assistant') 
-    conversation = ConversationChain(
-        llm=llm, verbose=True, memory=memory
-    )
-
-map = dict()
+map = dict() # Conversation
 
 def get_answer_using_chat_history(query, chat_memory):  
     # check korean
@@ -223,15 +216,16 @@ def lambda_handler(event, context):
 
     global modelId, llm, parameters, conversation, conversationMode, map
 
-    #chat_memory = ConversationBufferMemory(human_prefix='Human', ai_prefix='Assistant') # human/Assistant
-
     if userId in map:
         chat_memory = map[userId]
-        print('chat_memory exist!')
+        print('chat_memory exist. reuse it!')
     else: 
         chat_memory = ConversationBufferMemory(human_prefix='Human', ai_prefix='Assistant')
         map[userId] = chat_memory
         print('chat_memory does not exist. create new one!')
+
+    if methodOfConversation == 'ConversationChain':
+        conversation = ConversationChain(llm=llm, verbose=True, memory=chat_memory)
     
     start = int(time.time())    
 
