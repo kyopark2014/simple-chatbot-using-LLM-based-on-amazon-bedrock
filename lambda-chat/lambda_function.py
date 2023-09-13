@@ -109,9 +109,9 @@ def get_answer_using_chat_history(query, chat_memory, history_memory):
     chat_history_all = chats['history']
     print('chat_history_all: ', chat_history_all)
 
-    history = history_memory.load_memory_variables({})
-    history_all = history['history']
-    print('history_all: ', history_all)
+    #history = history_memory.load_memory_variables({})
+    #history_all = history['history']
+    #print('history_all: ', history_all)
 
     # use last two chunks of chat history
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=2000,chunk_overlap=0)
@@ -283,6 +283,11 @@ def lambda_handler(event, context):
                         storedMsg = str(msg).replace("\n"," ") 
                         chat_memory.save_context({"input": text}, {"output": storedMsg})     
                         history_memory.save_context({"input": text}, {"output": storedMsg}) 
+
+
+                        history = history_memory.load_memory_variables({})
+                        history_all = history['history']
+                        print('history_all: ', history_all)
                         
                 else:
                     msg = llm(HUMAN_PROMPT+text+AI_PROMPT)
