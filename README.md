@@ -440,6 +440,9 @@ Traceback (most recent call last):
     raise ValueError(f"Error raised by bedrock service: {e}")
 ```
 
+### DynamoDBChatMessageHistory
+
+LangChain의 DynamoDBChatMessageHistory을 이용해 [구현](https://github.com/kyopark2014/simple-chatbot-using-LLM-based-on-amazon-bedrock/blob/main/chat-history-dynamo.md)해 보았으나, 이전 채팅이력을 읽어올수 없는 구조여서 사용하지 않았습니다.
 
 
 
