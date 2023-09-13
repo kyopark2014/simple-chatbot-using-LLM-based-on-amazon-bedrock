@@ -265,7 +265,7 @@ def lambda_handler(event, context):
                         msg = get_answer_using_chat_history(text, chat_memory)
 
                         storedMsg = str(msg).replace("\n"," ") 
-                        chat_memory.save_context({"input": text}, {"output": storedMsg})     
+                        chat_memory.save_context({"question": text}, {"answer": storedMsg})     
                 else:
                     msg = llm(HUMAN_PROMPT+text+AI_PROMPT)
             #print('msg: ', msg)
