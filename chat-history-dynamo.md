@@ -1,6 +1,6 @@
 # DynamoDB를 이용하여 Chat History 저장
 
-DynamoDBChatMessageHistory을 이용하여 편리하게 저장을 할 수 있으나, 저장만 할뿐 순차적으로 읽어올수 없습니다.
+DynamoDBChatMessageHistory을 이용하여 편리하게 저장을 할 수 있으나, 저장만 할뿐 DynamoDB에서 로드 할 수 없습니다. 복잡도 대비 효용성이 떨어져서 사용하지 않고자 합니다. 
 
 아래와 같이 history를 DyanmoDB의 Table과 연결합니다.
 
