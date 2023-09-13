@@ -123,16 +123,18 @@ def get_answer_using_chat_history(query, chat_memory):
     print('chat_history_all: ', chat_history_all)
 
     # use last two chunks of chat history
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=2000,chunk_overlap=0)
-    texts = text_splitter.split_text(chat_history_all) 
+    if chat_history_all:
+        text_splitter = RecursiveCharacterTextSplitter(chunk_size=2000,chunk_overlap=0)
+        texts = text_splitter.split_text(chat_history_all) 
 
-    pages = len(texts)
-    print('pages: ', pages)
+        pages = len(texts)
+        print('pages: ', pages)
 
-    if pages >= 2:
-        chat_history = f"{texts[pages-2]} {texts[pages-1]}"
-    elif pages == 1:
-        chat_history = texts[0]
+        if pages >= 2:
+            chat_history = f"{texts[pages-2]} {texts[pages-1]}"
+        elif pages == 1:
+            chat_history = texts[0]
+    
     else:  # 0 page
         chat_history = ""
     print('chat_history:\n ', chat_history)
