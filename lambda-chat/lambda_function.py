@@ -83,8 +83,8 @@ if methodOfConversation == 'ConversationChain':
     conversation = ConversationChain(
         llm=llm, verbose=True, memory=memory
     )
-elif methodOfConversation == 'PromptTemplate':
-    chat_memory = ConversationBufferMemory(human_prefix='Human', ai_prefix='Assistant') # human/Assistant
+
+map = dict()
 
 def get_answer_using_chat_history(query, chat_memory):  
     # check korean
@@ -221,7 +221,17 @@ def lambda_handler(event, context):
     body = event['body']
     print('body: ', body)
 
-    global modelId, llm, parameters, conversation, conversationMode
+    global modelId, llm, parameters, conversation, conversationMode, map
+
+    #chat_memory = ConversationBufferMemory(human_prefix='Human', ai_prefix='Assistant') # human/Assistant
+
+    if userId in map:
+        chat_memory = map[userId]
+        print('chat_memory exist!')
+    else: 
+        chat_memory = ConversationBufferMemory(human_prefix='Human', ai_prefix='Assistant')
+        map[userId] = chat_memory
+        print('chat_memory does not exist. create new one!')
     
     start = int(time.time())    
 
