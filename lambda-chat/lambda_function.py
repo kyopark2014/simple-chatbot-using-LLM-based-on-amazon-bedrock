@@ -219,8 +219,8 @@ def lambda_handler(event, context):
 
     from langchain.memory.chat_message_histories import DynamoDBChatMessageHistory    
     my_key = {
-        "user-id": userId,
-        "request-id": requestId,
+        "user-id": userId,  # partition key
+        "request-id": requestId, # sort key
     }
     message_history = DynamoDBChatMessageHistory(
         table_name=chatLogTableName, 
@@ -279,6 +279,11 @@ def lambda_handler(event, context):
                         storedMsg = str(msg).replace("\n"," ") 
                         chat_memory.save_context({"input": text}, {"output": storedMsg})     
                         history_memory.save_context({"input": text}, {"output": storedMsg}) 
+
+                        history = history_memory.load_memory_variables({})
+                        print('history: ', history)
+                        #history_all = history['history']
+                        #print('chat_history_all: ', history_all)
                 else:
                     msg = llm(HUMAN_PROMPT+text+AI_PROMPT)
             #print('msg: ', msg)
