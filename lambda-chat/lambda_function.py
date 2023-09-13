@@ -32,7 +32,7 @@ modelId = os.environ.get('model_id', 'amazon.titan-tg1-large')
 print('model_id: ', modelId)
 accessType = os.environ.get('accessType', 'aws')
 conversationMode = os.environ.get('conversationMode', 'false')
-methodOfConversation = 'ConversationChain' # ConversationChain or PromptTemplate
+methodOfConversation = 'PromptTemplate' # ConversationChain or PromptTemplate
 
 # Bedrock Contiguration
 bedrock_region = bedrock_region
@@ -78,17 +78,9 @@ parameters = get_parameter(modelId)
 llm = Bedrock(model_id=modelId, client=boto3_bedrock, model_kwargs=parameters)
 
 # Conversation
-condense_template = """\n\nHuman: 다음은 Human과 Assistant의 친근한 대화입니다. Assistant은 상황에 맞는 구체적인 세부 정보를 충분히 제공합니다. Assistant는 모르는 질문을 받으면 솔직히 모른다고 말합니다.
-    
-        {chat_history}
-        
-        Human: {question}
-
-        Assistant:"""
 if methodOfConversation == 'ConversationChain':
     memory = ConversationBufferMemory(human_prefix='Human', ai_prefix='Assistant')
     conversation = ConversationChain(
-        prompt=condense_template,
         llm=llm, 
         verbose=True, 
         memory=memory
