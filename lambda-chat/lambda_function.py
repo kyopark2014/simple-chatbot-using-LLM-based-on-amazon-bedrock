@@ -84,8 +84,7 @@ if methodOfConversation == 'ConversationChain':
         llm=llm, verbose=True, memory=memory
     )
 elif methodOfConversation == 'PromptTemplate':
-    # memory for conversation
-    chat_memory = ConversationBufferMemory(human_prefix='Human', ai_prefix='Assistant')
+    chat_memory = ConversationBufferMemory(human_prefix='Human', ai_prefix='Assistant') # human/Assistant
 
 def get_answer_using_chat_history(query, chat_memory):  
      # check korean
