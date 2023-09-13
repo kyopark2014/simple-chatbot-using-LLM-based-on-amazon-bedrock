@@ -32,7 +32,7 @@ modelId = os.environ.get('model_id', 'amazon.titan-tg1-large')
 print('model_id: ', modelId)
 accessType = os.environ.get('accessType', 'aws')
 conversationMode = os.environ.get('conversationMode', 'false')
-methodOfConversation = 'ConversationChain' # ConversationChain or PromptTemplate
+methodOfConversation = 'PromptTemplate' # ConversationChain or PromptTemplate
 
 # Bedrock Contiguration
 bedrock_region = bedrock_region
@@ -79,7 +79,7 @@ llm = Bedrock(model_id=modelId, client=boto3_bedrock, model_kwargs=parameters)
 
 # Conversation
 if methodOfConversation == 'ConversationChain':
-    memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True, input_key="question", output_key='answer', human_prefix='Human', ai_prefix='Assistant')
+    memory = ConversationBufferMemory(human_prefix='Human', ai_prefix='Assistant')
     conversation = ConversationChain(
         llm=llm, 
         verbose=True, 
@@ -87,14 +87,12 @@ if methodOfConversation == 'ConversationChain':
     )
 elif methodOfConversation == 'PromptTemplate':
     # memory for conversation
-    #chat_memory = ConversationBufferMemory(human_prefix='Human', ai_prefix='Assistant')
-
-    chat_memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True, input_key="question", output_key='answer', human_prefix='Human', ai_prefix='Assistant')
+    chat_memory = ConversationBufferMemory(human_prefix='Human', ai_prefix='Assistant')
 
 def get_answer_using_chat_history(query, chat_memory):  
      # check korean
     pattern_hangul = re.compile('[\u3131-\u3163\uac00-\ud7a3]+') 
-    word_kor = pattern_hangul.search(str(query))
+    word_kor = pattern_hangul.search(str(texts))
     print('word_kor: ', word_kor)
     
     if word_kor:
@@ -117,28 +115,26 @@ def get_answer_using_chat_history(query, chat_memory):
         
     # extract chat history
     chats = chat_memory.load_memory_variables({})
-    chat_history_all = chats['chat_history']
+    chat_history_all = chats['history']
     print('chat_history_all: ', chat_history_all)
 
     # use last two chunks of chat history
-    if chat_history_all:
-        text_splitter = RecursiveCharacterTextSplitter(chunk_size=2000,chunk_overlap=0)
-        texts = text_splitter.split_text(chat_history_all) 
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=2000,chunk_overlap=0)
+    texts = text_splitter.split_text(chat_history_all) 
 
-        pages = len(texts)
-        print('pages: ', pages)
+    pages = len(texts)
+    print('pages: ', pages)
 
-        if pages >= 2:
-            chat_history = f"{texts[pages-2]} {texts[pages-1]}"
-        elif pages == 1:
-            chat_history = texts[0]
-    
-    else:  # no history
+    if pages >= 2:
+        chat_history = f"{texts[pages-2]} {texts[pages-1]}"
+    elif pages == 1:
+        chat_history = texts[0]
+    else:  # 0 page
         chat_history = ""
     print('chat_history:\n ', chat_history)
 
     # make a question using chat history
-    if chat_history:
+    if pages >= 1:
         result = llm(CONDENSE_QUESTION_PROMPT.format(question=query, chat_history=chat_history))
     else:
         result = llm(HUMAN_PROMPT+query+AI_PROMPT)
@@ -265,7 +261,7 @@ def lambda_handler(event, context):
                         msg = get_answer_using_chat_history(text, chat_memory)
 
                         storedMsg = str(msg).replace("\n"," ") 
-                        chat_memory.save_context({"question": text}, {"answer": storedMsg})     
+                        chat_memory.save_context({"input": text}, {"output": storedMsg})     
                 else:
                     msg = llm(HUMAN_PROMPT+text+AI_PROMPT)
             #print('msg: ', msg)
