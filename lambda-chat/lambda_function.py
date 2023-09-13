@@ -26,6 +26,7 @@ s3 = boto3.client('s3')
 s3_bucket = os.environ.get('s3_bucket') # bucket name
 s3_prefix = os.environ.get('s3_prefix')
 callLogTableName = os.environ.get('callLogTableName')
+chatLogTableName = os.environ.get('chatLogTableName')
 endpoint_url = os.environ.get('endpoint_url', 'https://prod.us-west-2.frontend.bedrock.aws.dev')
 bedrock_region = os.environ.get('bedrock_region', 'us-west-2')
 modelId = os.environ.get('model_id', 'amazon.titan-tg1-large')
@@ -202,7 +203,7 @@ def get_summary(texts):
     else:
         # return summary[1:len(summary)-1]   
         return summary
-    
+
 def lambda_handler(event, context):
     print(event)
     userId  = event['user-id']
@@ -215,6 +216,20 @@ def lambda_handler(event, context):
     print('body: ', body)
 
     global modelId, llm, parameters, conversation, conversationMode, map
+
+    from langchain.memory.chat_message_histories import DynamoDBChatMessageHistory    
+    my_key = {
+        "user-id": userId,
+        "request-id": requestId,
+    }
+    message_history = DynamoDBChatMessageHistory(
+        table_name=chatLogTableName, 
+        session_id=userId,
+        key=my_key
+    )
+    history_memory = ConversationBufferMemory(
+        chat_memory=message_history, return_messages=True, human_prefix='Human', ai_prefix='Assistant'
+    )
 
     if userId in map:
         chat_memory = map[userId]
@@ -263,6 +278,7 @@ def lambda_handler(event, context):
 
                         storedMsg = str(msg).replace("\n"," ") 
                         chat_memory.save_context({"input": text}, {"output": storedMsg})     
+                        history_memory.save_context({"input": text}, {"output": storedMsg}) 
                 else:
                     msg = llm(HUMAN_PROMPT+text+AI_PROMPT)
             #print('msg: ', msg)
