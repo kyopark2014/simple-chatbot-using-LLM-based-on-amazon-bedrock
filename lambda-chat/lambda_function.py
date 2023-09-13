@@ -239,6 +239,7 @@ def lambda_handler(event, context):
     else:             
         if type == 'text':
             text = body
+            print('query: ', text)
 
             querySize = len(text)
             textCount = len(text.split())
