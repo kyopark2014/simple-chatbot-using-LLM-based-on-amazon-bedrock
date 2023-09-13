@@ -155,7 +155,10 @@ def load_document(file_type, s3_file_name):
         contents = '\n'.join(raw_text)    
         
     elif file_type == 'txt':        
-        contents = doc.get()['Body'].read()
+        contents = doc.get()['Body'].read().encode('utf-8')
+        import sys
+        print(sys.getdefaultencoding())
+    
     elif file_type == 'csv':        
         body = doc.get()['Body'].read()
         reader = csv.reader(body)        
