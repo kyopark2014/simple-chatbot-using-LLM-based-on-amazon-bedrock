@@ -32,7 +32,7 @@ modelId = os.environ.get('model_id', 'amazon.titan-tg1-large')
 print('model_id: ', modelId)
 accessType = os.environ.get('accessType', 'aws')
 conversationMode = os.environ.get('conversationMode', 'false')
-methodOfConversation = 'PromptTemplate' # ConversationChain or PromptTemplate
+methodOfConversation = 'ConversationChain' # ConversationChain or PromptTemplate
 
 # Bedrock Contiguration
 bedrock_region = bedrock_region
