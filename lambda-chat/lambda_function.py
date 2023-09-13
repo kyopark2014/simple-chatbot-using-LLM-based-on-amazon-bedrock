@@ -300,8 +300,13 @@ def lambda_handler(event, context):
                         json_string = dumps(messages)
                         print('json_string: ', json_string)
 
-                        print('Human: ', json_string[0]['kwargs']['content'])
-                        print('Assistant: ', json_string[1]['kwargs']['content'])
+                        json_str = json.loads(json_string)
+                        print('json_str: ', json_str)
+
+                        print('json[0]: ', json_str[0])
+
+                        print('Human: ', json_str[0]['kwargs']['content'])
+                        print('Assistant: ', json_str[1]['kwargs']['content'])
                         
                         
                         #history_all = history['history'].to_json()
