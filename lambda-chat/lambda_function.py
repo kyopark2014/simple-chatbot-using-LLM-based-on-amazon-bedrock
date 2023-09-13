@@ -285,10 +285,23 @@ def lambda_handler(event, context):
                         history_memory.save_context({"input": text}, {"output": storedMsg}) 
 
 
+                        from langchain.schema import messages_from_dict, messages_to_dict
+                        from langchain.schema import HumanMessage
+                        from langchain.schema import (
+                            AIMessage,
+                            HumanMessage,
+                            SystemMessage
+                        )
+  
                         history = history_memory.load_memory_variables({})
                         print('history: ', history)
-                        messages = history.chat_memory.messages
+                        messages = history['history']
+
                         print('messages: ', messages)
+
+                        from langchain.load.dump import dumps
+                        json_string = dumps(messages)
+                        print('json_string: ', json_string)
                         
                         #history_all = history['history'].to_json()
                         #history_all = history['history'].json()
