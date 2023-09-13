@@ -442,7 +442,7 @@ Traceback (most recent call last):
 
 ### DynamoDBChatMessageHistory
 
-LangChain의 DynamoDBChatMessageHistory을 이용해 [구현](https://github.com/kyopark2014/simple-chatbot-using-LLM-based-on-amazon-bedrock/blob/main/chat-history-dynamo.md)해 보았으나, 이전 채팅이력을 읽어올수 없는 구조여서 사용하지 않았습니다.
+LangChain의 DynamoDBChatMessageHistory을 이용해 [구현](https://github.com/kyopark2014/simple-chatbot-using-LLM-based-on-amazon-bedrock/blob/main/chat-history-dynamo.md)해 보았으나, 이전 채팅이력을 읽어올수 없는 구조여서 사용하지 않았습니다. DynamoDB에 저장할때에도 포맷을 변경할 수 없어서 사용성이 안좋습니다.
 
 
 
