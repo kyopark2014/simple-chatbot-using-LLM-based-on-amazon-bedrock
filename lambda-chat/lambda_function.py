@@ -285,9 +285,15 @@ def lambda_handler(event, context):
                         history_memory.save_context({"input": text}, {"output": storedMsg}) 
 
 
-                        history = history_memory.load_memory_variables({})
-                        history_all = history['history'].json()
-                        print('history_all: ', history_all)
+                        #history = history_memory.load_memory_variables({})
+                        #history_all = history['history'].to_json()
+                        #history_all = history['history'].json()
+                        temp = json.dumps(history_memory.to_json())
+                        print('temp: ', temp)
+                        
+                        retrieve_from_db = json.loads(json.dumps(history_memory.to_json()))
+                        
+                        print('history_all: ', retrieve_from_db)
                         
                 else:
                     msg = llm(HUMAN_PROMPT+text+AI_PROMPT)
