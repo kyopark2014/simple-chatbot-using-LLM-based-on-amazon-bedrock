@@ -155,7 +155,7 @@ def load_document(file_type, s3_file_name):
         contents = '\n'.join(raw_text)    
         
     elif file_type == 'txt':        
-        contents = doc.get()['Body'].read().encode('utf-8')
+        contents = doc.get()['Body'].read().decode('utf-8')
         import sys
         print(sys.getdefaultencoding())
     
