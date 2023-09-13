@@ -93,7 +93,7 @@ llm(text)
 ```python
 from langchain.chains import ConversationChain
 from langchain.memory import ConversationBufferMemory
-memory = ConversationBufferMemory()
+memory = ConversationBufferMemory(human_prefix='Human', ai_prefix='Assistant')
 conversation = ConversationChain(
     llm=llm, verbose=True, memory=memory
 )
@@ -105,13 +105,15 @@ conversation = ConversationChain(
 msg = conversation.predict(input=text)
 ```
 
-이때 ConversationBufferMemory()는 아래와 같이 저장합니다.
+이때 ConversationBufferMemory()는 아래와 같이 저장합니다. 
+
+*확인중:* 그런데 이유는 모르겠으나 아래처럼 Assistant로 지정하였음에도 일정시간후에 AI로 이름이 변경되어서 채팅 이력이 잘못되는 현상이 있어서 원인을 확인중입니다.
 
 ```text
 Human: 안녕 나는 제임스야.
-AI: 안녕하세요 제임스! 반가워요. 제 이름은 수호입니다.
+Assistant: 안녕하세요 제임스! 반가워요. 제 이름은 수호입니다.
 Human: 나는 서울에 살아.
-AI: 안녕하세요 서울에 사시는 제임스님! 서울은 대한민국의 수도로 정말 멋진 도시에요. 제가 서울에 대해 아는 것을 이야기해 드릴게요. 서울에는 고층 빌딩과 현대적인 건축물이 많아서 도시의 모습이 매우 독특하고 멋있어요. 또한 한강과 청계천이 흐르고 있어서 자연과 어우러진 도시 풍경도 볼 수 있죠. 역사적으로 중요한 곳도 많은데 경복궁, 창덕궁, 창경궁 등 유서 깊은 궁궐들이 있고, 명동, 인사동, 북촌 등 옛 정취가 남아있는 곳들도 많습니다. 또 밤에는 화려한 야경이 볼만해요! 제가 서울에 대해 아는 것은 여기까지인데, 서울에 대해 궁금한 것이 있으시면 물어보세요!
+Assistant: 안녕하세요 서울에 사시는 제임스님! 서울은 대한민국의 수도로 정말 멋진 도시에요. 제가 서울에 대해 아는 것을 이야기해 드릴게요. 서울에는 고층 빌딩과 현대적인 건축물이 많아서 도시의 모습이 매우 독특하고 멋있어요. 또한 한강과 청계천이 흐르고 있어서 자연과 어우러진 도시 풍경도 볼 수 있죠. 역사적으로 중요한 곳도 많은데 경복궁, 창덕궁, 창경궁 등 유서 깊은 궁궐들이 있고, 명동, 인사동, 북촌 등 옛 정취가 남아있는 곳들도 많습니다. 또 밤에는 화려한 야경이 볼만해요! 제가 서울에 대해 아는 것은 여기까지인데, 서울에 대해 궁금한 것이 있으시면 물어보세요!
 Human: 내가 사는곳에서 좋은 관광지 소개해줄래?
 AI: 네, 제임스님이 사는 서울에서 좋은 관광지를 소개해드리겠습니다.
 ```
