@@ -232,7 +232,7 @@ def lambda_handler(event, context):
         key=my_key
     )
     history_memory = ConversationBufferMemory(
-        chat_memory=message_history, return_messages=True, human_prefix='Human', ai_prefix='Assistant'
+        chat_memory=message_history, return_messages=True
     )
 
     if userId in map:
@@ -286,7 +286,7 @@ def lambda_handler(event, context):
 
 
                         history = history_memory.load_memory_variables({})
-                        history_all = history['history']
+                        history_all = history['history'].json()
                         print('history_all: ', history_all)
                         
                 else:
