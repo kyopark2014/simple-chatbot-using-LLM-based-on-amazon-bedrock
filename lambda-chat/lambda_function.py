@@ -117,7 +117,9 @@ def get_answer_using_chat_history(query, chat_memory):
         
     # extract chat history
     chats = chat_memory.load_memory_variables({})
-    chat_history_all = chats['history']
+    print('chats: ', chats)
+
+    chat_history_all = chats['chat_history']
     print('chat_history_all: ', chat_history_all)
 
     # use last two chunks of chat history
