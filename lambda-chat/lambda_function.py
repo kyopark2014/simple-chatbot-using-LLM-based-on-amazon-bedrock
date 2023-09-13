@@ -32,7 +32,7 @@ modelId = os.environ.get('model_id', 'amazon.titan-tg1-large')
 print('model_id: ', modelId)
 accessType = os.environ.get('accessType', 'aws')
 conversationMode = os.environ.get('conversationMode', 'false')
-methodOfConversation = 'PromptTemplate' # ConversationChain or PromptTemplate
+methodOfConversation = 'ConversationChain' # ConversationChain or PromptTemplate
 
 # Bedrock Contiguration
 bedrock_region = bedrock_region
@@ -79,7 +79,7 @@ llm = Bedrock(model_id=modelId, client=boto3_bedrock, model_kwargs=parameters)
 
 # Conversation
 if methodOfConversation == 'ConversationChain':
-    memory = ConversationBufferMemory(human_prefix='Human', ai_prefix='Assistant')
+    memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True, input_key="question", output_key='answer', human_prefix='Human', ai_prefix='Assistant')
     conversation = ConversationChain(
         llm=llm, 
         verbose=True, 
