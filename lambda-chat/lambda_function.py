@@ -94,7 +94,7 @@ elif methodOfConversation == 'PromptTemplate':
 def get_answer_using_chat_history(query, chat_memory):  
      # check korean
     pattern_hangul = re.compile('[\u3131-\u3163\uac00-\ud7a3]+') 
-    word_kor = pattern_hangul.search(str(texts))
+    word_kor = pattern_hangul.search(str(query))
     print('word_kor: ', word_kor)
     
     if word_kor:
