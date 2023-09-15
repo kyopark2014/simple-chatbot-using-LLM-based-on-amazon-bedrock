@@ -132,7 +132,7 @@ def get_answer_using_chat_history(query, chat_memory):
 
     return result    
 
-# load documents from s3
+# load documents from s3 for pdf and txt
 def load_document(file_type, s3_file_name):
     s3r = boto3.resource("s3")
     doc = s3r.Object(s3_bucket, s3_prefix+'/'+s3_file_name)
@@ -180,10 +180,10 @@ def load_csv_document(s3_file_name):
     
     body = doc.get()['Body'].read().decode('utf-8')
     # print('body: ', body)
-    print('length: ', len(body))
+    print('total characters: ', len(body))
 
     reader_obj = csv.DictReader(body, delimiter=',',quotechar='"')
-    print('length of reader_obj: ', len(reader_obj))
+    #print('number of rows: ', len(reader_obj))
     #CSVLoader
     #csv_reader = csv.DictReader(body)
     #print('csv_reader: ', csv_reader)
