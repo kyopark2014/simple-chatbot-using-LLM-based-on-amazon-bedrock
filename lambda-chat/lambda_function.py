@@ -201,10 +201,10 @@ def load_csv_document(s3_file_name):
     # using reader object
     #print("reader_obj: ", reader_obj)
     #print("reader_obj[0]: ", reader_obj[0])
-    for row in reader_obj:
-        print('length_of_row: ', len(row))
-        if len(row)>1:
-            print('row contants: ', row)
+    #for row in reader_obj:
+    #    print('length_of_row: ', len(row))
+    #    if len(row)>1:
+    #        print('row contants: ', row)
     
     docs = [
         Document(
