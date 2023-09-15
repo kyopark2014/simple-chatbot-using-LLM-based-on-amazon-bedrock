@@ -193,22 +193,7 @@ def load_csv_document(s3_file_name):
     #    }
     #)
     #print('contents: ', contents.load())
-    docs = []
-    columns_to_emebd = ["Category","Information"]
-    columns_to_metadata = ["Product Name","Price", "Rating","Description", "Features"]
-    
-    csv_reader = csv.DictReader(body)
-    for i, row in enumerate(csv_reader):
-        #to_metadata = {col: row[col] for col in columns_to_metadata if col in row}
-        values_to_embed = {k: row[k] for k in columns_to_emebd if k in row}
-        to_embed = "\n".join(f"{k.strip()}: {v.strip()}" for k, v in values_to_embed.items())
-        print('to_embed: ', to_embed)
-        #newDoc = Document(page_content=to_embed, metadata=to_metadata)
-        newDoc = Document(page_content=to_embed)
-        docs.append(newDoc)
 
-    print('docs: ', docs)
-    
 
     reader_obj = csv.DictReader(body, delimiter=',',quotechar='"')
     #print('number of rows: ', len(reader_obj))
@@ -235,6 +220,24 @@ def load_csv_document(s3_file_name):
         ) for row in reader_obj
     ]
     print('docs: ', docs)
+
+
+    docs = []
+    columns_to_emebd = ["Category","Information"]
+    columns_to_metadata = ["Product Name","Price", "Rating","Description", "Features"]
+    
+    csv_reader = csv.DictReader(body)
+    for i, row in enumerate(csv_reader):
+        #to_metadata = {col: row[col] for col in columns_to_metadata if col in row}
+        values_to_embed = {k: row[k] for k in columns_to_emebd if k in row}
+        to_embed = "\n".join(f"{k.strip()}: {v.strip()}" for k, v in values_to_embed.items())
+        print('to_embed: ', to_embed)
+        #newDoc = Document(page_content=to_embed, metadata=to_metadata)
+        newDoc = Document(page_content=to_embed)
+        docs.append(newDoc)
+
+    print('docs: ', docs)
+    
 
     #docs = []
     #    doc = Document(page_content=content, metadata=metadata)
