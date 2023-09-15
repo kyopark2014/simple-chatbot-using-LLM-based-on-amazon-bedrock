@@ -194,7 +194,7 @@ def load_csv_document(s3_file_name):
     #)
     #print('contents: ', contents.load())
 
-    reader_obj = csv.DictReader(csvfile=body, delimiter=',',quotechar='"')
+    reader_obj = csv.DictReader(body, delimiter=',',quotechar='"')
     #print('number of rows: ', len(reader_obj))
     #CSVLoader
     #csv_reader = csv.DictReader(body)
