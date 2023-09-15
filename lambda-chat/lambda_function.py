@@ -155,16 +155,14 @@ def load_document(file_type, s3_file_name):
 
     text_splitter = RecursiveCharacterTextSplitter(
         chunk_size=1000,
-        chunk_overlap=0,
+        chunk_overlap=100,
         separators=["\n\n", "\n", ".", " ", ""],
         length_function = len,
     ) 
 
     texts = text_splitter.split_text(new_contents) 
     print('texts[0]: ', texts[0])
-    print('texts[1]: ', texts[1])
-    print('texts[2]: ', texts[2])   
-
+    
     for t in texts:
         print('length: ', len(t))
         
@@ -189,7 +187,7 @@ def load_csv_document(s3_file_name):
 
     text_splitter = RecursiveCharacterTextSplitter(
         chunk_size=1000,
-        chunk_overlap=0,
+        chunk_overlap=100,
         separators=["\n\n", "\n", ".", " ", ""],
         length_function = len,
     ) 
