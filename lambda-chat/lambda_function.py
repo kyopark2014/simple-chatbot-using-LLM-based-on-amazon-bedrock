@@ -154,7 +154,7 @@ def load_document(file_type, s3_file_name):
         reader = csv.reader(body)     
 
         raw = []
-        header = next(reader)
+        #header = next(reader)
         for row in reader:
             raw.append(row)
         print('raw:', raw)
