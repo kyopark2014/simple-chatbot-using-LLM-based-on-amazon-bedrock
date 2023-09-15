@@ -184,7 +184,8 @@ def load_csv_document(s3_file_name):
     #    print('row: ', row)
 
     docs = []
-    for i, row in csv.DictReader(lines, delimiter=',',quotechar='"'):
+    n = 0
+    for row in csv.DictReader(lines, delimiter=',',quotechar='"'):
         # print('row: ', row)
         values_to_embed = {k: row[k] for k in columns if k in row}
         content = "\n".join(f"{k.strip()}: {v.strip()}" for k, v in values_to_embed.columns())
@@ -192,10 +193,12 @@ def load_csv_document(s3_file_name):
             page_content=content,
             metadata={
                 'name': s3_file_name,
-                'column': i,
+                'column': n+1,
             }
         )
         docs.append(doc)
+        n = n+1
+        
     print('docs: ', docs)
 
     text_splitter = RecursiveCharacterTextSplitter(
