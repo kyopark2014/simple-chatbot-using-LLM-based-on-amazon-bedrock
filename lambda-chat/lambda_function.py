@@ -195,12 +195,12 @@ def load_csv_document(s3_file_name):
         )
         docs.append(doc)
         n = n+1
-    #print('docs: ', docs)
+    print('docs[0]: ', docs[0])
 
-    texts = ""
+    texts = []
     for doc in docs:
-        texts = texts + doc.page_content + '\n\n'
-    print('texts[0]: ', texts[0])
+        texts.append(doc.page_content)
+    print('texts: ', texts)
 
     return texts
 
