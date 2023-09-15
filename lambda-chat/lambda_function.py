@@ -166,7 +166,7 @@ def load_csv_document(s3_file_name):
     doc = s3r.Object(s3_bucket, s3_prefix+'/'+s3_file_name)
     
     body = doc.get()['Body'].read().decode('utf-8')
-    print('body: ', body)
+    # print('body: ', body)
     print('body: ', len(body))
     
 
@@ -189,6 +189,7 @@ def load_csv_document(s3_file_name):
     print('texts[0]: ', texts[0])
     print('texts[1]: ', texts[1])
     print('texts[2]: ', texts[2])   
+    print(f"Number of documents after split and chunking={len(texts)}")
             
     return texts
 
@@ -301,7 +302,7 @@ def lambda_handler(event, context):
             print('file_type: ', file_type)
             
             if file_type == 'csv':
-                load_csv_document(object)
+                texts = load_csv_document(object)
             else:
                 texts = load_document(file_type, object)
             msg = get_summary(texts)
