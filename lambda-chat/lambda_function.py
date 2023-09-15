@@ -179,10 +179,11 @@ def load_csv_document(s3_file_name):
 
     csv_reader = csv.DictReader(body)
     print('csv_reader: ', csv_reader)
-    """
     docs = []
     for i, row in enumerate(csv_reader):
         content = "\n".join(f"{k.strip()}: {v.strip()}" for k, v in row.items())
+        print('content: ', content)
+        """
         try:
             source = (
                 row[self.source_column]
@@ -194,11 +195,11 @@ def load_csv_document(s3_file_name):
                 f"Source column '{self.source_column}' not found in CSV file."
             )
         metadata = {"source": source, "row": i}
-        doc = Document(page_content=content, metadata=metadata)
-        docs.append(doc)
-    print('docs: ', docs)
-    """
-
+        """
+    #    doc = Document(page_content=content, metadata=metadata)
+    #    docs.append(doc)
+    #print('docs: ', docs)
+    
     #reader = csv.reader(body)        
     #contents = CSVLoader(reader)
     
