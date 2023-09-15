@@ -172,34 +172,23 @@ def load_document(file_type, s3_file_name):
 def load_csv_document(s3_file_name):
     s3r = boto3.resource("s3")
     doc = s3r.Object(s3_bucket, s3_prefix+'/'+s3_file_name)
+
+    from langchain.document_loaders import S3FileLoader
+    loader = S3FileLoader("s3_bucket", "s3_prefix+'/'+s3_file_name")
+    data = loader.load()
+    print('data: ', data)
     
     body = doc.get()['Body'].read().decode('utf-8')
     # print('body: ', body)
     print('length: ', len(body))
 
-    csv_reader = csv.DictReader(body)
-    print('csv_reader: ', csv_reader)
-    docs = []
-    for i, row in enumerate(csv_reader):
-        print('row: ', row)
+    #reader = csv.reader(body)
+    #CSVLoader
+    #csv_reader = csv.DictReader(body)
+    #print('csv_reader: ', csv_reader)
 
-        for k, v in row.items():
-            print('k='+k+' ,v='+v)
-        #content = "\n".join(f"{k.strip()}: {v.strip()}" for k, v in row.items())
-        #print('content: ', content)
-        """
-        try:
-            source = (
-                row[self.source_column]
-                if self.source_column is not None
-                else self.file_path
-            )
-        except KeyError:
-            raise ValueError(
-                f"Source column '{self.source_column}' not found in CSV file."
-            )
-        metadata = {"source": source, "row": i}
-        """
+
+    #docs = []
     #    doc = Document(page_content=content, metadata=metadata)
     #    docs.append(doc)
     #print('docs: ', docs)
@@ -221,8 +210,8 @@ def load_csv_document(s3_file_name):
     texts = text_splitter.split_text(body) 
     #print('texts[0]: ', texts[0])
     print('texts[0]: ', texts[0])
-    print('texts[1]: ', texts[1])
-    print('texts[2]: ', texts[2])   
+    #print('texts[1]: ', texts[1])
+    #print('texts[2]: ', texts[2])   
     print(f"Number of documents after split and chunking={len(texts)}")
 
     for t in texts:
