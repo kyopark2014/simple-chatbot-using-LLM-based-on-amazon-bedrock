@@ -191,9 +191,8 @@ def load_csv_document(s3_file_name):
     print('lins: ', len(lines))
 
     for row in csv.DictReader(lines):
-        # print('row: ', str(row))
-        for v in row:
-
+        print('row: ', row)
+        
 
 
     #reader = csv.reader(body, delimiter=',',quotechar='"')        
