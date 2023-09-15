@@ -150,32 +150,18 @@ def load_document(file_type, s3_file_name):
         contents = doc.get()['Body'].read().decode('utf-8')
     
     elif file_type == 'csv':        
-        contents = doc.get()['Body'].read().decode('utf-8')
-        #print('body:', body)
-
-        #records = csv.reader(body)
-        #headers = next(records) 
-        #print('headers: %s' % (headers))         
-        #for eachRecord in records: 
-        #    print(eachRecord) 
-
-        #loader = CSVLoader(records, source_column="Source", encoding="utf-8")
-        #print('loader:', loader)               
-
+        body = doc.get()['Body'].read().decode('utf-8')
+        reader = csv.reader(body)        
+        contents = CSVLoader(reader)
+    
     print('contents: ', contents)
     new_contents = str(contents).replace("\n"," ") 
     print('length: ', len(new_contents))
 
-    text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=1000,
-        chunk_overlap=0,
-        separators=["\n\n", "\n", ".", " ", ""],
-        length_function = len,
-        is_separator_regex = False
-    ) 
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000,chunk_overlap=100) 
 
     texts = text_splitter.split_text(new_contents) 
-    print('texts[0]: ', texts[0])
+    #print('texts[0]: ', texts[0])
             
     return texts
 
