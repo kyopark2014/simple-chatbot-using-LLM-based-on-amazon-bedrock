@@ -217,7 +217,7 @@ def load_csv_document(s3_file_name):
 
     texts = ""
     for i in range(3):
-        texts.append(documents[i].page_content)
+        texts.join(documents[i].page_content)
     print('texts: ', texts)
 
     return texts
