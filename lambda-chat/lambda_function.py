@@ -183,7 +183,7 @@ def load_csv_document(s3_file_name):
     # print('body: ', body)
     print('total characters: ', len(body))
 
-    contents = CSVLoader(body, delimiter=',',quotechar='"')
+    contents = CSVLoader(body)
     print('----> contents: ', contents.load())
 
 
