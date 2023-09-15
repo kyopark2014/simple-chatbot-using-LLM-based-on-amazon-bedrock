@@ -170,19 +170,12 @@ def load_csv_document(s3_file_name):
     s3r = boto3.resource("s3")
     doc = s3r.Object(s3_bucket, s3_prefix+'/'+s3_file_name)
 
-    body = doc.get()['Body'].read().decode('utf-8')  
-    # print('body: ', body)
-    print('total characters: ', len(body))
-    
     lines = doc.get()['Body'].read().decode('utf-8').split('\n')   # read csv per line
     print('lins: ', len(lines))
         
     columns = lines[0].split(',')  # get columns
     print('columns: ', columns)
     
-    #for row in csv.DictReader(lines):
-    #    print('row: ', row)
-
     docs = []
     n = 0
     for row in csv.DictReader(lines, delimiter=',',quotechar='"'):
@@ -202,8 +195,7 @@ def load_csv_document(s3_file_name):
 
     texts = ""
     for doc in docs:
-        texts.join(doc.page_content)
-        print('text: '+doc.page_content)
+        texts = texts + doc.page_content + '\n\n'
     print('texts: ', texts)
 
     return texts
