@@ -173,23 +173,20 @@ def load_csv_document(s3_file_name):
     s3r = boto3.resource("s3")
     doc = s3r.Object(s3_bucket, s3_prefix+'/'+s3_file_name)
 
-    body = doc.get()['Body'].read().decode('utf-8')
+    body = doc.get()['Body'].read().decode('utf-8')  
     # print('body: ', body)
     print('total characters: ', len(body))
     
-    lines = doc.get()['Body'].read().decode('utf-8').split('\n')
+    lines = doc.get()['Body'].read().decode('utf-8').split('\n')   # read csv per line
     print('lins: ', len(lines))
         
     print('lines[0]: ', lines[0])
     columns_to_emebd = []
-    items = body[0].split(',')
+    items = lines[0].split(',')
     print('items: ', items)
     for item in items:
         columns_to_emebd.append(item)
     
-
-    
-
     for row in csv.DictReader(lines):
         print('row: ', row)
 
@@ -203,78 +200,6 @@ def load_csv_document(s3_file_name):
         newDoc = Document(page_content=to_embed)
         docs.append(newDoc)
     print('docs: ', docs)
-
-        #docs = []
-    #columns_to_emebd = ["Category","Information"]
-    #columns_to_metadata = ["Product Name","Price", "Rating","Description", "Features"]
-    
-    #csv_reader = csv.DictReader(body)
-    #for i, row in enumerate(csv_reader):
-    #    #to_metadata = {col: row[col] for col in columns_to_metadata if col in row}
-    #    values_to_embed = {k: row[k] for k in columns_to_emebd if k in row}
-    #    to_embed = "\n".join(f"{k.strip()}: {v.strip()}" for k, v in values_to_embed.items())
-    #    print('to_embed: ', to_embed)
-    #    #newDoc = Document(page_content=to_embed, metadata=to_metadata)
-    #    newDoc = Document(page_content=to_embed)
-    #    docs.append(newDoc)
-
-    #print('docs: ', docs)
-
-    #reader_obj = csv.DictReader(body, delimiter=',',quotechar='"')
-    #print('number of rows: ', len(reader_obj))
-    #CSVLoader
-    #csv_reader = csv.DictReader(body)
-    #print('csv_reader: ', csv_reader)
-
-      
-    # Iterate over each row in the csv file
-    # using reader object
-    #print("reader_obj: ", reader_obj)
-    #print("reader_obj[0]: ", reader_obj[0])
-
-    #n = 0
-    #for row in reader_obj:
-    #    print('row: '+str(row))
-    #    n = n+1
-    #    if len(row)>1:
-    #        print('row contants: ', row)
-    
-    #docs = [
-    #    Document(
-    #        page_content=row
-    #    ) for row in reader_obj
-    #]
-    #print('docs: ', docs)
-
-
-    #docs = []
-    #columns_to_emebd = ["Category","Information"]
-    #columns_to_metadata = ["Product Name","Price", "Rating","Description", "Features"]
-    
-    #csv_reader = csv.DictReader(body)
-    #for i, row in enumerate(csv_reader):
-    #    #to_metadata = {col: row[col] for col in columns_to_metadata if col in row}
-    #    values_to_embed = {k: row[k] for k in columns_to_emebd if k in row}
-    #    to_embed = "\n".join(f"{k.strip()}: {v.strip()}" for k, v in values_to_embed.items())
-    #    print('to_embed: ', to_embed)
-    #    #newDoc = Document(page_content=to_embed, metadata=to_metadata)
-    #    newDoc = Document(page_content=to_embed)
-    #    docs.append(newDoc)
-
-    #print('docs: ', docs)
-    
-
-    #docs = []
-    #    doc = Document(page_content=content, metadata=metadata)
-    #    docs.append(doc)
-    #print('docs: ', docs)
-    
-    #reader = csv.reader(body)        
-    #contents = CSVLoader(reader)
-    
-    #print('contents: ', contents)
-    #new_contents = str(contents).replace("\n"," ") 
-    #print('length: ', len(new_contents))
 
     text_splitter = RecursiveCharacterTextSplitter(
         chunk_size=1000,
