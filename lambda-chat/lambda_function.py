@@ -198,23 +198,12 @@ def load_csv_document(s3_file_name):
         )
         docs.append(doc)
         n = n+1
-
     print('docs: ', docs)
 
-    text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=1000,
-        chunk_overlap=100,
-        separators=["\n\n", "\n", ".", " ", ""],
-        length_function = len,
-    ) 
-
-    documents = text_splitter.split_documents(docs)
-    print('documents[0]: ', documents[0])
-
     texts = ""
-    for i in range(3):
-        texts.join(documents[i].page_content)
-        print('i: '+i+'text: '+documents[i].page_content)
+    for doc in docs:
+        texts.join(doc.page_content)
+        print('text: '+doc.page_content)
     print('texts: ', texts)
 
     return texts
