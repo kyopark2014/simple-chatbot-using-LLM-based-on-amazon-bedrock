@@ -173,27 +173,20 @@ def load_csv_document(s3_file_name):
     s3r = boto3.resource("s3")
     doc = s3r.Object(s3_bucket, s3_prefix+'/'+s3_file_name)
 
-    
-    #from langchain.document_loaders import S3FileLoader
-    #loader = S3FileLoader(bucket="s3_bucket", key="s3_prefix+'/'+s3_file_name")
-    #data = loader.load()
-    #print('data: ', data)
-    
-    body = doc.get()['Body'].read().decode('utf-8').split('\n')
+    body = doc.get()['Body'].read().decode('utf-8')
     # print('body: ', body)
     print('total characters: ', len(body))
-
+    
+    lines = doc.get()['Body'].read().decode('utf-8').split('\n')
+    print('lins: ', len(lines))
+        
     print('body[0]: ', body[0])
     items = body[0].split(',')
     for item in items:
         print(item)
 
-    lines = doc.get()['Body'].read().decode('utf-8').split('\n')
-    print('lins: ', len(lines))
-
     for row in csv.DictReader(lines):
         print('row: ', row)
-        
 
 
     #reader = csv.reader(body, delimiter=',',quotechar='"')        
