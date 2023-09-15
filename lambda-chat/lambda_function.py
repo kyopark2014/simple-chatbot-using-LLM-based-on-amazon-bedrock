@@ -180,25 +180,25 @@ def load_csv_document(s3_file_name):
     lines = doc.get()['Body'].read().decode('utf-8').split('\n')   # read csv per line
     print('lins: ', len(lines))
         
-    print('lines[0]: ', lines[0])
-    columns_to_emebd = []
-    items = lines[0].split(',')
-    print('items: ', items)
-    for item in items:
-        columns_to_emebd.append(item)
+    columns = lines[0].split(',')  # get columns
+    print('columns: ', columns)
     
-    for row in csv.DictReader(lines):
-        print('row: ', row)
+    #for row in csv.DictReader(lines):
+    #    print('row: ', row)
 
     docs = []
-    #columns_to_emebd = ["Category","Information"]
-    for row in csv.DictReader(lines, delimiter=',',quotechar='"'):
-        print('row: ', row)
-        values_to_embed = {k: row[k] for k in columns_to_emebd if k in row}
-        to_embed = "\n".join(f"{k.strip()}: {v.strip()}" for k, v in values_to_embed.items())
-        print('to_embed: ', to_embed)
-        newDoc = Document(page_content=to_embed)
-        docs.append(newDoc)
+    for i, row in csv.DictReader(lines, delimiter=',',quotechar='"'):
+        # print('row: ', row)
+        values_to_embed = {k: row[k] for k in columns if k in row}
+        content = "\n".join(f"{k.strip()}: {v.strip()}" for k, v in values_to_embed.columns())
+        doc = Document(
+            page_content=content,
+            metadata={
+                'name': s3_file_name,
+                'column': i,
+            }
+        )
+        docs.append(doc)
     print('docs: ', docs)
 
     text_splitter = RecursiveCharacterTextSplitter(
@@ -209,18 +209,11 @@ def load_csv_document(s3_file_name):
     ) 
 
     texts = text_splitter.split_text(body) 
-    
-    #print('texts[0]: ', texts[0])
     print('texts[0]: ', texts[0])
-    #print('texts[1]: ', texts[1])
-    #print('texts[2]: ', texts[2])   
     print(f"Number of documents after split and chunking={len(texts)}")
 
     documents = text_splitter.split_documents(docs)
-    print('documents: ', documents)
-
-    for t in texts:
-        print('length: ', len(t))
+    print('documents[0]: ', documents[0])
             
     return texts
 
