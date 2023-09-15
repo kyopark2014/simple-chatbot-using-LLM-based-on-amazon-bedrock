@@ -182,18 +182,18 @@ def load_csv_document(s3_file_name):
     # print('body: ', body)
     print('length: ', len(body))
 
-    reader = csv.reader(body)
+    reader_obj = csv.reader(body)
     #CSVLoader
     #csv_reader = csv.DictReader(body)
     #print('csv_reader: ', csv_reader)
 
-    reader_obj = csv.DictReader(reader)
       
     # Iterate over each row in the csv file
     # using reader object
-    print("reader_obj: ")
-    for row in reader_obj:
-        print(row)
+    print("reader_obj: ", reader_obj[0])
+    #print("reader_obj: ")
+    #for row in reader_obj:
+    #    print(row)
 
 
     #docs = []
