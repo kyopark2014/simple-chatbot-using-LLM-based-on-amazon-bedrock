@@ -182,6 +182,9 @@ def load_csv_document(s3_file_name):
     docs = []
     for i, row in enumerate(csv_reader):
         print('row: ', row)
+
+        for k, v in row.items():
+            print('k='+k+' ,v='+v)
         #content = "\n".join(f"{k.strip()}: {v.strip()}" for k, v in row.items())
         #print('content: ', content)
         """
