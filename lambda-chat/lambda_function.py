@@ -174,11 +174,11 @@ def load_csv_document(s3_file_name):
     print('lins: ', len(lines))
         
     columns = lines[0].split(',')  # get columns
-    #columns = ["Category", "Information"]
+    #columns = ["Category", "Information"]  
+    #columns_to_metadata = ["type","Source"]
     print('columns: ', columns)
     
     docs = []
-    columns_to_metadata = ["type","Source"]
     n = 0
     for row in csv.DictReader(lines, delimiter=',',quotechar='"'):
         # print('row: ', row)
@@ -195,12 +195,12 @@ def load_csv_document(s3_file_name):
         )
         docs.append(doc)
         n = n+1
-    print('docs: ', docs)
+    #print('docs: ', docs)
 
     texts = ""
     for doc in docs:
         texts = texts + doc.page_content + '\n\n'
-    print('texts: ', texts)
+    print('texts[0]: ', texts[0])
 
     return texts
 
