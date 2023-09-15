@@ -154,7 +154,7 @@ def load_document(file_type, s3_file_name):
         reader = csv.reader(body)        
         contents = CSVLoader(reader)
     
-    #print('contents: ', contents)
+    print('contents: ', contents)
     new_contents = str(contents).replace("\n"," ") 
     print('length: ', len(new_contents))
 
