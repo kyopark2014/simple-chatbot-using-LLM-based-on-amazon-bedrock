@@ -192,12 +192,16 @@ def load_csv_document(s3_file_name):
     # Iterate over each row in the csv file
     # using reader object
     #print("reader_obj: ", reader_obj)
-    print("reader_obj[0]: ", reader_obj[0])
+    #print("reader_obj[0]: ", reader_obj[0])
     for row in reader_obj:
         print('length_of_row: ', len(row))
     
-
-
+    docs = [
+        Document(
+            page_content=row
+        ) for row in reader_obj
+    ]
+    print('docs: ', docs)
 
     #docs = []
     #    doc = Document(page_content=content, metadata=metadata)
