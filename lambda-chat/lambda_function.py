@@ -151,6 +151,8 @@ def load_document(file_type, s3_file_name):
     
     elif file_type == 'csv':        
         body = doc.get()['Body'].read()
+        print('body:', body)
+        
         reader = csv.reader(body)     
 
         contents = CSVLoader(reader)
