@@ -173,6 +173,7 @@ def load_csv_document(s3_file_name):
     s3r = boto3.resource("s3")
     doc = s3r.Object(s3_bucket, s3_prefix+'/'+s3_file_name)
 
+    
     #from langchain.document_loaders import S3FileLoader
     #loader = S3FileLoader(bucket="s3_bucket", key="s3_prefix+'/'+s3_file_name")
     #data = loader.load()
@@ -181,6 +182,13 @@ def load_csv_document(s3_file_name):
     body = doc.get()['Body'].read().decode('utf-8')
     # print('body: ', body)
     print('total characters: ', len(body))
+
+
+    reader = csv.reader(body, delimiter=',')        
+    contents = CSVLoader(reader)
+
+    print('contents: ', contents)
+
 
     reader_obj = csv.DictReader(body, delimiter=',',quotechar='"')
     #print('number of rows: ', len(reader_obj))
