@@ -193,9 +193,7 @@ def load_csv_document(s3_file_name):
         }
     )
 
-    print('contents: ', contents)
-    for row in contents:
-        print('row: ', len(row))
+    print('contents: ', contents.load())
 
     reader_obj = csv.DictReader(body, delimiter=',',quotechar='"')
     #print('number of rows: ', len(reader_obj))
