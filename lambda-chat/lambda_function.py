@@ -208,7 +208,7 @@ def load_csv_document(s3_file_name):
 
     n = 0
     for row in reader_obj:
-        print('row: '+row)
+        print('row: '+str(row))
         n = n+1
     #    if len(row)>1:
     #        print('row contants: ', row)
