@@ -218,7 +218,7 @@ def get_summary(texts):
         
         Assistant:"""        
     else:         
-        prompt_template = """\n\nWrite a concise summary of the following:
+        prompt_template = """\n\nHuman: Write a concise summary of the following:
 
         {text}
         
