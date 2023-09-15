@@ -197,12 +197,7 @@ def load_csv_document(s3_file_name):
         n = n+1
     print('docs[0]: ', docs[0])
 
-    texts = []
-    for doc in docs:
-        texts.append(doc.page_content)
-    print('texts: ', texts)
-
-    return texts
+    return docs
 
 def get_summary(texts):    
     # check korean
@@ -313,9 +308,14 @@ def lambda_handler(event, context):
             print('file_type: ', file_type)
             
             if file_type == 'csv':
-                texts = load_csv_document(object)
+                docs = load_csv_document(object)
+                texts = []
+                for doc in docs:
+                    texts.append(doc.page_content)
+                print('texts: ', texts)
             else:
                 texts = load_document(file_type, object)
+            
             msg = get_summary(texts)
                 
         elapsed_time = int(time.time()) - start
