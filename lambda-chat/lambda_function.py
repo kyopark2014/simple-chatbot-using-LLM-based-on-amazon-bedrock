@@ -175,8 +175,29 @@ def load_csv_document(s3_file_name):
     
     body = doc.get()['Body'].read().decode('utf-8')
     # print('body: ', body)
-    print('body: ', len(body))
-    
+    print('length: ', len(body))
+
+    csv_reader = csv.DictReader(body)
+    print('csv_reader: ', csv_reader)
+    """
+    docs = []
+    for i, row in enumerate(csv_reader):
+        content = "\n".join(f"{k.strip()}: {v.strip()}" for k, v in row.items())
+        try:
+            source = (
+                row[self.source_column]
+                if self.source_column is not None
+                else self.file_path
+            )
+        except KeyError:
+            raise ValueError(
+                f"Source column '{self.source_column}' not found in CSV file."
+            )
+        metadata = {"source": source, "row": i}
+        doc = Document(page_content=content, metadata=metadata)
+        docs.append(doc)
+    print('docs: ', docs)
+    """
 
     #reader = csv.reader(body)        
     #contents = CSVLoader(reader)
