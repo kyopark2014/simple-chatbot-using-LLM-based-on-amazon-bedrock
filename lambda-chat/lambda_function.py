@@ -181,8 +181,9 @@ def load_csv_document(s3_file_name):
     print('csv_reader: ', csv_reader)
     docs = []
     for i, row in enumerate(csv_reader):
-        content = "\n".join(f"{k.strip()}: {v.strip()}" for k, v in row.items())
-        print('content: ', content)
+        print('row: ', row)
+        #content = "\n".join(f"{k.strip()}: {v.strip()}" for k, v in row.items())
+        #print('content: ', content)
         """
         try:
             source = (
