@@ -184,18 +184,17 @@ def load_csv_document(s3_file_name):
     print('total characters: ', len(body))
 
 
-    reader = csv.reader(body, delimiter=',',quotechar='"')        
-    contents = CSVLoader(
-        reader, 
-        csv_args={
-            'delimiter': ',',
-            'quotechar': '"'
-        }
-    )
+    #reader = csv.reader(body, delimiter=',',quotechar='"')        
+    #contents = CSVLoader(
+    #    reader, 
+    #    csv_args={
+    #        'delimiter': ',',
+    #        'quotechar': '"'
+    #    }
+    #)
+    #print('contents: ', contents.load())
 
-    print('contents: ', contents.load())
-
-    reader_obj = csv.DictReader(body, delimiter=',',quotechar='"')
+    reader_obj = csv.DictReader(csvfile=body, delimiter=',',quotechar='"')
     #print('number of rows: ', len(reader_obj))
     #CSVLoader
     #csv_reader = csv.DictReader(body)
@@ -206,8 +205,11 @@ def load_csv_document(s3_file_name):
     # using reader object
     #print("reader_obj: ", reader_obj)
     #print("reader_obj[0]: ", reader_obj[0])
-    #for row in reader_obj:
-    #    print('length_of_row: ', len(row))
+
+    n = 0
+    for row in reader_obj:
+        print('row ('+n+'): '+row)
+        n = n+1
     #    if len(row)>1:
     #        print('row contants: ', row)
     
