@@ -178,7 +178,7 @@ def load_csv_document(s3_file_name):
     
     docs = []
     columns = ["Category", "Information"]
-    columns_to_metadata = ["type,"Source"]
+    columns_to_metadata = ["type","Source"]
     n = 0
     for row in csv.DictReader(lines, delimiter=',',quotechar='"'):
         # print('row: ', row)
