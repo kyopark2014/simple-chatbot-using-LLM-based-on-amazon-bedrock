@@ -60,7 +60,7 @@ print('models: ', modelInfo)
 HUMAN_PROMPT = "\n\nHuman:"
 AI_PROMPT = "\n\nAssistant:"
 def get_parameter(modelId):
-    if modelId == 'amazon.titan-tg1-large': 
+    if modelId == 'amazon.titan-tg1-large' or modelId == 'amazon.titan-tg1-xlarge': 
         return {
             "maxTokenCount":1024,
             "stopSequences":[],
@@ -148,12 +148,7 @@ def load_document(file_type, s3_file_name):
         
     elif file_type == 'txt':        
         contents = doc.get()['Body'].read().decode('utf-8')
-    
-    elif file_type == 'csv':        
-        body = doc.get()['Body'].read().decode('utf-8')
-        reader = csv.reader(body)        
-        contents = CSVLoader(reader)
-    
+        
     print('contents: ', contents)
     new_contents = str(contents).replace("\n"," ") 
     print('length: ', len(new_contents))
@@ -162,6 +157,38 @@ def load_document(file_type, s3_file_name):
 
     texts = text_splitter.split_text(new_contents) 
     #print('texts[0]: ', texts[0])
+            
+    return texts
+
+# load csv documents from s3
+def load_csv_document(s3_file_name):
+    s3r = boto3.resource("s3")
+    doc = s3r.Object(s3_bucket, s3_prefix+'/'+s3_file_name)
+    
+    body = doc.get()['Body'].read().decode('utf-8')
+    print('body: ', body)
+    print('body: ', len(body))
+    
+
+    #reader = csv.reader(body)        
+    #contents = CSVLoader(reader)
+    
+    #print('contents: ', contents)
+    #new_contents = str(contents).replace("\n"," ") 
+    #print('length: ', len(new_contents))
+
+    text_splitter = RecursiveCharacterTextSplitter(
+        chunk_size=1000,
+        chunk_overlap=0,
+        separators=["\n\n", "\n", ".", " ", ""],
+        length_function = len,
+    ) 
+
+    texts = text_splitter.split_text(body) 
+    #print('texts[0]: ', texts[0])
+    print('texts[0]: ', texts[0])
+    print('texts[1]: ', texts[1])
+    print('texts[2]: ', texts[2])   
             
     return texts
 
@@ -273,7 +300,10 @@ def lambda_handler(event, context):
             file_type = object[object.rfind('.')+1:len(object)]
             print('file_type: ', file_type)
             
-            texts = load_document(file_type, object)
+            if file_type == 'csv':
+                load_csv_document(object)
+            else:
+                texts = load_document(file_type, object)
             msg = get_summary(texts)
                 
         elapsed_time = int(time.time()) - start
