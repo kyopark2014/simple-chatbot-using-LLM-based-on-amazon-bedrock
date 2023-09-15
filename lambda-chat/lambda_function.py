@@ -180,31 +180,21 @@ def load_csv_document(s3_file_name):
     lines = doc.get()['Body'].read().decode('utf-8').split('\n')
     print('lins: ', len(lines))
         
-    print('body[0]: ', body[0])
+    print('lines[0]: ', lines[0])
     columns_to_emebd = []
     items = body[0].split(',')
     print('items: ', items)
-    #for item in items:
-    #    columns_to_emebd.append(item)
+    for item in items:
+        columns_to_emebd.append(item)
     
 
+    
 
     for row in csv.DictReader(lines):
         print('row: ', row)
 
-
-    #reader = csv.reader(body, delimiter=',',quotechar='"')        
-    contents = CSVLoader(
-        lines, 
-        csv_args={
-            'delimiter': ',',
-            'quotechar': '"'
-        }
-    )
-    print('contents: ', contents.load())
-
     docs = []
-    columns_to_emebd = items
+    #columns_to_emebd = ["Category","Information"]
     for row in csv.DictReader(lines, delimiter=',',quotechar='"'):
         print('row: ', row)
         values_to_embed = {k: row[k] for k in columns_to_emebd if k in row}
@@ -294,11 +284,15 @@ def load_csv_document(s3_file_name):
     ) 
 
     texts = text_splitter.split_text(body) 
+    
     #print('texts[0]: ', texts[0])
     print('texts[0]: ', texts[0])
     #print('texts[1]: ', texts[1])
     #print('texts[2]: ', texts[2])   
     print(f"Number of documents after split and chunking={len(texts)}")
+
+    documents = text_splitter.split_documents(docs)
+    print('documents: ', documents)
 
     for t in texts:
         print('length: ', len(t))
