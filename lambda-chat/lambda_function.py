@@ -181,9 +181,13 @@ def load_csv_document(s3_file_name):
     print('lins: ', len(lines))
         
     print('body[0]: ', body[0])
+    columns_to_emebd = []
     items = body[0].split(',')
-    for item in items:
-        print(item)
+    print('items: ', items)
+    #for item in items:
+    #    columns_to_emebd.append(item)
+    
+
 
     for row in csv.DictReader(lines):
         print('row: ', row)
@@ -200,7 +204,7 @@ def load_csv_document(s3_file_name):
     print('contents: ', contents.load())
 
     docs = []
-    columns_to_emebd = ["Category","Information"]
+    columns_to_emebd = items
     for row in csv.DictReader(lines, delimiter=',',quotechar='"'):
         print('row: ', row)
         values_to_embed = {k: row[k] for k in columns_to_emebd if k in row}
