@@ -174,7 +174,7 @@ def load_csv_document(s3_file_name):
     doc = s3r.Object(s3_bucket, s3_prefix+'/'+s3_file_name)
 
     from langchain.document_loaders import S3FileLoader
-    loader = S3FileLoader("s3_bucket", "s3_prefix+'/'+s3_file_name")
+    loader = S3FileLoader(bucket="s3_bucket", key="s3_prefix+'/'+s3_file_name")
     data = loader.load()
     print('data: ', data)
     
