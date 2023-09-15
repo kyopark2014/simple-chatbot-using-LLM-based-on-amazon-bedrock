@@ -193,14 +193,14 @@ def load_csv_document(s3_file_name):
 
 
     #reader = csv.reader(body, delimiter=',',quotechar='"')        
-    #contents = CSVLoader(
-    #    reader, 
-    #    csv_args={
-    #        'delimiter': ',',
-    #        'quotechar': '"'
-    #    }
-    #)
-    #print('contents: ', contents.load())
+    contents = CSVLoader(
+        lines, 
+        csv_args={
+            'delimiter': ',',
+            'quotechar': '"'
+        }
+    )
+    print('contents: ', contents.load())
 
     docs = []
     columns_to_emebd = ["Category","Information"]
