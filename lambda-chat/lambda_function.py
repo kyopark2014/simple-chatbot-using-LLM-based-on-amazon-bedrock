@@ -161,7 +161,9 @@ def load_document(file_type, s3_file_name):
     ) 
 
     texts = text_splitter.split_text(new_contents) 
-    #print('texts[0]: ', texts[0])
+    print('texts[0]: ', texts[0])
+    print('texts[1]: ', texts[1])
+    print('texts[2]: ', texts[2])   
 
     for t in texts:
         print('length: ', len(t))
