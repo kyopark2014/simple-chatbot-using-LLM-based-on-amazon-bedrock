@@ -208,16 +208,13 @@ def load_csv_document(s3_file_name):
         length_function = len,
     ) 
 
-    #texts = text_splitter.split_text(body) 
-    #print('texts[0]: ', texts[0])
-    #print(f"Number of documents after split and chunking={len(texts)}")
-
     documents = text_splitter.split_documents(docs)
     print('documents[0]: ', documents[0])
 
     texts = ""
     for i in range(3):
         texts.join(documents[i].page_content)
+        print('i: '+i+'text: '+documents[i].page_content)
     print('texts: ', texts)
 
     return texts
