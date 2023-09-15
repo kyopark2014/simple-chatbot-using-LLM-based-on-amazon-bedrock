@@ -185,7 +185,7 @@ def load_csv_document(s3_file_name):
 
     reader = csv.reader(body)        
     contents = CSVLoader(reader)
-    print('----> contents: ', contents)
+    print('----> contents: ', contents.load())
 
 
     lines = doc.get()['Body'].read().decode('utf-8').split('\n')
