@@ -150,25 +150,17 @@ def load_document(file_type, s3_file_name):
         contents = doc.get()['Body'].read().decode('utf-8')
     
     elif file_type == 'csv':        
-        body = doc.get()['Body'].read().decode('utf-8')
-        print('body:', body)
+        contents = doc.get()['Body'].read().decode('utf-8')
+        #print('body:', body)
 
-        records = csv.reader(body)
+        #records = csv.reader(body)
         #headers = next(records) 
         #print('headers: %s' % (headers))         
         #for eachRecord in records: 
         #    print(eachRecord) 
 
-        loader = CSVLoader(records, source_column="Source", encoding="utf-8")
-        print('loader:', loader)
-        docs = loader.load()
-
-        print(len(docs))
-        print('docs[0]: ', docs[0])
-
-       
-    
-    
+        #loader = CSVLoader(records, source_column="Source", encoding="utf-8")
+        #print('loader:', loader)               
 
     print('contents: ', contents)
     new_contents = str(contents).replace("\n"," ") 
