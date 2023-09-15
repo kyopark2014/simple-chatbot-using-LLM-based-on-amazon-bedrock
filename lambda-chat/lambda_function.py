@@ -177,17 +177,21 @@ def load_csv_document(s3_file_name):
     print('columns: ', columns)
     
     docs = []
+    columns = ["Category", "Information"]
+    columns_to_metadata = ["type,"Source"]
     n = 0
     for row in csv.DictReader(lines, delimiter=',',quotechar='"'):
         # print('row: ', row)
+        to_metadata = {col: row[col] for col in columns_to_metadata if col in row}
         values = {k: row[k] for k in columns if k in row}
         content = "\n".join(f"{k.strip()}: {v.strip()}" for k, v in values.items())
         doc = Document(
             page_content=content,
-            metadata={
-                'name': s3_file_name,
-                'row': n+1,
-            }
+            #metadata={
+            #    'name': s3_file_name,
+            #    'row': n+1,
+            #}
+            metadata=to_metadata
         )
         docs.append(doc)
         n = n+1
