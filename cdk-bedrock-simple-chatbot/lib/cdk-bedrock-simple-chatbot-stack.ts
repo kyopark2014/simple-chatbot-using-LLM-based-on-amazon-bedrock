@@ -18,7 +18,8 @@ const s3_prefix = 'docs';
 const endpoint_url = "https://prod.us-west-2.frontend.bedrock.aws.dev";
 const model_id = "anthropic.claude-v2"; // amazon.titan-e1t-medium, anthropic.claude-v2
 const projectName = `bedrock-with-simple`; 
-const bucketName = `storage-for-${projectName}-${region}`; 
+
+const bucketName = `storage-for-${projectName}-${region}-01`; 
 const accessType = "preview"; // aws or preview
 const bedrock_region = "us-east-1";  // "us-east-1" "us-west-2" 
 const conversationMode = 'true'; 
