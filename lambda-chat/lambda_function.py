@@ -265,8 +265,8 @@ def load_chatHistory(userId, allowTime, chat_memory):
     )
     print('query result: ', response['Items'])
 
-    storedMsg = str(msg).replace("\n"," ") 
-    chat_memory.save_context({"input": text}, {"output": storedMsg})     
+    #storedMsg = str(msg).replace("\n"," ") 
+    #chat_memory.save_context({"input": text}, {"output": storedMsg})     
 
     
 def lambda_handler(event, context):
@@ -292,11 +292,11 @@ def lambda_handler(event, context):
         map[userId] = chat_memory
         print('chat_memory does not exist. create new one!')
 
-    if methodOfConversation == 'ConversationChain':
-        conversation = ConversationChain(llm=llm, verbose=True, memory=chat_memory)
-
         allowTime = '2020-09-20 21:52:14'
         load_chatHistory(userId, allowTime, chat_memory)
+
+    if methodOfConversation == 'ConversationChain':
+        conversation = ConversationChain(llm=llm, verbose=True, memory=chat_memory)        
     
     start = int(time.time())    
 
