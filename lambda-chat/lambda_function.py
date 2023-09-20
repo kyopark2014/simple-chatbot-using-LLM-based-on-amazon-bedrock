@@ -257,12 +257,14 @@ def load_chatHistory(userId, allowTime, chat_memory):
     for item in response['Items']:
         text = item['body']['S']
         msg = item['msg']['S']
+        type = item['type']['S']
 
-        print('text: ', text)
-        print('msg: ', msg)        
+        if type == 'text':
+            print('text: ', text)
+            print('msg: ', msg)        
 
-        storedMsg = str(msg).replace("\n"," ") 
-        chat_memory.save_context({"input": text}, {"output": storedMsg})             
+            storedMsg = str(msg).replace("\n"," ") 
+            chat_memory.save_context({"input": text}, {"output": storedMsg})             
     
 def lambda_handler(event, context):
     print(event)
