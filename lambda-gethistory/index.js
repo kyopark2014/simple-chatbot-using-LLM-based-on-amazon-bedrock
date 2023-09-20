@@ -26,10 +26,10 @@ exports.handler = async (event, context) => {
     try {
         result = await dynamo.query(queryParams).promise();
     
-        console.log(JSON.stringify(result));    
+        console.log('History: ', JSON.stringify(result));    
 
         let history = [];
-        for(item in result['item']) {
+        for(const item in result['item']) {
             let request_time = item['request_time']['S'];
             let body = item['body']['S'];
             let msg = item['msg']['S'];
@@ -42,6 +42,8 @@ exports.handler = async (event, context) => {
                 'msg': msg,
             });
         }
+
+        console.log('Json History: ', history);
         const response = {
             statusCode: 200,
             msg: JSON.stringify(history)
