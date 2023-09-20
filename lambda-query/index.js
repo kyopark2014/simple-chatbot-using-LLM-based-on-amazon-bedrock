@@ -8,7 +8,7 @@ exports.handler = async (event, context) => {
     //console.log('## ENVIRONMENT VARIABLES: ' + JSON.stringify(process.env));
     //console.log('## EVENT: ' + JSON.stringify(event));
 
-    const requestId = event['request_id'];
+    let requestId = event['request_id'];
 
     let msg = "";
     let queryParams = {
@@ -16,7 +16,7 @@ exports.handler = async (event, context) => {
         IndexName: indexName, 
         KeyConditionExpression: "request_id = :requestId",
         ExpressionAttributeValues: {
-            ":requestId": requestId
+            ":requestId": {'S': requestId}
         }
     };
     
