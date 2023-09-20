@@ -255,8 +255,8 @@ def load_chatHistory(userId, allowTime, chat_memory):
     print('query result: ', response['Items'])
 
     for item in response['Items']:
-        text = item['body']
-        msg = item['msg']
+        text = item['body']['S']
+        msg = item['msg']['S']
 
         print('text: ', text)
         print('msg: ', msg)        
