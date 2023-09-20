@@ -29,9 +29,7 @@ exports.handler = async (event, context) => {
         console.log('History: ', JSON.stringify(result));    
 
         let history = [];
-        for(const item in result['item']) {
-            console.log('item: ', JSON.stringify(item));  
-            
+        for(const item in result['items']) {
             let request_time = item['request_time']['S'];
             let body = item['body']['S'];
             let msg = item['msg']['S'];
