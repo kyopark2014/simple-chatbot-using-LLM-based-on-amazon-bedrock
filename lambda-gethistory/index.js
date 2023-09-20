@@ -10,6 +10,9 @@ exports.handler = async (event, context) => {
     const userId = event['userId'];
     const allowTime = event['allowTime'];
 
+    console.log('userId: ', userId)
+    console.log('allowTime: ', allowTime)
+
     let msg = "";
     let queryParams = {
         TableName: tableName,
