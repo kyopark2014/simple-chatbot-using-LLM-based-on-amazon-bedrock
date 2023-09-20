@@ -93,7 +93,13 @@ function onSend(e) {
     
     if(message.value != '') {
         console.log("msg: ", message.value);
-        addSentMessage(message.value);
+
+        let current = new Date();
+        let datastr = getDate(current);
+        let timestr = getTime(current);
+        let requestTime = datastr+' '+timestr
+        addSentMessage(message.value, timestr);
+        sendRequest(text, requestTime);
     }
     else {
         console.log("msg: ", "empty!");
@@ -128,13 +134,8 @@ function getTime(current) {
     return time_map.join(':');
 }
 
-function addSentMessage(text) {
+function addSentMessage(text, timestr) {
     console.log("sent message: "+text);
-
-    let current = new Date();
-    let datastr = getDate(current);
-    let timestr = getTime(current);
-    let requestTime = datastr+' '+timestr
 
     index++;
 
@@ -154,9 +155,7 @@ function addSentMessage(text) {
     else {
         msglist[index].innerHTML = 
             `<div class="chat-sender80 chat-sender--right"><h1>${timestr}</h1>${text}&nbsp;<h2 id="status${index}"></h2></div>`;
-    } 
-
-    sendRequest(text, requestTime);
+    }     
 }       
 
 function addSentMessageForSummary(text, timestr) {  
