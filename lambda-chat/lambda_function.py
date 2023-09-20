@@ -255,7 +255,7 @@ def load_chatHistory(userId, allowTime):
     """
     response = dynamodb_client.query(
         TableName=callLogTableName,
-        KeyConditionExpression='user-id = :userId AND request-time > :allowTime',
+        KeyConditionExpression='user_id = :userId AND request_time > :allowTime',
         ExpressionAttributeValues={
             ':userId': {'S': userId},
             ':allowTime': {'S': allowTime}
@@ -266,11 +266,11 @@ def load_chatHistory(userId, allowTime):
     
 def lambda_handler(event, context):
     print(event)
-    userId  = event['user-id']
+    userId  = event['user_id']
     print('userId: ', userId)
-    requestId  = event['request-id']
+    requestId  = event['request_id']
     print('requestId: ', requestId)
-    requestTime  = event['request-time']
+    requestTime  = event['request_time']
     print('requestTime: ', requestTime)
     type  = event['type']
     print('type: ', type)
@@ -356,9 +356,9 @@ def lambda_handler(event, context):
         print('msg: ', msg)
 
         item = {
-            'user-id': {'S':userId},
-            'request-id': {'S':requestId},
-            'request-time': {'S':requestTime},
+            'user_id': {'S':userId},
+            'request_id': {'S':requestId},
+            'request_time': {'S':requestTime},
             'type': {'S':type},
             'body': {'S':body},
             'msg': {'S':msg}

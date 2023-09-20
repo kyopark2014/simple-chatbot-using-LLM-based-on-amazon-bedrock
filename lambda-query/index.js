@@ -7,14 +7,14 @@ exports.handler = async (event, context) => {
     //console.log('## ENVIRONMENT VARIABLES: ' + JSON.stringify(process.env));
     //console.log('## EVENT: ' + JSON.stringify(event));
 
-    const userId = event['user-id'];
-    const requestId = event['request-id'];
+    const userId = event['user_id'];
+    const requestId = event['request_id'];
 
     let msg = "";
     try {
         const key = {
-            "user-id": {"S": userId}, 
-            "request-id": {"S": requestId}
+            "user_id": {"S": userId}, 
+            "request_id": {"S": requestId}
         };
         console.log("key: ", key);
 

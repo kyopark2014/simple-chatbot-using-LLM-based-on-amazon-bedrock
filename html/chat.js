@@ -332,9 +332,9 @@ function sendRequest(text, requestTime) {
     };
 
     var requestObj = {
-        "user-id": userId,
-        "request-id": requestId,
-        "request-time": requestTime,
+        "user_id": userId,
+        "request_id": requestId,
+        "request_time": requestTime,
         "type": "text",
         "body":text
     }
@@ -372,9 +372,9 @@ function sendRequestForSummary(object, requestTime) {
     };
     
     var requestObj = {
-        "user-id": userId,
-        "request-id": requestId,
-        "request-time": requestTime,
+        "user_id": userId,
+        "request_id": requestId,
+        "request_time": requestTime,
         "type": "document",
         "body": object
     }
@@ -428,8 +428,8 @@ function sendRequestForRetry(userId, requestId) {
     };
     
     var requestObj = {
-        "user-id": userId,
-        "request-id": requestId,
+        "user_id": userId,
+        "request_id": requestId,
     }
     console.log("request: " + JSON.stringify(requestObj));
 
