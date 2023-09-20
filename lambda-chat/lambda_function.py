@@ -243,6 +243,15 @@ def get_summary(texts):
     
 def load_chatHistory(userId, allowTime):
     dynamodb_client = boto3.client('dynamodb')
+
+    response = dynamodb_client.query(
+        TableName=callLogTableName,
+        KeyConditionExpression='user-id = :userId',
+        ExpressionAttributeValues={
+            ':userId': {'S': userId}
+        }
+    )
+    """
     response = dynamodb_client.query(
         TableName=callLogTableName,
         KeyConditionExpression='user-id = :userId AND request-time > :allowTime',
@@ -251,6 +260,7 @@ def load_chatHistory(userId, allowTime):
             ':allowTime': {'S': allowTime}
         }
     )
+    """
     print('query result: ', response['Items'])
     
 def lambda_handler(event, context):
