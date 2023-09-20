@@ -115,11 +115,26 @@ function uuidv4() {
     })
 })();
 
+
+function getDate() {
+    let current = new Date();
+    var datestr = current.toISOString().slice(0,10);
+
+    return datestr;
+}
+
+function getTime() {
+    let mtime = [current.getHours(), current.getMinutes(), current.getSeconds()].map((a)=>(a < 10 ? '0' + a : a));
+    let timestr = mtime.join(':');
+
+    return timestr;
+}
+
 function addSentMessage(text) {
     console.log("sent message: "+text);
 
-    var date = new Date();
-    var timestr = date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
+    let datastr = getDate();
+    let timestr = getTime();
     index++;
 
     var length = text.length;
@@ -140,17 +155,17 @@ function addSentMessage(text) {
             `<div class="chat-sender80 chat-sender--right"><h1>${timestr}</h1>${text}&nbsp;<h2 id="status${index}"></h2></div>`;
     } 
 
-    sendRequest(text);    
+    sendRequest(text, datastr+' '+timestr);
 }       
 
 function addSentMessageForSummary(text) {  
     console.log("sent message: "+text);
 
-    var date = new Date();
-    var timestr = date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
+    let date = new Date();
+    let timestr = date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
     index++;
 
-    var length = text.length;
+    let length = text.length;
     if(length < 100) {
         msglist[index].innerHTML = 
             `<div class="chat-sender60 chat-sender--right"><h1>${timestr}</h1>${text}&nbsp;<h2 id="status${index}"></h2></div>`;   
@@ -166,8 +181,6 @@ function addSentMessageForSummary(text) {
 function addReceivedMessage(msg) {
     // console.log("add received message: "+msg);
     sender = "Chatbot"
-    var date = new Date();
-    var timestr = date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
     index++;
 
     msg = msg.replaceAll("\n", "<br/>");
@@ -293,7 +306,7 @@ attachFile.addEventListener('click', function(){
 
 let isResponsed = new HashMap();
 let retryNum = new HashMap();
-function sendRequest(text) {
+function sendRequest(text, requestTime) {
     const uri = "chat";
     const xhr = new XMLHttpRequest();
 
@@ -322,6 +335,7 @@ function sendRequest(text) {
     var requestObj = {
         "user-id": userId,
         "request-id": requestId,
+        "request-time": requestTime,
         "type": "text",
         "body":text
     }
@@ -332,7 +346,7 @@ function sendRequest(text) {
     xhr.send(blob);            
 }
 
-function sendRequestForSummary(object) {
+function sendRequestForSummary(object, requestTime) {
     const uri = "chat";
     const xhr = new XMLHttpRequest();
 
@@ -358,9 +372,14 @@ function sendRequestForSummary(object) {
         }
     };
 
+    let datastr = getDate();
+    let timestr = getTime();
+    requestTime = datastr+' '+timestr
+
     var requestObj = {
         "user-id": userId,
         "request-id": requestId,
+        "request-time": requestTime,
         "type": "document",
         "body": object
     }
