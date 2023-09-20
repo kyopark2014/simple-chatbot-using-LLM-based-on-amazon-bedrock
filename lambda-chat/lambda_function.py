@@ -241,6 +241,18 @@ def get_summary(texts):
         # return summary[1:len(summary)-1]   
         return summary
     
+def load_chatHistory(userId, allowTime):
+    dynamodb_client = boto3.client('dynamodb')
+    response = dynamodb_client.query(
+        TableName=callLogTableName,
+        KeyConditionExpression='user-id = :userId AND request-time > :allowTime',
+        ExpressionAttributeValues={
+            ':userId': {'S': userId},
+            ':allowTime': {'S': allowTime}
+        }
+    )
+    print('query result: ', response['Items'])
+    
 def lambda_handler(event, context):
     print(event)
     userId  = event['user-id']
@@ -253,6 +265,9 @@ def lambda_handler(event, context):
     print('type: ', type)
     body = event['body']
     print('body: ', body)
+
+    allowTime = '2022-09-20 21:52:14'
+    load_chatHistory(userId, allowTime)
 
     global modelId, llm, parameters, conversation, conversationMode, map
 
