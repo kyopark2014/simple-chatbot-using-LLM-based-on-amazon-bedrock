@@ -325,7 +325,7 @@ export class CdkBedrockSimpleChatbotStack extends cdk.Stack {
     
     // POST method - history
     const history = api.root.addResource("history");
-    query.addMethod('POST', new apiGateway.LambdaIntegration(lambdaQueryResult, {
+    history.addMethod('POST', new apiGateway.LambdaIntegration(lambdaQueryResult, {
       passthroughBehavior: apiGateway.PassthroughBehavior.WHEN_NO_TEMPLATES,
       credentialsRole: role,
       integrationResponses: [{
