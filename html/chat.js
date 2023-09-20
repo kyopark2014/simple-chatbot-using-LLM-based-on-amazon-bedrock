@@ -399,11 +399,11 @@ async function getResponse(userId, requestId) {
     else {
         console.log('Retry!');
         retryNum.put(requestId, n-1);
-        sendRequestForRetry(userId, requestId);
+        sendRequestForRetry(requestId);
     }    
 }
 
-function sendRequestForRetry(userId, requestId) {
+function sendRequestForRetry(requestId) {
     const uri = "query";
     const xhr = new XMLHttpRequest();
 
@@ -428,7 +428,6 @@ function sendRequestForRetry(userId, requestId) {
     };
     
     var requestObj = {
-        "user_id": userId,
         "request_id": requestId,
     }
     console.log("request: " + JSON.stringify(requestObj));
