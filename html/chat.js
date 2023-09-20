@@ -42,7 +42,12 @@ var maxMsgItems = 200;
 var msgHistory = new HashMap();
 var callee = "John";
 var index=0;
-var userId = uuidv4();
+
+var userId = localStorage.getItem('userId'); // set userID if exists 
+if(userId=="") {
+    userId = uuidv4();
+}
+console.log('userId: ', userId);
 
 for (i=0;i<maxMsgItems;i++) {
     msglist.push(document.getElementById('msgLog'+i));
@@ -63,7 +68,7 @@ calleeId.textContent = "AWS";
 
 index = 0;
 
-addNotifyMessage("start chat with Amazon Bedrock");
+addNotifyMessage("Start chat with Amazon Bedrock");
 
 addReceivedMessage("Amazon Bedrock을 이용하여 주셔서 감사합니다. 원하는 질문을 입력하세요. 아래의 파일 버튼을 선택해 TXT, PDF, CSV 문서를 올리면 요약(Summarization)을 하실 수 있습니다.")
 
