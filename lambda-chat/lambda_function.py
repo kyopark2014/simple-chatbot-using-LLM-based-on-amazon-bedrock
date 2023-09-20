@@ -263,8 +263,7 @@ def load_chatHistory(userId, allowTime, chat_memory):
             print('text: ', text)
             print('msg: ', msg)        
 
-            storedMsg = str(msg).replace("\n"," ") 
-            chat_memory.save_context({"input": text}, {"output": storedMsg})             
+            chat_memory.save_context({"input": text}, {"output": msg})             
     
 def lambda_handler(event, context):
     print(event)

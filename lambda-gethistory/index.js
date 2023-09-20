@@ -28,15 +28,33 @@ exports.handler = async (event, context) => {
     
         console.log(JSON.stringify(result));    
 
-        msg = result['Item']['msg']['S'];
+        let history = [];
+        for(item in result['item']) {
+            let request_time = item['request_time']['S'];
+            let body = item['body']['S'];
+            let msg = item['msg']['S'];
+            let type = item['type']['S'];
+
+            history.push({
+                'request_time': request_time,
+                'type': type,
+                'body': body,
+                'msg': msg,
+            });
+        }
+        const response = {
+            statusCode: 200,
+            msg: JSON.stringify(history)
+        };
+        return response;  
+          
     } catch (error) {
         console.log(error);
-        return;
-    } 
 
-    const response = {
-        statusCode: 200,
-        msg: msg
-    };
-    return response;
+        const response = {
+            statusCode: 500,
+            msg: error
+        };
+        return response;  
+    } 
 };
