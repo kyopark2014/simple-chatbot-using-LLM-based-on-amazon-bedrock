@@ -72,6 +72,9 @@ addNotifyMessage("Start chat with Amazon Bedrock");
 
 addReceivedMessage("Amazon Bedrock을 이용하여 주셔서 감사합니다. 원하는 질문을 입력하세요. 아래의 파일 버튼을 선택해 TXT, PDF, CSV 문서를 올리면 요약(Summarization)을 하실 수 있습니다.")
 
+let allowTime = '2020-09-20 21:52:14';
+getHistory(userId, allowTime)
+
 // Listeners
 message.addEventListener('keyup', function(e){
     if (e.keyCode == 13) {
@@ -429,6 +432,41 @@ function sendRequestForRetry(requestId) {
     
     var requestObj = {
         "request_id": requestId,
+    }
+    console.log("request: " + JSON.stringify(requestObj));
+
+    var blob = new Blob([JSON.stringify(requestObj)], {type: 'application/json'});
+
+    xhr.send(blob);            
+}
+
+function getHistory(userId, allowTime) {
+    const uri = "history";
+    const xhr = new XMLHttpRequest();
+
+    xhr.open("POST", uri, true);
+    xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            response = JSON.parse(xhr.responseText);
+            console.log("response: " + JSON.stringify(response));
+                        
+        /*    if(response.msg) {
+                isResponsed.put(requestId, true);
+                addReceivedMessage(response.msg);        
+                
+                console.log('completed!');
+            }            
+            else {
+                console.log('The request is not completed yet.');
+
+                getResponse(userId, requestId);
+            } */
+        }
+    };
+    
+    var requestObj = {
+        "userId": userId,
+        "allowTime": allowTime
     }
     console.log("request: " + JSON.stringify(requestObj));
 
