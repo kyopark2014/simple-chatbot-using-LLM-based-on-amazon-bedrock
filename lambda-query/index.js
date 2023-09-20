@@ -9,7 +9,8 @@ exports.handler = async (event, context) => {
     //console.log('## EVENT: ' + JSON.stringify(event));
 
     let requestId = event['request_id'];
-
+    console.log('requestId: ', requestId);    
+    
     let msg = "";
     let queryParams = {
         TableName: tableName,
@@ -23,9 +24,10 @@ exports.handler = async (event, context) => {
     try {
         result = await dynamo.query(queryParams).promise();
     
-        console.log(JSON.stringify(result));    
+        console.log('result: ', JSON.stringify(result));    
 
-        msg = result['Item']['msg']['S'];
+        if(result['Item'])
+            msg = result['Item']['msg']['S'];
     } catch (error) {
         console.log(error);
         return;
