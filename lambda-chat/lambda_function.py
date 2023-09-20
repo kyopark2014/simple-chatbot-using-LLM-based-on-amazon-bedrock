@@ -248,7 +248,7 @@ def load_chatHistory(userId, allowTime):
         TableName=callLogTableName,
         KeyConditionExpression="user-id = :userId and request-id = :requestId",
         ExpressionAttributeValues={
-            ':userId': {'S': userId}
+            ':userId': {'S': userId},
             ':requestId': {'S': "1234"}
         }
     )
