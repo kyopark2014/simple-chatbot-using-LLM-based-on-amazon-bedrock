@@ -116,25 +116,23 @@ function uuidv4() {
 })();
 
 
-function getDate() {
-    let current = new Date();
-    var datestr = current.toISOString().slice(0,10);
-
-    return datestr;
+function getDate(current) {    
+    return current.toISOString().slice(0,10);
 }
 
-function getTime() {
-    let mtime = [current.getHours(), current.getMinutes(), current.getSeconds()].map((a)=>(a < 10 ? '0' + a : a));
-    let timestr = mtime.join(':');
-
-    return timestr;
+function getTime(current) {
+    let time_map = [current.getHours(), current.getMinutes(), current.getSeconds()].map((a)=>(a < 10 ? '0' + a : a));
+    return time_map.join(':');
 }
 
 function addSentMessage(text) {
     console.log("sent message: "+text);
 
-    let datastr = getDate();
-    let timestr = getTime();
+    let current = new Date();
+    let datastr = getDate(current);
+    let timestr = getTime(current);
+    let requestTime = datastr+' '+timestr
+
     index++;
 
     var length = text.length;
@@ -155,14 +153,11 @@ function addSentMessage(text) {
             `<div class="chat-sender80 chat-sender--right"><h1>${timestr}</h1>${text}&nbsp;<h2 id="status${index}"></h2></div>`;
     } 
 
-    sendRequest(text, datastr+' '+timestr);
+    sendRequest(text, requestTime);
 }       
 
-function addSentMessageForSummary(text) {  
+function addSentMessageForSummary(text, timestr) {  
     console.log("sent message: "+text);
-
-    let date = new Date();
-    let timestr = date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
     index++;
 
     let length = text.length;
@@ -243,7 +238,11 @@ attachFile.addEventListener('click', function(){
                 contentType = 'text/csv'
             }
 
-            addSentMessageForSummary("uploading the selected file in order to summerize...");
+            let current = new Date();
+            let datastr = getDate(current);
+            let timestr = getTime(current);
+            let requestTime = datastr+' '+timestr
+            addSentMessageForSummary("uploading the selected file in order to summerize...", timestr);
 
             const uri = "upload";
             const xhr = new XMLHttpRequest();
@@ -275,7 +274,7 @@ attachFile.addEventListener('click', function(){
                             console.log(xmlHttp.responseText);
                                            
                             // summary for the upload file
-                            sendRequestForSummary(filename);
+                            sendRequestForSummary(filename, requestTime);
                         }
                         else if(xmlHttp.readyState == XMLHttpRequest.DONE && xmlHttp.status != 200) {
                             console.log('status' + xmlHttp.status);
@@ -371,11 +370,7 @@ function sendRequestForSummary(object, requestTime) {
             console.log("response: " + xhr.readyState + ', xhr.status: '+xhr.status);
         }
     };
-
-    let datastr = getDate();
-    let timestr = getTime();
-    requestTime = datastr+' '+timestr
-
+    
     var requestObj = {
         "user-id": userId,
         "request-id": requestId,
