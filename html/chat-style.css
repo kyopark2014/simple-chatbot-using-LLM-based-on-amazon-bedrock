@@ -306,6 +306,121 @@ body {
   font-size: 0.7em;
 }
 
+/* width 80% */
+.chat-receiver80 {
+  margin-top :2.0em;
+  margin-left:20px;
+  margin-right:20%;  /* receiver bubble width */
+  margin-bottom:0.5em;
+    
+  padding: 12px 14px; 
+  background: #ddd; 
+  /* margin: 10px 30px; */
+  border-radius: 9px;
+  position: relative;
+  /* margin-left: -10px; */
+  /* animation: fadeIn 1s ease-in; */
+}
+.chat-receiver80 h1 {
+  margin-top:-3.0em;  /* the position of time string */
+  margin-left:-1em;
+  color: black;
+  font-size: 0.7em;
+}
+.chat-receiver80 h2 {
+  margin-top:-1em;
+  margin-bottom:0em;
+  margin-left:17em;
+  color: black;
+  font-size: 0.7em;
+}
+
+/* width 60% */
+.chat-receiver60 {
+  margin-top :2.0em;
+  margin-left:20px;
+  margin-right:40%;  /* receiver bubble width */
+  margin-bottom:0.5em;
+    
+  padding: 12px 14px; 
+  background: #ddd; 
+  /* margin: 10px 30px; */
+  border-radius: 9px;
+  position: relative;
+  /* margin-left: -10px; */
+  /* animation: fadeIn 1s ease-in; */
+}
+.chat-receiver60 h1 {
+  margin-top:-3.0em;  /* the position of time string */
+  margin-left:-1em;
+  color: black;
+  font-size: 0.7em;
+}
+.chat-receiver60 h2 {
+  margin-top:-1em;
+  margin-bottom:0em;
+  margin-left:17em;
+  color: black;
+  font-size: 0.7em;
+}
+
+/* width 40% */
+.chat-receiver40 {
+  margin-top :2.0em;
+  margin-left:20px;
+  margin-right:60%;  /* receiver bubble width */
+  margin-bottom:0.5em;
+    
+  padding: 12px 14px; 
+  background: #ddd; 
+  /* margin: 10px 30px; */
+  border-radius: 9px;
+  position: relative;
+  /* margin-left: -10px; */
+  /* animation: fadeIn 1s ease-in; */
+}
+.chat-receiver40 h1 {
+  margin-top:-3.0em;  /* the position of time string */
+  margin-left:-1em;
+  color: black;
+  font-size: 0.7em;
+}
+.chat-receiver40 h2 {
+  margin-top:-1em;
+  margin-bottom:0em;
+  margin-left:17em;
+  color: black;
+  font-size: 0.7em;
+}
+
+/* width 20% */
+.chat-receiver20 {
+  margin-top :2.0em;
+  margin-left:20px;
+  margin-right:80%;  /* receiver bubble width */
+  margin-bottom:0.5em;
+    
+  padding: 12px 14px; 
+  background: #ddd; 
+  /* margin: 10px 30px; */
+  border-radius: 9px;
+  position: relative;
+  /* margin-left: -10px; */
+  /* animation: fadeIn 1s ease-in; */
+}
+.chat-receiver20 h1 {
+  margin-top:-3.0em;  /* the position of time string */
+  margin-left:-1em;
+  color: black;
+  font-size: 0.7em;
+}
+.chat-receiver20 h2 {
+  margin-top:-1em;
+  margin-bottom:0em;
+  margin-left:17em;
+  color: black;
+  font-size: 0.7em;
+}
 
 .chat-sender {
   margin-top :1.5em;
@@ -345,6 +460,114 @@ body {
   font-size: 0.7em;
 }
 .chat-sender h2 {
+  margin-top:-1.0em;
+  margin-bottom:-0.5em;
+  margin-left:-2.5em;
+  color: black;
+  font-size: 0.7em;
+}
+
+/* width 20% */
+.chat-sender20 {
+  margin-top :1.5em;
+  margin-left:80%;  /* sender bubble width */
+  margin-right:30px;
+  margin-bottom:0.5em;
+  padding: 15px 14px;
+  background: #74b9ff; 
+  color: #fff;
+  border-radius: 9px;
+  position: relative;
+  /* animation: fadeIn 1s ease-in; */
+}
+.chat-sender20 h1 {
+  margin-top:-2.8em;  /* the position of time string */
+  margin-left:-1em;
+  color: black;
+  font-size: 0.7em;
+}
+.chat-sender20 h2 {
+  margin-top:-1.0em;
+  margin-bottom:-0.5em;
+  margin-left:-2.5em;
+  color: black;
+  font-size: 0.7em;
+}
+
+/* width 40% */
+.chat-sender40 {
+  margin-top :1.5em;
+  margin-left:60%;  /* sender bubble width */
+  margin-right:30px;
+  margin-bottom:0.5em;
+  padding: 15px 14px;
+  background: #74b9ff; 
+  color: #fff;
+  border-radius: 9px;
+  position: relative;
+  /* animation: fadeIn 1s ease-in; */
+}
+.chat-sender40 h1 {
+  margin-top:-2.8em;  /* the position of time string */
+  margin-left:-1em;
+  color: black;
+  font-size: 0.7em;
+}
+.chat-sender40 h2 {
+  margin-top:-1.0em;
+  margin-bottom:-0.5em;
+  margin-left:-2.5em;
+  color: black;
+  font-size: 0.7em;
+}
+
+/* width 60% */
+.chat-sender60 {
+  margin-top :1.5em;
+  margin-left:40%;  /* sender bubble width */
+  margin-right:30px;
+  margin-bottom:0.5em;
+  padding: 15px 14px;
+  background: #74b9ff; 
+  color: #fff;
+  border-radius: 9px;
+  position: relative;
+  /* animation: fadeIn 1s ease-in; */
+}
+.chat-sender60 h1 {
+  margin-top:-2.8em;  /* the position of time string */
+  margin-left:-1em;
+  color: black;
+  font-size: 0.7em;
+}
+.chat-sender60 h2 {
+  margin-top:-1.0em;
+  margin-bottom:-0.5em;
+  margin-left:-2.5em;
+  color: black;
+  font-size: 0.7em;
+}
+
+/* width 80% */
+.chat-sender80 {
+  margin-top :1.5em;
+  margin-left:20%;  /* sender bubble width */
+  margin-right:30px;
+  margin-bottom:0.5em;
+  padding: 15px 14px;
+  background: #74b9ff; 
+  color: #fff;
+  border-radius: 9px;
+  position: relative;
+  /* animation: fadeIn 1s ease-in; */
+}
+.chat-sender80 h1 {
+  margin-top:-2.8em;  /* the position of time string */
+  margin-left:-1em;
+  color: black;
+  font-size: 0.7em;
+}
+.chat-sender80 h2 {
   margin-top:-1.0em;
   margin-bottom:-0.5em;
   margin-left:-2.5em;

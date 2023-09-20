@@ -67,6 +67,22 @@ addNotifyMessage("start chat with Amazon Bedrock");
 
 addReceivedMessage("Amazon Bedrock을 이용하여 주셔서 감사합니다. 원하는 질문을 입력하세요. 아래의 파일 버튼을 선택해 TXT, PDF, CSV 문서를 올리면 요약(Summerization)을 하실 수 있습니다.")
 
+/*addSentMessage("안녕하세요.")
+addSentMessage("안녕하세요.안녕하세요.")
+addSentMessage("안녕하세요.안녕하세요.안녕하세요.")
+addSentMessage("안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.")
+addSentMessage("안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.")
+addSentMessage("안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.")
+addSentMessage("안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.안녕하세요.")
+
+addSentMessage("abcedf abc.")
+addSentMessage("abcedf abc.abcedf abc.")
+addSentMessage("abcedf abc.abcedf abc.abcedf abc.abcedf abc.")
+addSentMessage("abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.")
+addSentMessage("abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.")
+addSentMessage("abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.")
+addSentMessage("abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc..edf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.abcedf abc.") */
+
 // Listeners
 message.addEventListener('keyup', function(e){
     if (e.keyCode == 13) {
@@ -117,10 +133,25 @@ function addSentMessage(text) {
     var timestr = date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
     index++;
 
-    msglist[index].innerHTML = 
-        `<div class="chat-sender chat-sender--right"><h1>${timestr}</h1>${text}&nbsp;<h2 id="status${index}"></h2></div>`;   
+    var length = text.length;
+    if(length < 10) {
+        msglist[index].innerHTML = 
+            `<div class="chat-sender20 chat-sender--right"><h1>${timestr}</h1>${text}&nbsp;<h2 id="status${index}"></h2></div>`;   
+    }
+    else if(length < 30) {
+        msglist[index].innerHTML = 
+            `<div class="chat-sender40 chat-sender--right"><h1>${timestr}</h1>${text}&nbsp;<h2 id="status${index}"></h2></div>`;
+    }  
+    else if(length < 150) {
+        msglist[index].innerHTML = 
+            `<div class="chat-sender60 chat-sender--right"><h1>${timestr}</h1>${text}&nbsp;<h2 id="status${index}"></h2></div>`;
+    }  
+    else {
+        msglist[index].innerHTML = 
+            `<div class="chat-sender80 chat-sender--right"><h1>${timestr}</h1>${text}&nbsp;<h2 id="status${index}"></h2></div>`;
+    } 
 
-    sendRequest(text);    
+    //sendRequest(text);    
 }       
 
 function addSentMessageForSummary(text) {  
@@ -130,8 +161,15 @@ function addSentMessageForSummary(text) {
     var timestr = date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
     index++;
 
-    msglist[index].innerHTML = 
-        `<div class="chat-sender chat-sender--right"><h1>${timestr}</h1>${text}&nbsp;<h2 id="status${index}"></h2></div>`;   
+    var length = text.length;
+    if(length < 100) {
+        msglist[index].innerHTML = 
+            `<div class="chat-sender60 chat-sender--right"><h1>${timestr}</h1>${text}&nbsp;<h2 id="status${index}"></h2></div>`;   
+    }
+    else {
+        msglist[index].innerHTML = 
+            `<div class="chat-sender80 chat-sender--right"><h1>${timestr}</h1>${text}&nbsp;<h2 id="status${index}"></h2></div>`;
+    }   
 
     chatPanel.scrollTop = chatPanel.scrollHeight;  // scroll needs to move bottom
 }  
@@ -145,9 +183,21 @@ function addReceivedMessage(msg) {
 
     msg = msg.replaceAll("\n", "<br/>");
 
-    // msglist[index].innerHTML =  `<div class="chat-receiver chat-receiver--left"><h1>${sender}</h1><h2>${timestr}</h2>${msg}&nbsp;</div>`;     
-    msglist[index].innerHTML = `<div class="chat-receiver chat-receiver--left"><h1>${sender}</h1>${msg}&nbsp;</div>`;  
-
+    var length = msg.length;
+    console.log("length: ", length);
+    if(length < 10) {
+        msglist[index].innerHTML = `<div class="chat-receiver20 chat-receiver--left"><h1>${sender}</h1>${msg}&nbsp;</div>`;  
+    }
+    else if(length < 30) {
+        msglist[index].innerHTML = `<div class="chat-receiver40 chat-receiver--left"><h1>${sender}</h1>${msg}&nbsp;</div>`;  
+    }
+    else if(length < 150) {
+        msglist[index].innerHTML = `<div class="chat-receiver60 chat-receiver--left"><h1>${sender}</h1>${msg}&nbsp;</div>`;  
+    }
+    else {
+        msglist[index].innerHTML = `<div class="chat-receiver80 chat-receiver--left"><h1>${sender}</h1>${msg}&nbsp;</div>`;  
+    }
+     
     chatPanel.scrollTop = chatPanel.scrollHeight;  // scroll needs to move bottom
 }
 
