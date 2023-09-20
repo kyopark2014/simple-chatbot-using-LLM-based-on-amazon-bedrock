@@ -16,7 +16,7 @@ exports.handler = async (event, context) => {
     let msg = "";
     let queryParams = {
         TableName: tableName,
-        KeyConditionExpression: "userId = :userId and request_time > :allowTime",
+        KeyConditionExpression: "user_id = :userId and request_time > :allowTime",
         ExpressionAttributeValues: {
             ":userId": {'S': userId},
             ":allowTime": {'S': allowTime}
