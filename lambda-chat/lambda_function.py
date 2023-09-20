@@ -241,7 +241,7 @@ def get_summary(texts):
         # return summary[1:len(summary)-1]   
         return summary
     
-def load_chatHistory(userId, allowTime):
+def load_chatHistory(userId, allowTime, chat_memory):
     dynamodb_client = boto3.client('dynamodb')
 
     response = dynamodb_client.query(
@@ -265,6 +265,9 @@ def load_chatHistory(userId, allowTime):
     )
     print('query result: ', response['Items'])
 
+    storedMsg = str(msg).replace("\n"," ") 
+    chat_memory.save_context({"input": text}, {"output": storedMsg})     
+
     
 def lambda_handler(event, context):
     print(event)
@@ -279,10 +282,7 @@ def lambda_handler(event, context):
     body = event['body']
     print('body: ', body)
 
-    allowTime = '2020-09-20 21:52:14'
-    load_chatHistory(userId, allowTime)
-
-    global modelId, llm, parameters, conversation, conversationMode, map
+    global modelId, llm, parameters, conversation, conversationMode, map, chat_memory
 
     if userId in map:
         chat_memory = map[userId]
@@ -294,6 +294,9 @@ def lambda_handler(event, context):
 
     if methodOfConversation == 'ConversationChain':
         conversation = ConversationChain(llm=llm, verbose=True, memory=chat_memory)
+
+        allowTime = '2020-09-20 21:52:14'
+        load_chatHistory(userId, allowTime, chat_memory)
     
     start = int(time.time())    
 
