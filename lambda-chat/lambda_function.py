@@ -246,7 +246,8 @@ def load_chatHistory(userId, allowTime):
 
     response = dynamodb_client.query(
         TableName=callLogTableName,
-        KeyConditionExpression='user-id = :userId',
+        ExpressionAttributeNames={"user-id": "uid"},
+        KeyConditionExpression='uid = :userId',
         ExpressionAttributeValues={
             ':userId': {'S': userId}
         }
