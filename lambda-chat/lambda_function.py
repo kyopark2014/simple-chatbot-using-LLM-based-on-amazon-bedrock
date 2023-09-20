@@ -264,7 +264,7 @@ def load_chatHistory(userId, allowTime):
         }
     )
     print('query result: ', response['Items'])
-    
+
     
 def lambda_handler(event, context):
     print(event)
@@ -279,7 +279,7 @@ def lambda_handler(event, context):
     body = event['body']
     print('body: ', body)
 
-    allowTime = '2022-09-20 21:52:14'
+    allowTime = '2020-09-20 21:52:14'
     load_chatHistory(userId, allowTime)
 
     global modelId, llm, parameters, conversation, conversationMode, map
