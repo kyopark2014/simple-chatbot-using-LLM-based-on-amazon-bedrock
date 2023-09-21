@@ -25,7 +25,7 @@ exports.handler = async (event, context) => {
         let result = await dynamo.query(queryParams).promise();    
         // console.log('result: ', JSON.stringify(result));    
 
-        if(result['Item'])
+        if(result['Items'])
             msg = result['Items']['msg']['S'];
 
         console.log('msg: ', msg);   
