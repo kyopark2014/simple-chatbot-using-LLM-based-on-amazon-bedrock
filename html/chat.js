@@ -451,13 +451,18 @@ function getHistory(userId, allowTime) {
                         
             for(let i=0; i<history.length; i++) {
                 if(history[i].type=='text') {                
+                    // let timestr = history[i].request_time.substring(11, 19);
                     let timestr = history[i].request_time;
                     let msg = history[i].msg;
                     let body = history[i].body;
                     addSentMessage(body, timestr)
                     addReceivedMessage(msg);                            
-                } 
-            }                        
+                }                 
+            }         
+            if(history) {
+                addNotifyMessage("Welcomm back to the conversation");               
+                chatPanel.scrollTop = chatPanel.scrollHeight;  // scroll needs to move bottom
+            }
         }
     };
     
