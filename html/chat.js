@@ -124,7 +124,6 @@ function uuidv4() {
     })
 })();
 
-
 function getDate(current) {    
     return current.toISOString().slice(0,10);
 }
@@ -446,15 +445,15 @@ function getHistory(userId, allowTime) {
     xhr.open("POST", uri, true);
     xhr.onreadystatechange = () => {
         if (xhr.readyState === 4 && xhr.status === 200) {
-            response = JSON.parse(xhr.responseText);
-            console.log("response: " + JSON.stringify(response));
+            let response = JSON.parse(xhr.responseText);
+            let history = JSON.parse(response['msg']);
+            // console.log("history: " + JSON.stringify(history));
                         
-            for(let i=0; i<response.length; i++) {
-                console.log("item: " + response[i]);
-                if(response[i].type=='text') {                
-                    let timestr = response[i].request_time;
-                    let msg = response[i].msg;
-                    let body = response[i].body;
+            for(let i=0; i<history.length; i++) {
+                if(history[i].type=='text') {                
+                    let timestr = history[i].request_time;
+                    let msg = history[i].msg;
+                    let body = history[i].body;
                     addSentMessage(body, timestr)
                     addReceivedMessage(msg);                            
                 } 
