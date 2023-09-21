@@ -94,29 +94,17 @@ message.addEventListener('keyup', function(e){
     }
 });
 
+// refresh button
 refreshChatWindow.addEventListener('click', function(){
-    // console.log('update chat window');
-    // updateChatWindow(callee);
-
     console.log('go back user input menu');
     window.location.href = "index.html";
 });
 
-refer.addEventListener('click', function(){
-    // console.log('update chat window');
-    // updateChatWindow(callee);
-
-    console.log('refer icon');
-    // window.location.href = "index.html";
-});
-
+// depart button
 depart.addEventListener('click', function(){
-    // console.log('update chat window');
-    // updateChatWindow(callee);
-
     console.log('depart icon');
     deleteItems(userId);
-    // window.location.href = "index.html";
+    window.location.href = "index.html";
 });
 
 sendBtn.addEventListener('click', onSend);
@@ -559,8 +547,7 @@ function deleteItems(userId) {
     };
     
     var requestObj = {
-        "userId": userId,
-        "allowTime": allowTime
+        "userId": userId
     }
     console.log("request: " + JSON.stringify(requestObj));
 
