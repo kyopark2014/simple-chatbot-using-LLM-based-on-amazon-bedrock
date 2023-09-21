@@ -447,14 +447,14 @@ function getHistory(userId, allowTime) {
     xhr.onreadystatechange = () => {
         if (xhr.readyState === 4 && xhr.status === 200) {
             response = JSON.parse(xhr.responseText);
-            console.log("response: " + response);
+            console.log("response: " + JSON.stringify(response));
                         
-            for(let item of response) {
-                console.log("item: " + item);
-                if(response.type=='text') {                
-                    let timestr = response.request_time;
-                    let msg = response.msg;
-                    let body = response.body;
+            for(let i=0; i<response.length; i++) {
+                console.log("item: " + response[i]);
+                if(response[i].type=='text') {                
+                    let timestr = response[i].request_time;
+                    let msg = response[i].msg;
+                    let body = response[i].body;
                     addSentMessage(body, timestr)
                     addReceivedMessage(msg);                            
                 } 
