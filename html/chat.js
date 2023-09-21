@@ -115,6 +115,7 @@ depart.addEventListener('click', function(){
     // updateChatWindow(callee);
 
     console.log('depart icon');
+    deleteItems(userId);
     // window.location.href = "index.html";
 });
 
@@ -531,6 +532,29 @@ function getHistory(userId, allowTime) {
                 addNotifyMessage("Welcome back to the conversation");               
                 chatPanel.scrollTop = chatPanel.scrollHeight;  // scroll needs to move bottom
             }
+        }
+    };
+    
+    var requestObj = {
+        "userId": userId,
+        "allowTime": allowTime
+    }
+    console.log("request: " + JSON.stringify(requestObj));
+
+    var blob = new Blob([JSON.stringify(requestObj)], {type: 'application/json'});
+
+    xhr.send(blob);            
+}
+
+function deleteItems(userId) {
+    const uri = "delete";
+    const xhr = new XMLHttpRequest();
+
+    xhr.open("POST", uri, true);
+    xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+            let response = JSON.parse(xhr.responseText);
+            console.log("response: " + JSON.stringify(response));
         }
     };
     
