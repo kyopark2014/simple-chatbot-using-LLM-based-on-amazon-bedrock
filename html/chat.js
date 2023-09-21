@@ -40,7 +40,7 @@ HashMap.prototype = {
 var msglist = [];
 var maxMsgItems = 200;
 var msgHistory = new HashMap();
-var callee = "John";
+var callee = "AWS";
 var index=0;
 
 var userId = localStorage.getItem('userId'); // set userID if exists 
@@ -103,8 +103,8 @@ refreshChatWindow.addEventListener('click', function(){
 // depart button
 depart.addEventListener('click', function(){
     console.log('depart icon');
-    deleteItems(userId);
-    window.location.href = "index.html";
+    
+    deleteItems(userId);    
 });
 
 sendBtn.addEventListener('click', onSend);
@@ -157,7 +157,7 @@ function addSentMessage(text, timestr) {
     index++;
 
     var length = text.length;    
-    console.log('length: ', length);
+    // console.log('length: ', length);
     if(length < 10) {
         msglist[index].innerHTML = 
             `<div class="chat-sender20 chat-sender--right"><h1>${timestr}</h1>${text}&nbsp;<h2 id="status${index}"></h2></div>`;   
@@ -223,7 +223,7 @@ function addReceivedMessage(msg) {
     msg = msg.replaceAll("\n", "<br/>");
 
     var length = msg.length;
-    console.log("length: ", length);
+    // console.log("length: ", length);
 
     if(length < 10) {
         msglist[index].innerHTML = `<div class="chat-receiver20 chat-receiver--left"><h1>${sender}</h1>${msg}&nbsp;</div>`;  
@@ -543,6 +543,8 @@ function deleteItems(userId) {
         if (xhr.readyState === 4 && xhr.status === 200) {
             let response = JSON.parse(xhr.responseText);
             console.log("response: " + JSON.stringify(response));
+
+            window.location.href = "index.html";
         }
     };
     

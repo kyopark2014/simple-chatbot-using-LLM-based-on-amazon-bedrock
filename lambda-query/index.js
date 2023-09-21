@@ -22,20 +22,24 @@ exports.handler = async (event, context) => {
     };
     
     try {
-        result = await dynamo.query(queryParams).promise();
-    
-        console.log('result: ', JSON.stringify(result));    
+        let result = await dynamo.query(queryParams).promise();    
+        // console.log('result: ', JSON.stringify(result));    
 
         if(result['Item'])
-            msg = result['Item']['msg']['S'];
+            msg = result['Items']['msg']['S'];
+
+        console.log('msg: ', msg);   
+        const response = {
+            statusCode: 200,
+            msg: msg
+        };
+        return response;
     } catch (error) {
         console.log(error);
-        return;
-    } 
-
-    const response = {
-        statusCode: 200,
-        msg: msg
-    };
-    return response;
+        const response = {
+            statusCode: 500,
+            msg: error
+        };
+        return response;
+    }     
 };
