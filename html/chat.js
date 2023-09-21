@@ -72,8 +72,20 @@ addNotifyMessage("Start chat with Amazon Bedrock");
 
 addReceivedMessage("Amazon Bedrock을 이용하여 주셔서 감사합니다. 원하는 질문을 입력하세요. 아래의 파일 버튼을 선택해 TXT, PDF, CSV 문서를 올리면 요약(Summarization)을 하실 수 있습니다.")
 
-let allowTime = '2020-09-20 21:52:14';
-getHistory(userId, allowTime)
+// get history
+function getAllowTime() {    
+    let allowableDays = 2; // two day's history
+    
+    let current = new Date();
+    let allowable = new Date(current.getTime() - 24*60*60*1000*allowableDays);  
+    let allowTime = getDate(allowable)+' '+getTime(current);
+    console.log('Current Time: ', getDate(current)+' '+getTime(current));
+    console.log('Allow Time: ', allowTime);
+    
+    return allowTime;
+}
+let allowTime = getAllowTime();
+getHistory(userId, allowTime);
 
 // Listeners
 message.addEventListener('keyup', function(e){
