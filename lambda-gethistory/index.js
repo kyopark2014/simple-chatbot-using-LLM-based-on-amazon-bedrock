@@ -24,12 +24,13 @@ exports.handler = async (event, context) => {
     };
     
     try {
-        result = await dynamo.query(queryParams).promise();
+        let result = await dynamo.query(queryParams).promise();
     
-        console.log('History: ', JSON.stringify(result['Items']));    
+        console.log('History: ', JSON.stringify(result));    
 
         let history = [];
-        for(const item in result['Items']) {
+        for(let item of result['Items']) {
+            console.log('item: ', item);
             let request_time = item['request_time']['S'];
             let body = item['body']['S'];
             let msg = item['msg']['S'];

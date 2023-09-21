@@ -449,17 +449,15 @@ function getHistory(userId, allowTime) {
             response = JSON.parse(xhr.responseText);
             console.log("response: " + JSON.stringify(response));
                         
-        /*    if(response.msg) {
-                isResponsed.put(requestId, true);
-                addReceivedMessage(response.msg);        
-                
-                console.log('completed!');
-            }            
-            else {
-                console.log('The request is not completed yet.');
-
-                getResponse(userId, requestId);
-            } */
+            for(let item in response) {
+                console.log("item: " + item);
+           /*     if(response.type=='text') {                
+                    addSentMessage(res)
+                    addReceivedMessage(response.msg);        
+                    
+                    console.log('completed!');
+                } */
+            }                        
         }
     };
     
