@@ -95,8 +95,27 @@ message.addEventListener('keyup', function(e){
 });
 
 refreshChatWindow.addEventListener('click', function(){
-    console.log('update chat window');
-    updateChatWindow(callee);
+    // console.log('update chat window');
+    // updateChatWindow(callee);
+
+    console.log('go back user input menu');
+    window.location.href = "index.html";
+});
+
+refer.addEventListener('click', function(){
+    // console.log('update chat window');
+    // updateChatWindow(callee);
+
+    console.log('refer icon');
+    // window.location.href = "index.html";
+});
+
+depart.addEventListener('click', function(){
+    // console.log('update chat window');
+    // updateChatWindow(callee);
+
+    console.log('depart icon');
+    // window.location.href = "index.html";
 });
 
 sendBtn.addEventListener('click', onSend);
