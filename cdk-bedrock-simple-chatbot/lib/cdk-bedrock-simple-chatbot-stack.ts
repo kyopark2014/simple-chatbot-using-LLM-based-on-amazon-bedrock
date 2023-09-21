@@ -349,5 +349,46 @@ export class CdkBedrockSimpleChatbotStack extends cdk.Stack {
       allowedMethods: cloudFront.AllowedMethods.ALLOW_ALL,  
       viewerProtocolPolicy: cloudFront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
     });
+
+    // Lambda - deleteItems
+    const lambdaDeleteItems = new lambda.Function(this, `lambda-deleteItems-for-${projectName}`, {
+      runtime: lambda.Runtime.NODEJS_16_X, 
+      functionName: `lambda-deleteItems-for-${projectName}`,
+      code: lambda.Code.fromAsset("../lambda-delete-items"), 
+      handler: "index.handler", 
+      timeout: cdk.Duration.seconds(60),
+      logRetention: logs.RetentionDays.ONE_DAY,
+      environment: {
+        tableName: callLogTableName
+      }      
+    });
+    callLogDataTable.grantReadWriteData(lambdaDeleteItems); // permission for dynamo
+    
+    // POST method - delete items
+    const deleteItem = api.root.addResource("delete");
+    deleteItem.addMethod('POST', new apiGateway.LambdaIntegration(lambdaDeleteItems, {
+      passthroughBehavior: apiGateway.PassthroughBehavior.WHEN_NO_TEMPLATES,
+      credentialsRole: role,
+      integrationResponses: [{
+        statusCode: '200',
+      }], 
+      proxy:false, 
+    }), {
+      methodResponses: [  
+        {
+          statusCode: '200',
+          responseModels: {
+            'application/json': apiGateway.Model.EMPTY_MODEL,
+          }, 
+        }
+      ]
+    }); 
+
+    // cloudfront setting for api gateway    
+    distribution.addBehavior("/delete", new origins.RestApiOrigin(api), {
+      cachePolicy: cloudFront.CachePolicy.CACHING_DISABLED,
+      allowedMethods: cloudFront.AllowedMethods.ALLOW_ALL,  
+      viewerProtocolPolicy: cloudFront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+    });
   }
 }

@@ -130,7 +130,7 @@ function onSend(e) {
         let timestr = getTime(current);
         let requestTime = datastr+' '+timestr
         addSentMessage(message.value, timestr);
-        sendRequest(text, requestTime);
+        sendRequest(message.value, requestTime);
     }
     else {
         console.log("msg: ", "empty!");
@@ -165,27 +165,48 @@ function getTime(current) {
 }
 
 function addSentMessage(text, timestr) {
-    console.log("sent message: "+text);
-
     index++;
 
-    var length = text.length;
+    var length = text.length;    
+    console.log('length: ', length);
     if(length < 10) {
         msglist[index].innerHTML = 
             `<div class="chat-sender20 chat-sender--right"><h1>${timestr}</h1>${text}&nbsp;<h2 id="status${index}"></h2></div>`;   
     }
-    else if(length < 30) {
+    else if(length < 15) {
+        msglist[index].innerHTML = 
+            `<div class="chat-sender25 chat-sender--right"><h1>${timestr}</h1>${text}&nbsp;<h2 id="status${index}"></h2></div>`;   
+    }
+    else if(length < 18) {
+        msglist[index].innerHTML = 
+            `<div class="chat-sender30 chat-sender--right"><h1>${timestr}</h1>${text}&nbsp;<h2 id="status${index}"></h2></div>`;
+    }  
+    else if(length < 23) {
+        msglist[index].innerHTML = 
+            `<div class="chat-sender35 chat-sender--right"><h1>${timestr}</h1>${text}&nbsp;<h2 id="status${index}"></h2></div>`;
+    }
+    else if(length < 26) {
         msglist[index].innerHTML = 
             `<div class="chat-sender40 chat-sender--right"><h1>${timestr}</h1>${text}&nbsp;<h2 id="status${index}"></h2></div>`;
-    }  
-    else if(length < 150) {
+    }
+    else if(length < 35) {
+        msglist[index].innerHTML = 
+            `<div class="chat-sender50 chat-sender--right"><h1>${timestr}</h1>${text}&nbsp;<h2 id="status${index}"></h2></div>`;
+    }
+    else if(length < 80) {
         msglist[index].innerHTML = 
             `<div class="chat-sender60 chat-sender--right"><h1>${timestr}</h1>${text}&nbsp;<h2 id="status${index}"></h2></div>`;
+    }  
+    else if(length < 145) {
+        msglist[index].innerHTML = 
+            `<div class="chat-sender70 chat-sender--right"><h1>${timestr}</h1>${text}&nbsp;<h2 id="status${index}"></h2></div>`;
     }  
     else {
         msglist[index].innerHTML = 
             `<div class="chat-sender80 chat-sender--right"><h1>${timestr}</h1>${text}&nbsp;<h2 id="status${index}"></h2></div>`;
     }     
+
+    chatPanel.scrollTop = chatPanel.scrollHeight;  // scroll needs to move bottom
 }       
 
 function addSentMessageForSummary(text, timestr) {  
@@ -214,14 +235,30 @@ function addReceivedMessage(msg) {
 
     var length = msg.length;
     console.log("length: ", length);
+
     if(length < 10) {
         msglist[index].innerHTML = `<div class="chat-receiver20 chat-receiver--left"><h1>${sender}</h1>${msg}&nbsp;</div>`;  
     }
-    else if(length < 30) {
+    else if(length < 15) {
+        msglist[index].innerHTML = `<div class="chat-receiver25 chat-receiver--left"><h1>${sender}</h1>${msg}&nbsp;</div>`;  
+    }
+    else if(length < 18) {
+        msglist[index].innerHTML = `<div class="chat-receiver30 chat-receiver--left"><h1>${sender}</h1>${msg}&nbsp;</div>`;  
+    }
+    else if(length < 23) {
+        msglist[index].innerHTML = `<div class="chat-receiver35 chat-receiver--left"><h1>${sender}</h1>${msg}&nbsp;</div>`;  
+    }
+    else if(length < 26) {
         msglist[index].innerHTML = `<div class="chat-receiver40 chat-receiver--left"><h1>${sender}</h1>${msg}&nbsp;</div>`;  
     }
-    else if(length < 150) {
+    else if(length < 35) {
+        msglist[index].innerHTML = `<div class="chat-receiver50 chat-receiver--left"><h1>${sender}</h1>${msg}&nbsp;</div>`;  
+    }
+    else if(length < 80) {
         msglist[index].innerHTML = `<div class="chat-receiver60 chat-receiver--left"><h1>${sender}</h1>${msg}&nbsp;</div>`;  
+    }
+    else if(length < 145) {
+        msglist[index].innerHTML = `<div class="chat-receiver70 chat-receiver--left"><h1>${sender}</h1>${msg}&nbsp;</div>`;  
     }
     else {
         msglist[index].innerHTML = `<div class="chat-receiver80 chat-receiver--left"><h1>${sender}</h1>${msg}&nbsp;</div>`;  
@@ -490,8 +527,8 @@ function getHistory(userId, allowTime) {
                     addReceivedMessage(msg);                            
                 }                 
             }         
-            if(history) {
-                addNotifyMessage("Welcomm back to the conversation");               
+            if(history.length>=1) {
+                addNotifyMessage("Welcome back to the conversation");               
                 chatPanel.scrollTop = chatPanel.scrollHeight;  // scroll needs to move bottom
             }
         }

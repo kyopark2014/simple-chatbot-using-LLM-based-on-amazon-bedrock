@@ -13,7 +13,6 @@ exports.handler = async (event, context) => {
     console.log('userId: ', userId)
     console.log('allowTime: ', allowTime)
 
-    let msg = "";
     let queryParams = {
         TableName: tableName,
         KeyConditionExpression: "user_id = :userId and request_time > :allowTime",
