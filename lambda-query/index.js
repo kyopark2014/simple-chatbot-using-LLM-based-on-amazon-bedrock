@@ -31,6 +31,14 @@ exports.handler = async (event, context) => {
         if(result['Items'])
             msg = result['Items'][0]['msg']['S'];
 
+        isCompleted = true;
+        
+        console.log(await wait());
+        console.log(await wait());
+        console.log(await wait());
+        console.log(await wait());
+        console.log(await wait());
+        
         console.log('msg: ', msg);   
         const response = {
             statusCode: 200,
@@ -46,3 +54,16 @@ exports.handler = async (event, context) => {
         return response;
     }     
 };
+
+let isCompleted = false;
+
+function wait() {
+    return new Promise((resolve, reject) => {
+        if (!isCompleted) {
+            setTimeout(() => resolve("wait..."), 1000);
+        }
+        else {
+            setTimeout(() => resolve("done..."), 0);
+        }
+    });
+}
