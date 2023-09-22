@@ -1,8 +1,8 @@
 const aws = require('aws-sdk');
 
 var dynamo = new aws.DynamoDB();
-const tableName = process.env.tableName;
-const indexName = process.env.indexName;
+let tableName = process.env.tableName;
+let indexName = process.env.indexName;
 
 console.log('tableName: ', tableName);
 console.log('indexName: ', indexName);
