@@ -86,7 +86,8 @@ def get_answer_using_chat_history(query, chat_memory):
     print('word_kor: ', word_kor)
     
     if word_kor:
-        condense_template = """\n\nHuman: 다음은 Human과 Assistant의 친근한 대화입니다. Assistant은 상황에 맞는 구체적인 세부 정보를 충분히 제공합니다. Assistant는 모르는 질문을 받으면 솔직히 모른다고 말합니다.
+        #condense_template = """\n\nHuman: 다음은 Human과 Assistant의 친근한 대화입니다. Assistant은 상황에 맞는 구체적인 세부 정보를 충분히 제공합니다. Assistant는 모르는 질문을 받으면 솔직히 모른다고 말합니다.
+        condense_template = """\n\nHuman: Using the following conversation, answer friendly for the newest question. If you don't know the answer, just say that you don't know, don't try to make up an answer. You will be acting as a thoughtful advisor.
     
         {chat_history}
         
@@ -287,7 +288,8 @@ def lambda_handler(event, context):
 
     global modelId, llm, parameters, conversation, conversationMode, map, chat_memory
 
-    if userId in map:
+    # create chat_memory
+    if userId in map:  
         chat_memory = map[userId]
         print('chat_memory exist. reuse it!')
     else: 
@@ -299,7 +301,7 @@ def lambda_handler(event, context):
         load_chatHistory(userId, allowTime, chat_memory)
 
     if methodOfConversation == 'ConversationChain':
-        conversation = ConversationChain(llm=llm, verbose=True, memory=chat_memory)        
+        conversation = ConversationChain(llm=llm, verbose=False, memory=chat_memory)        
     
     start = int(time.time())    
 
