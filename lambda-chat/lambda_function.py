@@ -362,8 +362,7 @@ def lambda_handler(event, context):
                 
         elapsed_time = int(time.time()) - start
         print("total run time(sec): ", elapsed_time)
-
-        print('question: ', text)
+        
         print('msg: ', msg)
 
         item = {
