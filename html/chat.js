@@ -157,7 +157,7 @@ function addSentMessage(text, timestr) {
     index++;
 
     var length = text.length;    
-    // console.log('length: ', length);
+    console.log('length: ', length);
     if(length < 10) {
         msglist[index].innerHTML = 
             `<div class="chat-sender20 chat-sender--right"><h1>${timestr}</h1>${text}&nbsp;<h2 id="status${index}"></h2></div>`;   
