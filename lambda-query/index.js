@@ -4,6 +4,9 @@ var dynamo = new aws.DynamoDB();
 const tableName = process.env.tableName;
 const indexName = process.env.indexName;
 
+console.log('tableName: ', tableName);
+console.log('indexName: ', indexName);
+
 exports.handler = async (event, context) => {
     //console.log('## ENVIRONMENT VARIABLES: ' + JSON.stringify(process.env));
     //console.log('## EVENT: ' + JSON.stringify(event));
