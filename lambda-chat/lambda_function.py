@@ -265,7 +265,6 @@ def load_chatHistory(userId, allowTime, chat_memory):
 
             chat_memory.save_context({"input": text}, {"output": msg})             
 
-
 import datetime 
 def getAllowaTime():
     d = datetime.datetime.now() - datetime.timedelta(days = 2)
@@ -363,6 +362,7 @@ def lambda_handler(event, context):
         elapsed_time = int(time.time()) - start
         print("total run time(sec): ", elapsed_time)
 
+        print('question: ', text)
         print('msg: ', msg)
 
         item = {
