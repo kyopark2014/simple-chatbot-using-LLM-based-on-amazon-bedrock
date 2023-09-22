@@ -264,7 +264,16 @@ def load_chatHistory(userId, allowTime, chat_memory):
             print('msg: ', msg)        
 
             chat_memory.save_context({"input": text}, {"output": msg})             
-    
+
+
+import datetime 
+def getAllowaTime():
+    d = datetime.datetime.now() - datetime.timedelta(days = 2)
+    timeStr = str(d)[0:19]
+    print('allow time: ',timeStr)
+
+    return timeStr
+
 def lambda_handler(event, context):
     print(event)
     userId  = event['user_id']
@@ -288,7 +297,7 @@ def lambda_handler(event, context):
         map[userId] = chat_memory
         print('chat_memory does not exist. create new one!')
 
-        allowTime = '2020-09-20 21:52:14'
+        allowTime = getAllowaTime()
         load_chatHistory(userId, allowTime, chat_memory)
 
     if methodOfConversation == 'ConversationChain':
