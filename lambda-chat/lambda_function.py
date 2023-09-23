@@ -82,7 +82,7 @@ llm = Bedrock(model_id=modelId, client=boto3_bedrock, model_kwargs=parameters)
 map = dict() # Conversation
 
 def get_answer_using_chat_history(query, chat_memory):  
-    condense_template = """\n\nHuman: Use the following pieces of context to provide a concise answer to the question at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer.  
+    condense_template = """\n\nHuman: Use the following pieces of context to provide a concise answer to the question at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer.
       
     {chat_history}
         
@@ -117,11 +117,7 @@ def get_answer_using_chat_history(query, chat_memory):
     print('chat_history:\n ', chat_history)
 
     # make a question using chat history
-    if pages >= 1:
-        result = llm(CONDENSE_QUESTION_PROMPT.format(question=query, chat_history=chat_history))
-    else:
-        result = llm(HUMAN_PROMPT+query+AI_PROMPT)
-    #print('result: ', result)
+    result = llm(CONDENSE_QUESTION_PROMPT.format(question=query, chat_history=chat_history))
 
     return result    
 
