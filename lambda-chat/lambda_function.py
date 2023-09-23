@@ -70,8 +70,10 @@ def get_parameter(modelId):
     elif modelId == 'anthropic.claude-v1' or modelId == 'anthropic.claude-v2':
         return {
             "stop_sequences": [HUMAN_PROMPT],
-            #"model": "claude-2",
             "max_tokens_to_sample":1024,
+            "temperature":0.1,
+            "top_k":3,
+            "top_p": 0.1
         }
 parameters = get_parameter(modelId)
 
