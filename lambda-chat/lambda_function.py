@@ -77,18 +77,36 @@ def get_parameter(modelId):
         }
 parameters = get_parameter(modelId)
 
-llm = Bedrock(model_id=modelId, client=boto3_bedrock, model_kwargs=parameters)
+llm = Bedrock(
+    model_id=modelId, 
+    client=boto3_bedrock, 
+    streaming=True,
+    model_kwargs=parameters)
 
 map = dict() # Conversation
 
 def get_answer_using_chat_history(query, chat_memory):  
-    condense_template = """\n\nHuman: Use the following pieces of context to provide a concise answer to the question at the end. If you don't know the answer, just say that you don't know, don't try to make up an answer.
-      
-    {chat_history}
-        
-    Human: {question}
+    # check korean
+    pattern_hangul = re.compile('[\u3131-\u3163\uac00-\ud7a3]+')
+    word_kor = pattern_hangul.search(str(query))
+    print('word_kor: ', word_kor)
 
-    Assistant:"""
+    if word_kor:
+        condense_template = """\n\nHuman: 아래 문맥(context)을 참조했음에도 답을 알 수 없다면, 솔직히 모른다고 말합니다.
+
+        {chat_history}
+        
+        Human: {question}
+
+        Assistant:"""
+    else:
+        condense_template = """\n\nHuman: Using the following conversation, answer friendly for the newest question. If you don't know the answer, just say that you don't know, don't try to make up an answer. You will be acting as a thoughtful advisor.
+
+        {chat_history}
+        
+        Human: {question}
+
+        Assistant:"""
     
     CONDENSE_QUESTION_PROMPT = PromptTemplate.from_template(condense_template)
         
