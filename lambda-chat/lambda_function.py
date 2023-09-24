@@ -332,6 +332,12 @@ def lambda_handler(event, context):
             elif text == 'disableConversationMode':
                 conversationMode = 'false'
                 msg  = "Conversation mode is disabled"
+            elif text == 'clearMemory':
+                chat_memory = ""
+                chat_memory = ConversationBufferMemory(human_prefix='Human', ai_prefix='Assistant')
+                map[userId] = chat_memory
+                print('initiate the chat memory!')
+                msg  = "The chat memory was intialized in this session."
             else:            
                 if conversationMode == 'true':
                     if methodOfConversation == 'ConversationChain':
