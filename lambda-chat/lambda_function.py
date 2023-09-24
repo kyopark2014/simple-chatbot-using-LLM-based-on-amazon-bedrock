@@ -80,7 +80,7 @@ parameters = get_parameter(modelId)
 llm = Bedrock(
     model_id=modelId, 
     client=boto3_bedrock, 
-    streaming=True,
+    #streaming=True,
     model_kwargs=parameters)
 
 map = dict() # Conversation
