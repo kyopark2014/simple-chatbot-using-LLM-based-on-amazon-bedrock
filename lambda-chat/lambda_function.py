@@ -69,11 +69,11 @@ def get_parameter(modelId):
         }
     elif modelId == 'anthropic.claude-v1' or modelId == 'anthropic.claude-v2':
         return {
-            "stop_sequences": [HUMAN_PROMPT],
-            "max_tokens_to_sample":1024
-            #"temperature":0.1,
-            #"top_k":3,
-            #"top_p": 0.1
+            "max_tokens_to_sample":1024,
+            "temperature":0.1,
+            "top_k":250,
+            "top_p": 1,
+            "stop_sequences": [HUMAN_PROMPT]            
         }
 parameters = get_parameter(modelId)
 
@@ -92,7 +92,8 @@ def get_answer_using_chat_history(query, chat_memory):
     print('word_kor: ', word_kor)
 
     if word_kor:
-        condense_template = """\n\nHuman: 아래 문맥(context)을 참조했음에도 답을 알 수 없다면, 솔직히 모른다고 말합니다.
+        #condense_template = """\n\nHuman: 아래 문맥(context)을 참조했음에도 답을 알 수 없다면, 솔직히 모른다고 말합니다.
+        prompt_template = """\n\nHuman: 다음은 Human과 Assistant의 친근한 대화입니다. Assistant은 상황에 맞는 구체적인 세부 정보를 충분히 제공합니다. 아래 문맥(context)을 참조했음에도 답을 알 수 없다면, 솔직히 모른다고 말합니다.
 
         {chat_history}
         
