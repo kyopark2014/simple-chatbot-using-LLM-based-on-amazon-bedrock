@@ -2,7 +2,7 @@
 
 아래는 ConversationChain이 아닌 PromptTemplate을 이용해 chat history를 구현한 예입니다.
 
-```
+```python
 chat_memory = ConversationBufferMemory(human_prefix='Human', ai_prefix='Assistant')
 map[userId] = chat_memory
 print('chat_memory does not exist. create new one!')
