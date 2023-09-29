@@ -1,6 +1,6 @@
 # PromptTemplate을 이용한 chat history 구현
 
-아래는 ConversationChain이 아닌 PromptTemplate을 이용해 chat history를 구현한 예입니다.
+아래는 ConversationChain이 아닌 PromptTemplate을 이용해 chat history를 구현한 예입니다. Bedrock SDK 업그레이드후에 claude관련 변경으로 아래 코드는 현재 사용 불가상태입니다.
 
 ```python
 chat_memory = ConversationBufferMemory(human_prefix='Human', ai_prefix='Assistant')
