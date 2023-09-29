@@ -36,16 +36,6 @@ git clone https://github.com/kyopark2014/simple-chatbot-using-LLM-based-on-amazo
 cd simple-chatbot-using-LLM-based-on-amazon-bedrock/cdk-bedrock-simple-chatbot/ && npm install
 ```
 
-6) bedrock-sdk를 설치합니다.
-
-```java
-cd ../lambda-chat
-curl https://d2eo22ngex1n9g.cloudfront.net/Documentation/SDK/bedrock-python-sdk.zip --output bedrock-python-sdk.zip
-unzip bedrock-python-sdk.zip -d bedrock-sdk
-rm bedrock-python-sdk.zip
-cd ../cdk-bedrock-simple-chatbot/
-```
-
 6) CDK 사용을 위해 Bootstrapping을 수행합니다.
 
 아래 명령어로 Account ID를 확인합니다.
