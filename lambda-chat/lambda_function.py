@@ -21,36 +21,18 @@ s3 = boto3.client('s3')
 s3_bucket = os.environ.get('s3_bucket') # bucket name
 s3_prefix = os.environ.get('s3_prefix')
 callLogTableName = os.environ.get('callLogTableName')
-endpoint_url = os.environ.get('endpoint_url', 'https://prod.us-west-2.frontend.bedrock.aws.dev')
 bedrock_region = os.environ.get('bedrock_region', 'us-west-2')
 modelId = os.environ.get('model_id', 'amazon.titan-tg1-large')
 print('model_id: ', modelId)
-accessType = os.environ.get('accessType', 'aws')
 conversationMode = os.environ.get('conversationMode', 'false')
-methodOfConversation = 'PromptTemplate' # ConversationChain or PromptTemplate
-
-# Bedrock Contiguration
-bedrock_region = bedrock_region
-bedrock_config = {
-    "region_name":bedrock_region,
-    "endpoint_url":endpoint_url
-}
    
-# supported llm list from bedrock
-if accessType=='aws':  # internal user of aws
-    boto3_bedrock = boto3.client(
-        service_name='bedrock',
-        region_name=bedrock_config["region_name"],
-        endpoint_url=bedrock_config["endpoint_url"],
-    )
-else: # preview user
-    boto3_bedrock = boto3.client(
-        service_name='bedrock',
-        region_name=bedrock_config["region_name"],
-    )
+boto3_bedrock = boto3.client(
+    service_name='bedrock',
+    region_name=bedrock_region,
+)
 
-modelInfo = boto3_bedrock.list_foundation_models()    
-print('models: ', modelInfo)
+#modelInfo = boto3_bedrock.list_foundation_models()    
+#print('models: ', modelInfo)
 
 HUMAN_PROMPT = "\n\nHuman:"
 AI_PROMPT = "\n\nAssistant:"
@@ -79,6 +61,37 @@ llm = Bedrock(
     model_kwargs=parameters)
 
 map = dict() # Conversation
+
+def get_conversation_prompt(query):
+    # check korean
+    pattern_hangul = re.compile('[\u3131-\u3163\uac00-\ud7a3]+')
+    word_kor = pattern_hangul.search(str(query))
+    print('word_kor: ', word_kor)
+
+    if word_kor:    
+        #condense_template = """\n\nHuman: 아래 문맥(context)을 참조했음에도 답을 알 수 없다면, 솔직히 모른다고 말합니다.
+        condense_template = """다음은 Human과 Assistant의 친근한 대화입니다. Assistant은 상황에 맞는 구체적인 세부 정보를 충분히 제공합니다. 아래 문맥(context)을 참조했음에도 답을 알 수 없다면, 솔직히 모른다고 말합니다.
+
+        Current conversation:
+        {history}
+        
+        Human: {input}
+        
+        Assistant:
+        """
+    else:
+        condense_template = """\n\nHuman: Using the following conversation, answer friendly for the newest question. If you don't know the answer, just say that you don't know, don't try to make up an answer. You will be acting as a thoughtful advisor.
+
+        {history}
+        
+        Human: {input}
+
+        Assistant:
+        """
+
+        #claude_prompt = PromptTemplate.from_template("""The following is a friendly conversation between a human and an AI. The AI is talkative and provides lots of specific details from its context. If the AI does not know the answer to a question, it truthfully says it does not know.
+    
+    return PromptTemplate.from_template(condense_template)
 
 def get_answer_using_chat_history(query, chat_memory):  
     # check korean
@@ -298,7 +311,6 @@ def lambda_handler(event, context):
         allowTime = getAllowTime()
         load_chatHistory(userId, allowTime, chat_memory)
 
-    if methodOfConversation == 'ConversationChain':
         conversation = ConversationChain(llm=llm, verbose=False, memory=chat_memory)        
     
     start = int(time.time())    
@@ -336,13 +348,13 @@ def lambda_handler(event, context):
                 msg  = "The chat memory was intialized in this session."
             else:            
                 if conversationMode == 'true':
-                    if methodOfConversation == 'ConversationChain':
-                        msg = conversation.predict(input=text)
-                    elif methodOfConversation == 'PromptTemplate':
-                        msg = get_answer_using_chat_history(text, chat_memory)
+                    conversation.prompt = get_conversation_prompt(text)
+                    msg = conversation.predict(input=text)
 
-                        storedMsg = str(msg).replace("\n"," ") 
-                        chat_memory.save_context({"input": text}, {"output": storedMsg})     
+                    # extract chat history for debug
+                    chats = chat_memory.load_memory_variables({})
+                    chat_history_all = chats['history']
+                    print('chat_history_all: ', chat_history_all)
                 else:
                     msg = llm(HUMAN_PROMPT+text+AI_PROMPT)
             #print('msg: ', msg)
