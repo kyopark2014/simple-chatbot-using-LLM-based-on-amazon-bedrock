@@ -1,6 +1,8 @@
 # Bedrock SDK
 
-## old 설치 방법
+## SDK 설치 방법
+
+Boto3 1.28.57 이하에서 사용하였고, 현재는 업그레이드로 설치하면 됩니다.
 
 ```text
 cd ../lambda-chat
