@@ -259,17 +259,17 @@ def lambda_handler(event, context):
 
     msg = ""
     if type == 'text' and body[:11] == 'list models':
-        bedrock_client = boto3.client('bedrock')
-        modelInfo = bedrock_client.list_foundation_models()    
-        print('models: ', modelInfo)
+        #bedrock_client = boto3.client('bedrock')
+        #modelInfo = bedrock_client.list_foundation_models()    
+        #print('models: ', modelInfo)
 
-        msg = f"The list of models: \n"
-        lists = modelInfo['modelSummaries']
+        #msg = f"The list of models: \n"
+        #lists = modelInfo['modelSummaries']
         
-        for model in lists:
-            msg += f"{model['modelId']}\n"
+        #for model in lists:
+        #    msg += f"{model['modelId']}\n"
         
-        msg += f"current model: {modelId}"
+        #msg += f"current model: {modelId}"
         print('model lists: ', msg)    
     else:             
         if type == 'text':
