@@ -117,20 +117,27 @@ def get_conversation_prompt(query):
     return PromptTemplate.from_template(condense_template)
 ```
 
-[ConversationBufferMemory](https://python.langchain.com/docs/modules/memory/types/buffer)을 이용하여 conversation을 정의합니다.
+[ConversationBufferMemory](https://python.langchain.com/docs/modules/memory/types/buffer)을 이용하여 conversation을 정의하고 conversation.predict로 Bedrock으로 요청을 보낼 수 있습니다.
 
 ```python
 from langchain.chains import ConversationChain
 from langchain.memory import ConversationBufferMemory
 
+chat_memory = ConversationBufferMemory(human_prefix='Human', ai_prefix='Assistant')
+conversation = ConversationChain(llm=llm, verbose=False, memory=chat_memory)
+
 conversation.prompt = get_conversation_prompt(text)
 msg = conversation.predict(input = text)
+```
 
-# extract chat history for debug
+history는 아래와 같이 확인할 수 있습니다.
+
+```python
 chats = chat_memory.load_memory_variables({})
 chat_history_all = chats['history']
 print('chat_history_all: ', chat_history_all)
 ```
+
 
 
 ## 문서 요약하기 (Summerization)
