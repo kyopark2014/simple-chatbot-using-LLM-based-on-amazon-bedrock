@@ -46,7 +46,7 @@ def get_parameter(modelId):
             "max_tokens_to_sample":1024,
             "temperature":0.1,
             "top_k":250,
-            "top_p": 1.0,
+            "top_p": 0.9,
             "stop_sequences": [HUMAN_PROMPT]            
         }
 parameters = get_parameter(modelId)
@@ -259,17 +259,17 @@ def lambda_handler(event, context):
 
     msg = ""
     if type == 'text' and body[:11] == 'list models':
-        #bedrock_client = boto3.client('bedrock')
-        #modelInfo = bedrock_client.list_foundation_models()    
-        #print('models: ', modelInfo)
+        bedrock_client = boto3.client('bedrock')
+        modelInfo = bedrock_client.list_foundation_models()    
+        print('models: ', modelInfo)
 
-        #msg = f"The list of models: \n"
-        #lists = modelInfo['modelSummaries']
+        msg = f"The list of models: \n"
+        lists = modelInfo['modelSummaries']
         
-        #for model in lists:
-        #    msg += f"{model['modelId']}\n"
+        for model in lists:
+            msg += f"{model['modelId']}\n"
         
-        #msg += f"current model: {modelId}"
+        msg += f"current model: {modelId}"
         print('model lists: ', msg)    
     else:             
         if type == 'text':
