@@ -1,6 +1,6 @@
 # Amazon Bedrock의 LLM을 이용한 Simple Chatbot 만들기
 
-여기서는 Amazon Bedrock의 LLM(Large language Model)을 이용하여 Prompt에 기반한 간단한 질문/답변을 보여주는 simple chatbot을 구현합니다. 브라우저에서 chatbot으로 메시지를 전송하면, LLM을 통해 답변을 얻고 이를 화면에 보여줍니다. 입력한 모든 내용은 DynamoDB에 call log로 저장됩니다. 또한 파일 버튼을 선택하여, TXT, PDF, CSV와 같은 문서 파일을 Amazon S3로 업로드하고, 텍스트를 추출하여 문서 요약(Summerization) 기능을 사용할 수 있습니다.
+여기서는 Amazon Bedrock의 LLM(Large language Model)을 이용하여 일상적인 대화 또는 질문/답변(Question/Answering)을 수행할 수 있는 챗봇을 구현합니다. 브라우저에서 chatbot으로 메시지를 전송하면, LLM을 통해 답변을 얻고 이를 화면에 보여줍니다. 입력한 모든 내용은 DynamoDB에 call log로 저장됩니다. 또한 파일 버튼을 선택하여, TXT, PDF, CSV와 같은 문서 파일을 Amazon S3로 업로드하고, 텍스트를 추출하여 문서 요약(Summerization) 기능을 사용할 수 있습니다.
 
 LLM 어플리케이션 개발을 위해 LangChain을 활용하였으며, Bedrock이 제공하는 LLM 모델을 확인하고, 필요시 변경할 수 있습니다. Chatbot API를 테스트 하기 위하여 Web Client를 제공합니다. AWS CDK를 이용하여 chatbot을 위한 인프라를 설치하면, ouput 화면에서 브라우저로 접속할 수 있는 URL을 알수 있습니다. Bedrock은 아직 Preview로 제공되므로, AWS를 통해 Preview Access 권한을 획득하여야 사용할 수 있습니다.
 
@@ -28,32 +28,16 @@ LLM 어플리케이션 개발을 위해 LangChain을 활용하였으며, Bedrock
 
 ## Bedrock 모델 정보 가져오기
 
-Bedrock은 완전관리형 서비스로 API를 이용하여 접속하며, 여기서는 "us-west-2"를 이용하여 아래의 endpoint_url로 접속합니다. 이 주소는 preview 권한을 받을때 안내 받을 수 있습니다. 아래와 같이 boto3.client()을 이용하여 client를 생성합니다. 이후 list_foundation_models()을 이용하여 현재 지원 가능한 LLM에 대한 정보를 획득할 수 있습니다.
+Bedrock은 완전관리형 서비스로 Boto3을 이용하여 아래와 같이 접속합니다. 
 
 ```python
 import boto3
-from utils import bedrock
+from langchain.llms.bedrock import Bedrock
 
-bedrock_region = "us-west-2" 
-bedrock_config = {
-    "region_name":bedrock_region,
-    "endpoint_url":"https://prod.us-west-2.frontend.bedrock.aws.dev"
-}
-    
-if accessType=='aws': # internal user of aws
-    boto3_bedrock = boto3.client(
-        service_name='bedrock’,
-        region_name=bedrock_config["region_name"],
-        endpoint_url=bedrock_config["endpoint_url"],
-    )
-else: # preview user
-    boto3_bedrock = boto3.client(
-        service_name='bedrock’,
-        region_name=bedrock_config["region_name"],
-    )
-
-modelInfo = boto3_bedrock.list_foundation_models()
-print('models: ', modelInfo)
+boto3_bedrock = boto3.client(
+    service_name='bedrock’,
+    region_name=bedrock_region,
+)
 ```
 
 ## LangChain 
@@ -63,15 +47,28 @@ print('models: ', modelInfo)
 ```python
 from langchain.llms.bedrock import Bedrock
 
-modelId = 'amazon.titan-tg1-large'  # anthropic.claude-v1
-parameters = {
-    "maxTokenCount":512,
-    "stopSequences":[],
-    "temperature":0,
-    "topP":0.9
-}
+def get_parameter(modelId):
+    if modelId == 'amazon.titan-tg1-large' or modelId == 'amazon.titan-tg1-xlarge':
+    return {
+        "maxTokenCount": 1024,
+        "stopSequences": [],
+        "temperature": 0,
+        "topP": 0.9
+    }
+    elif modelId == 'anthropic.claude-v1' or modelId == 'anthropic.claude-v2':
+    return {
+        "max_tokens_to_sample": 1024,
+        "temperature": 0.1,
+        "top_k": 250,
+        "top_p": 1,
+        "stop_sequences": [HUMAN_PROMPT]
+    }
+parameters = get_parameter(modelId)
 
-llm = Bedrock(model_id=modelId, client=boto3_bedrock, model_kwargs=parameters)
+llm = Bedrock(
+    model_id=modelId, 
+    client=boto3_bedrock, 
+    model_kwargs=parameters)
 ```
 
 ## 질문/답변하기 (Prompt)
