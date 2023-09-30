@@ -95,7 +95,6 @@ def get_conversation_prompt(query):
     print('word_kor: ', word_kor)
 
     if word_kor:    
-        #condense_template = """\n\nHuman: 아래 문맥(context)을 참조했음에도 답을 알 수 없다면, 솔직히 모른다고 말합니다.
         condense_template = """다음은 Human과 Assistant의 친근한 대화입니다. Assistant은 상황에 맞는 구체적인 세부 정보를 충분히 제공합니다. 아래 문맥(context)을 참조했음에도 답을 알 수 없다면, 솔직히 모른다고 말합니다.
 
         Current conversation:
@@ -114,8 +113,6 @@ def get_conversation_prompt(query):
 
         Assistant:
         """
-
-        #claude_prompt = PromptTemplate.from_template("""The following is a friendly conversation between a human and an AI. The AI is talkative and provides lots of specific details from its context. If the AI does not know the answer to a question, it truthfully says it does not know.
     
     return PromptTemplate.from_template(condense_template)
 ```
