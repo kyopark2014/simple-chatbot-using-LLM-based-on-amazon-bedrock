@@ -1,6 +1,6 @@
 # Amazon Bedrock의 LLM을 이용한 Simple Chatbot 만들기
 
-여기서는 Amazon Bedrock의 LLM(Large language Model)을 이용하여 일상적인 대화 또는 질문/답변(Question/Answering)을 수행할 수 있는 챗봇을 구현합니다. 브라우저에서 chatbot으로 메시지를 전송하면, LLM을 통해 답변을 얻고 이를 화면에 보여줍니다. 입력한 모든 내용은 DynamoDB에 call log로 저장됩니다. 또한 파일 버튼을 선택하여, TXT, PDF, CSV와 같은 문서 파일을 Amazon S3로 업로드하고, 텍스트를 추출하여 문서 요약(Summerization) 기능을 사용할 수 있습니다.
+여기서는 Amazon Bedrock의 LLM(Large language Model)을 이용하여 일상적인 대화 또는 질문/답변(Question/Answering)을 수행할 수 있는 챗봇을 구현합니다. 브라우저에서 chatbot으로 메시지를 전송하면, LLM을 통해 답변을 얻고 이를 화면에 보여줍니다. 입력한 모든 내용은 DynamoDB에 call log로 저장됩니다. 또한 파일 버튼을 선택하여, TXT, PDF, CSV와 같은 문서 파일을 Amazon S3로 업로드하고, 텍스트를 추출하여 문서 요약(Summarization) 기능을 사용할 수 있습니다.
 
 LLM 어플리케이션 개발을 위해 LangChain을 활용하였으며, Bedrock이 제공하는 LLM 모델을 확인하고, 필요시 변경할 수 있습니다. Chatbot API를 테스트 하기 위하여 Web Client를 제공합니다. AWS CDK를 이용하여 chatbot을 위한 인프라를 설치하면, ouput 화면에서 브라우저로 접속할 수 있는 URL을 알수 있습니다. Bedrock은 아직 Preview로 제공되므로, AWS를 통해 Preview Access 권한을 획득하여야 사용할 수 있습니다.
 
@@ -60,7 +60,7 @@ def get_parameter(modelId):
         "max_tokens_to_sample": 1024,
         "temperature": 0.1,
         "top_k": 250,
-        "top_p": 1,
+        "top_p": 1.0,
         "stop_sequences": [HUMAN_PROMPT]
     }
 parameters = get_parameter(modelId)
@@ -76,7 +76,10 @@ llm = Bedrock(
 LangChang을 이용하여 아래와 같이 간단한 질문과 답변을 Prompt을 이용하여 구현할 수 있습니다. 아래에서 입력인 text prompt를 LangChain 인터페이스를 통해 요청하면 Bedrock의 LLM 모델을 통해 답변을 얻을 수 있습니다.
 
 ```python
-llm(text)
+HUMAN_PROMPT = "\n\nHuman:"
+AI_PROMPT = "\n\nAssistant:"
+
+msg = llm(HUMAN_PROMPT+text+AI_PROMPT)
 ```
 
 ## Conversation
@@ -170,13 +173,42 @@ contents = '\n'.join(raw_text)
 contents = doc.get()['Body'].read()
 ```
 
-파일 확장자가 csv일 경우에 CSVLoader을 이용하여 읽어옵니다.
+파일 확장자가 csv일 경우에는 아래처럼 읽어옵니다.
 
 ```python
-from langchain.document_loaders import CSVLoader
-body = doc.get()['Body'].read()
-reader = csv.reader(body)
-contents = CSVLoader(reader)
+def load_csv_document(s3_file_name):
+    s3r = boto3.resource("s3")
+    doc = s3r.Object(s3_bucket, s3_prefix+'/'+s3_file_name)
+
+    lines = doc.get()['Body'].read().decode('utf-8').split('\n')   # read csv per line
+    print('lins: ', len(lines))
+        
+    columns = lines[0].split(',')  # get columns
+    #columns = ["Category", "Information"]  
+    #columns_to_metadata = ["type","Source"]
+    print('columns: ', columns)
+    
+    docs = []
+    n = 0
+    for row in csv.DictReader(lines, delimiter=',',quotechar='"'):
+        # print('row: ', row)
+        #to_metadata = {col: row[col] for col in columns_to_metadata if col in row}
+        values = {k: row[k] for k in columns if k in row}
+        content = "\n".join(f"{k.strip()}: {v.strip()}" for k, v in values.items())
+        doc = Document(
+            page_content=content,
+            metadata={
+                'name': s3_file_name,
+                'row': n+1,
+            }
+            #metadata=to_metadata
+        )
+        docs.append(doc)
+        n = n+1
+    print('docs[0]: ', docs[0])
+
+    return docs
+
 ```
 
 ### 텍스트 나누기 
@@ -187,7 +219,7 @@ contents = CSVLoader(reader)
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.docstore.document import Document
 
-text_splitter = RecursiveCharacterTextSplitter(chunk_size = 1000, chunk_overlap = 0)
+text_splitter = RecursiveCharacterTextSplitter(chunk_size = 1000, chunk_overlap = 100)
 texts = text_splitter.split_text(new_contents)
 print('texts[0]: ', texts[0])
 
@@ -203,28 +235,47 @@ docs = [
 Template를 정의하고 [load_summarize_chain](https://sj-langchain.readthedocs.io/en/latest/chains/langchain.chains.summarize.__init__.load_summarize_chain.html?highlight=load_summarize_chain)을 이용하여 summarization를 수행합니다.
 
 ```python
-from langchain import PromptTemplate
+from langchain.prompts import PromptTemplate
 from langchain.chains.summarize import load_summarize_chain
 
-prompt_template = """Write a concise summary of the following:
+def get_summary(texts):    
+    # check korean
+    pattern_hangul = re.compile('[\u3131-\u3163\uac00-\ud7a3]+') 
+    word_kor = pattern_hangul.search(str(texts))
+    print('word_kor: ', word_kor)
+    
+    if word_kor:
+        #prompt_template = """\n\nHuman: 다음 텍스트를 간결하게 요약하세오. 텍스트의 요점을 다루는 글머리 기호로 응답을 반환합니다.
+        prompt_template = """\n\nHuman: 다음 텍스트를 요약해서 500자 이내로 설명하세오.
 
-{ text }
+        {text}
         
-    CONCISE SUMMARY """
+        Assistant:"""        
+    else:         
+        prompt_template = """\n\nHuman: Write a concise summary of the following:
 
-PROMPT = PromptTemplate(template = prompt_template, input_variables = ["text"])
-chain = load_summarize_chain(llm, chain_type = "stuff", prompt = PROMPT)
-summary = chain.run(docs)
-print('summary: ', summary)
+        {text}
+        
+        Assistant:"""
+    
+    PROMPT = PromptTemplate(template=prompt_template, input_variables=["text"])
+    chain = load_summarize_chain(llm, chain_type="stuff", prompt=PROMPT)
 
-if summary == '':  # error notification
-    summary = 'Fail to summarize the document. Try agan...'
-    return summary
-else:
-    return summary
+    docs = [
+        Document(
+            page_content=t
+        ) for t in texts[:3]
+    ]
+    summary = chain.run(docs)
+    print('summary: ', summary)
+
+    if summary == '':  # error notification
+        summary = 'Fail to summarize the document. Try agan...'
+        return summary
+    else:
+        # return summary[1:len(summary)-1]   
+        return summary
 ```
-
-
 
 ## IAM Role
 
@@ -394,7 +445,7 @@ Container 접속 후 아래 명령어로 동작을 확인합니다.
 cd .. && python3 test.py
 ```
 
-
+<!--
 ### TroubleShooting: Too many request
 
 현재 Bedrock은 Preview이어서, 너무 많은 요청을 하면 ThrottlingException이 발생합니다.
@@ -425,6 +476,6 @@ Traceback (most recent call last):
 ### DynamoDBChatMessageHistory
 
 LangChain의 DynamoDBChatMessageHistory을 이용해 [구현](https://github.com/kyopark2014/simple-chatbot-using-LLM-based-on-amazon-bedrock/blob/main/chat-history-dynamo.md)해 보았으나, 이전 채팅이력을 읽어올수 없는 구조여서 사용하지 않았습니다. DynamoDB에 저장할때에도 포맷을 변경할 수 없어서 사용성이 안좋습니다.
-
+-->
 
 
