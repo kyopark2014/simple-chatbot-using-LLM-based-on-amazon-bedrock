@@ -49,7 +49,7 @@ def get_parameter(modelId):
             "max_tokens_to_sample":1024,
             "temperature":0.1,
             "top_k":250,
-            "top_p": 1,
+            "top_p": 1.0,
             "stop_sequences": [HUMAN_PROMPT]            
         }
 parameters = get_parameter(modelId)
