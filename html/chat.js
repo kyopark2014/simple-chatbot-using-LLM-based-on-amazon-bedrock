@@ -43,11 +43,17 @@ var msgHistory = new HashMap();
 var callee = "AWS";
 var index=0;
 
-var userId = localStorage.getItem('userId'); // set userID if exists 
+let userId = localStorage.getItem('userId'); // set userID if exists 
 if(userId=="") {
     userId = uuidv4();
 }
 console.log('userId: ', userId);
+
+let conversationType = localStorage.getItem('convType'); // set convType if exists 
+if(conversationType=="") {
+    conversationType = "normal";
+}
+console.log('conversationType: ', conversationType);
 
 for (i=0;i<maxMsgItems;i++) {
     msglist.push(document.getElementById('msgLog'+i));
@@ -394,7 +400,8 @@ function sendRequest(text, requestTime) {
         "request_id": requestId,
         "request_time": requestTime,
         "type": "text",
-        "body":text
+        "body":text,
+        "convType": conversationType
     }
     console.log("request: " + JSON.stringify(requestObj));
 
