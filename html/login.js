@@ -15,7 +15,7 @@ if(conversationType != '') {
     convtypeInput.value = conversationType;
 }
 else {
-    convtypeInput.value = "qa"
+    convtypeInput.value = "normal"  // general conversation
 }
 
 console.log(userInput.value);
