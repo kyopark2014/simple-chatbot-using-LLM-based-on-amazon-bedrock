@@ -35,7 +35,7 @@ import boto3
 from langchain.llms.bedrock import Bedrock
 
 boto3_bedrock = boto3.client(
-    service_name='bedrock’,
+    service_name='bedrock-runtime’,
     region_name=bedrock_region,
 )
 ```
